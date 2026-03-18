@@ -13,7 +13,7 @@ import random
 
 # Optional: text-to-speech
 try:
-    import pyttsx3
+  import pyttsx3
     TTS_AVAILABLE = True
 except Exception:
     TTS_AVAILABLE = False
