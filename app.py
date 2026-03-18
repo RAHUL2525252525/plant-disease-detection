@@ -823,6 +823,12 @@ page = st.sidebar.radio("Go to / ತೆರೆಯಿರಿ", ["Home","Chatbot","H
 
 # ---------------- Home ----------------
 if page == "Home":
+    pass  # placeholder so Python is happy
+
+elif page == "Chatbot":
+    st.markdown("## 🤖 AI Crop Assistant Chatbot")
+    # rest of your chatbot code
+if page == "Home":
     st.markdown("### 📷 Select Image Source")
     
     # Input Section
