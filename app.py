@@ -444,45 +444,41 @@ def mock_chatbot_response(prompt):
         
 st.markdown("""
 <style>
-/* Background - Deep Forest */
+/* Background - Fresh Garden */
 .stApp {
-    background: linear-gradient(135deg, #0b3d0b 0%, #1f4d1f 50%, #081c08 100%);
-    background-attachment: fixed;
+    background: linear-gradient(135deg, #e0f7e9 0%, #d4f1e0 50%, #f0fff5 100%);
 }
 
 /* Title */
 h1 {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: 800 !important;
-    font-size: 5rem !important;
-    color: #a7ff83;
-    text-shadow: 0 0 20px #4d8c4d;
-    margin-bottom: 40px !important;
+    font-size: 4.5rem !important;
+    color: #2f6f46;
+    margin-bottom: 30px !important;
 }
 
 /* Cards & Chat */
 .prediction-box, .solution-box, .stChatMessage {
-    background: rgba(255, 255, 255, 0.03) !important;
-    backdrop-filter: blur(30px) saturate(120%);
-    border-radius: 40px !important;
-    padding: 50px !important;
+    background: rgba(255, 255, 255, 0.7) !important;
+    border-radius: 30px !important;
+    padding: 40px !important;
     margin: 20px 0;
 }
 
 /* Button */
 .stButton button {
-    background: #4d8c4d !important;
-    color: #e0f8d8 !important;
-    border-radius: 80px !important;
+    background: #70c497 !important;
+    color: #ffffff !important;
+    border-radius: 60px !important;
     padding: 20px 50px !important;
-    font-size: 1.3rem !important;
-    font-weight: 700 !important;
+    font-size: 1.2rem !important;
 }
 
 /* Sidebar */
 section[data-testid="stSidebar"] {
-    background: rgba(0, 0, 0, 0.2) !important;
-    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.5) !important;
+    backdrop-filter: blur(10px);
 }
 </style>
 """, unsafe_allow_html=True)
