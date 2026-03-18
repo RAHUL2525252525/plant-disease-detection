@@ -444,7 +444,6 @@ def mock_chatbot_response(prompt):
 
 
 # 1. KINETIC BACKGROUND - Swaying Plants
-# 1. KINETIC BACKGROUND - Swaying Plants
 st.markdown("""
     <video autoplay loop muted playsinline  style="
         position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;
@@ -460,7 +459,7 @@ st.markdown("""
     
     .stApp { background: transparent; font-family: 'Inter', sans-serif; }
 
-    /* --- 1. THE FLOATING PULL ARROW --- */
+    /* --- FLOATING PULL ARROW --- */
     button[kind="headerNoPadding"] { display: none !important; }
     
     [data-testid="collapsedControl"] {
@@ -493,16 +492,15 @@ st.markdown("""
         font-weight: 900;
     }
 
-    /* --- 2. THE GLASS DASHBOARD (SIDEBAR) --- */
+    /* --- GLASS DASHBOARD (SIDEBAR) --- */
     section[data-testid="stSidebar"] {
         background: rgba(0, 0, 0, 0.85) !important;
         backdrop-filter: blur(40px) saturate(160%) !important;
         border-right: 1px solid rgba(167, 255, 131, 0.2);
-        /* Remove fixed width to allow natural collapse */
         transition: all 0.3s ease;
     }
 
-    /* --- 3. COMPACT MICRO-UI FOR DASHBOARD --- */
+    /* --- COMPACT MICRO-UI FOR DASHBOARD --- */
     section[data-testid="stSidebar"] label, 
     section[data-testid="stSidebar"] p {
         font-size: 0.8rem !important;
@@ -541,7 +539,7 @@ st.markdown("""
         margin: 0 !important;
     }
 
-    /* --- 4. MAIN CONTENT AREA --- */
+    /* --- MAIN CONTENT AREA --- */
     h1 {
         font-weight: 900 !important;
         font-size: clamp(3rem, 10vw, 7rem) !important;
@@ -569,14 +567,11 @@ st.markdown("""
 
 # 3. DASHBOARD CONTENT (Inside the Slide-out)
 with st.sidebar:
-    st.markdown("### 🛰️ SYSTEM HUD")
-    st.warning("ACTIVE SCANNING: Sensors Normal")
-    
+    # Just a clean sidebar without system commands
     st.selectbox("ANALYSIS MODE", ["Deep Scan", "Quick Check", "Neural Map"])
     st.slider("SENSITIVITY", 0, 100, 75)
-    
-    st.markdown("---")
-    st.markdown("<p style='font-size: 0.75rem; color: #a7ff83;'>SYSTEM VERSION: 4.0.2-EMERALD</p>", unsafe_allow_html=True)
+    st.radio("DISPLAY STYLE", ["Light", "Dark", "Emerald"])
+
 # 3. DASHBOARD CONTENT (Inside the Slide-out)
 
 # 3. IMPLEMENTATION
