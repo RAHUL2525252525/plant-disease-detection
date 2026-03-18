@@ -956,6 +956,34 @@ if page == "Home":
     # 👉 your existing Home code here (image upload, prediction, PDF, etc)
 
 # ---------------- Chatbot ----------------
+# ---------------- Home ----------------
+if page == "Home":
+    st.markdown("## 🌿 AI Plant Disease Detection")
+    
+    # Input Section
+    input_method = st.radio("Input Method", ["Camera", "Upload"], horizontal=True)
+    image_obj = None
+
+    if input_method == "Camera":
+        cam = st.camera_input("Take leaf picture")
+        if cam:
+            image_obj = Image.open(cam).convert("RGB")
+    else:
+        up = st.file_uploader("Upload leaf image", type=["jpg","png"])
+        if up:
+            image_obj = Image.open(up).convert("RGB")
+    
+    if image_obj:
+        st.image(image_obj, width=250)
+        if st.button("Analyze"):
+            # Run prediction and show results
+            diagnosis, confidence = mock_predict(image_obj)
+            st.success(f"Prediction: {diagnosis} ({confidence*100:.2f}%)")
+            # Optionally, generate PDF or save history
+            save_history(diagnosis, confidence)
+            st.info("Prediction saved to history.")
+
+# ---------------- Chatbot ----------------
 elif page == "Chatbot":
     st.markdown("## 🤖 AI Crop Assistant Chatbot")
     st.markdown("Ask me anything about crop care, fertilizers, or general disease management.")
@@ -983,7 +1011,6 @@ elif page == "Chatbot":
 
         st.session_state.messages.append({"role": "assistant", "content": response})
 
-
 # ---------------- History ----------------
 elif page == "History":
     st.markdown("## 📜 Prediction History")
@@ -1009,7 +1036,6 @@ elif page == "History":
             key="download_csv_btn"
         )
 
-
 # ---------------- About ----------------
 elif page == "About":
     st.markdown("## ℹ️ About AI Plant Doctor")
@@ -1026,11 +1052,9 @@ elif page == "About":
     Always confirm with agricultural experts.
     """)
 
-
 # ---------------- FALLBACK (OPTIONAL) ----------------
 else:
     st.warning("Invalid page selection.")
-
 
 # ---------------- MAIN ----------------
 if __name__ == "__main__":
