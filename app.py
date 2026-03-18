@@ -443,77 +443,124 @@ def mock_chatbot_response(prompt):
         return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
 
 
+# 1. THE TECHNICAL GRID & VIDEO BACKGROUND
 st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;900&display=swap');
-
-.stApp { background: transparent; font-family: 'Inter', sans-serif; }
-
-/* --- 1. TITAN HEADER --- */
-h1 {
-    font-weight: 900 !important;
-    font-size: clamp(3rem, 15vw, 10rem) !important;
-    letter-spacing: -12px !important;
-    color: #ffffff;
-    line-height: 0.75 !important;
-    margin: 0 !important;
-    filter: drop-shadow(0 30px 60px rgba(0,0,0,1));
-}
-
-/* --- 2. MICRO-UI: CONTROLS & ALERTS (ULTRA MICRO) --- */
-/* Sidebar & Input Labels */
-section[data-testid="stSidebar"] label, 
-section[data-testid="stSidebar"] p,
-.stSelectbox label, 
-.stTextInput label,
-.stRadio label p {
-    font-size: 3px !important;   /* Ultra tiny */
-    font-weight: 600 !important;
-    letter-spacing: 1px !important;
-    text-transform: uppercase;
-    color: rgba(167, 255, 131, 0.25) !important;
-    margin-bottom: 1px !important;
-}
-
-/* Alert/Warning Boxes */
-.stAlert {
-    background: rgba(0, 0, 0, 0.7) !important;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(167, 255, 131, 0.03) !important;
-    border-radius: 0px !important;
-    padding: 1px 4px !important;   /* Tiny padding */
-    min-height: 0px !important;
-}
-
-/* Alert Text */
-.stAlert p, .stAlert div {
-    font-size: 3px !important;  /* Tiny text */
-    font-weight: 400 !important;
-    letter-spacing: 0.5px;
-    color: #a7ff83 !important;
-    margin: 0 !important;
-    text-transform: uppercase;
-}
-
-/* Inputs - Nano-Sized for Pro Look */
-.stSelectbox div[data-baseweb="select"], 
-.stTextInput input,
-.stRadio {
-    background: rgba(255, 255, 255, 0.02) !important;
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
-    border-radius: 0px !important;
-    height: 22px !important;    /* Tiny height */
-    font-size: 7px !important;  /* Tiny font inside input */
-    color: #666 !important;
-    padding: 0 4px !important;
-}
-
-/* Hide standard UI clutter */
-#MainMenu, footer, header {visibility: hidden;}
-.block-container { padding: 4rem !important; max-width: 95% !important; }
-</style>
+    <video autoplay loop muted playsinline  style="
+        position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;
+        z-index: -2; filter: brightness(0.1) contrast(1.5) grayscale(1); object-fit: cover;">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-video-of-leaves-in-a-branch-11440-large.mp4" type="video/mp4">
+    </video>
+    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+        background-image: radial-gradient(rgba(167, 255, 131, 0.05) 1px, transparent 1px);
+        background-size: 30px 30px; z-index: -1; pointer-events: none;"></div>
 """, unsafe_allow_html=True)
 
+# 2. THE KINETIC BLUEPRINT CSS
+st.markdown("""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400;900&family=JetBrains+Mono:wght@100&display=swap');
+    
+    .stApp { background: transparent; font-family: 'Inter', sans-serif; }
+
+    /* --- 1. THE ASYMMETRIC HEADER --- */
+    h1 {
+        font-weight: 900 !important;
+        font-size: clamp(3rem, 12vw, 8rem) !important;
+        letter-spacing: -10px !important;
+        color: #ffffff;
+        line-height: 0.8 !important;
+        margin: 0 !important;
+        padding-left: 20px;
+        border-left: 1px solid rgba(167, 255, 131, 0.3);
+    }
+
+    /* --- 2. ULTRA-MICRO INSTRUMENTATION (SIZE 3-5) --- */
+    section[data-testid="stSidebar"] label, 
+    section[data-testid="stSidebar"] p,
+    .stSelectbox label, 
+    .stTextInput label,
+    .stRadio label p {
+        font-size: 3.5px !important; /* Ultra-Micro */
+        font-weight: 400 !important;
+        letter-spacing: 2px !important;
+        text-transform: uppercase;
+        color: rgba(167, 255, 131, 0.3) !important;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Target Alerts - Minimalist HUD Style */
+    .stAlert {
+        background: rgba(0, 0, 0, 0.8) !important;
+        border: none !important;
+        border-left: 2px solid #a7ff83 !important;
+        border-radius: 0px !important;
+        padding: 2px 8px !important;
+    }
+    .stAlert p {
+        font-size: 5px !important;
+        letter-spacing: 1px;
+        color: #a7ff83 !important;
+        text-transform: uppercase;
+    }
+
+    /* --- 3. THE "BLUEPRINT" CONTAINERS --- */
+    .prediction-box, .solution-box, .stChatMessage {
+        background: rgba(255, 255, 255, 0.01) !important;
+        backdrop-filter: blur(40px);
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        border-radius: 0px !important;
+        padding: 50px !important;
+        margin: 20px 0;
+        position: relative;
+    }
+
+    /* Corner Accents for a Technical Feel */
+    .prediction-box::before {
+        content: ""; position: absolute; top: 0; left: 0; width: 20px; height: 20px;
+        border-top: 1px solid #a7ff83; border-left: 1px solid #a7ff83;
+    }
+    .prediction-box::after {
+        content: ""; position: absolute; bottom: 0; right: 0; width: 20px; height: 20px;
+        border-bottom: 1px solid #a7ff83; border-right: 1px solid #a7ff83;
+    }
+
+    /* --- 4. TACTILE MONOCHROME BUTTON --- */
+    .stButton button {
+        width: 100% !important;
+        height: 80px !important;
+        background: transparent !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        border-radius: 0px !important;
+        font-size: 1.5rem !important;
+        font-weight: 100 !important;
+        text-transform: uppercase;
+        letter-spacing: 12px;
+        transition: 0.5s ease;
+    }
+
+    .stButton button:hover {
+        background: #ffffff !important;
+        color: #000000 !important;
+        letter-spacing: 18px;
+    }
+
+    /* --- 5. NANO-INPUTS --- */
+    .stSelectbox div[data-baseweb="select"], 
+    .stTextInput input {
+        background: rgba(0,0,0,0.5) !important;
+        border: 1px solid rgba(167, 255, 131, 0.1) !important;
+        height: 20px !important;
+        font-size: 8px !important;
+        color: #a7ff83 !important;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Remove standard Streamlit noise */
+    #MainMenu, footer, header {visibility: hidden;}
+    .block-container { padding: 4rem !important; max-width: 95% !important; }
+</style>
+""", unsafe_allow_html=True)
 # ---------------- SIDEBAR ----------------
 st.sidebar.title("🌿 Controls & Alerts")
 lang_choice = st.sidebar.selectbox("Language / ಭಾಷೆ", ("en", "kn"), 
