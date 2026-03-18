@@ -450,7 +450,7 @@ st.markdown("""
         <source src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-video-of-leaves-in-a-branch-11440-large.mp4" type="video/mp4">
     </video>
     <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-        background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%); 
+        background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 100%); 
         z-index: -1; pointer-events: none;"></div>
 """, unsafe_allow_html=True)
 
@@ -478,13 +478,12 @@ st.markdown("""
     }
 
     /* --- 2. CONTROLS & ALERTS (Standard Readable UX) --- */
-    /* Sidebar Labels & System Text */
     section[data-testid="stSidebar"] label, 
     section[data-testid="stSidebar"] p,
     .stSelectbox label, 
     .stTextInput label,
     .stRadio label p {
-        font-size: 0.85rem !important; /* Normal, clean, readable */
+        font-size: 0.85rem !important; 
         font-weight: 600 !important;
         letter-spacing: 0.5px;
         color: rgba(255, 255, 255, 0.8) !important;
