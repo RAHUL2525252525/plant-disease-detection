@@ -442,117 +442,108 @@ def mock_chatbot_response(prompt):
     else:
         return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
 
-# ---------------- CUSTOM CSS (Your Beautiful Design) ----------------
 st.markdown("""
 <style>
-    /* 1. The Void - Pure OLED Black with fixed background */
+    /* 1. The Foundation - Matte Obsidian */
     .stApp {
-        background: #000000;
+        background-color: #050505;
         background-image: 
-            radial-gradient(circle at 10% 20%, rgba(0, 255, 127, 0.05) 0%, transparent 40%),
-            radial-gradient(circle at 90% 80%, rgba(0, 200, 255, 0.03) 0%, transparent 40%);
-        color: #e0f2f1;
+            linear-gradient(rgba(16, 255, 131, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(16, 255, 131, 0.02) 1px, transparent 1px);
+        background-size: 100px 100px;
     }
 
-    /* 2. Massive Title Layout - Centered with Glow */
+    /* 2. Massive Hero Title - Left Aligned & Brutalist */
     h1 {
-        font-family: 'Orbitron', sans-serif;
-        text-align: center;
-        letter-spacing: 10px !important;
-        background: linear-gradient(to right, #ffffff, #a7ff83, #00ff87);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 4.5rem !important;
-        padding: 40px 0 !important;
-        filter: drop-shadow(0 0 15px rgba(167,255,131,0.3));
+        font-family: 'Helvetica Neue', sans-serif;
+        font-weight: 900 !important;
+        font-size: 5rem !important;
+        letter-spacing: -3px !important;
+        color: #ffffff;
+        line-height: 0.9 !important;
+        margin-bottom: 20px !important;
         text-transform: uppercase;
     }
+    
+    /* Sub-accent for the title */
+    h1::after {
+        content: " SYSTEM v2.0";
+        font-size: 1rem;
+        letter-spacing: 5px;
+        color: #00ff87;
+        vertical-align: middle;
+        font-weight: 300;
+    }
 
-    /* 3. The "Bio-Shield" Containers */
+    /* 3. The "Vault" Cards - Sharp & Heavy */
     .prediction-box, .solution-box, .stChatMessage {
-        background: linear-gradient(135deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.05) 100%) !important;
-        backdrop-filter: blur(30px) saturate(200%);
-        border-radius: 40px 5px 40px 5px !important; /* Asymmetric "Massive" corners */
-        border: 1px solid rgba(167, 255, 131, 0.2) !important;
-        padding: 40px !important;
-        box-shadow: 20px 20px 60px rgba(0,0,0,0.7);
-        position: relative;
+        background: #0d0d0d !important;
+        border: none !important;
+        border-left: 8px solid #00ff87 !important; /* Thick "Massive" Accent */
+        border-radius: 0px !important; 
+        padding: 50px !important;
+        box-shadow: 50px 50px 100px rgba(0,0,0,0.5);
+        margin-bottom: 30px;
+    }
+
+    /* 4. The Diagnosis Block - High Contrast */
+    .primary-diagnosis-box {
+        background: #111;
+        border: 1px solid #222;
+        padding: 60px !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
     }
     
-    /* Decorative Corner Accents */
-    .prediction-box::before {
-        content: ""; position: absolute; top: 0; left: 0; width: 40px; height: 40px;
-        border-top: 3px solid #a7ff83; border-left: 3px solid #a7ff83;
+    .primary-diagnosis-box h2 {
+        font-size: 3rem !important;
+        color: #00ff87;
+        font-weight: 800;
+        margin: 0;
     }
 
-    /* 4. The "Holographic" Diagnosis Center */
-    .primary-diagnosis-box {
-        background: rgba(0, 255, 135, 0.03);
-        border: 2px solid rgba(167, 255, 131, 0.5);
-        border-radius: 0px 50px 0px 50px;
-        padding: 50px !important;
-        text-align: center;
-        position: relative;
-        box-shadow: inset 0 0 50px rgba(167, 255, 131, 0.1);
-    }
-
-    /* The Moving High-Tech Sweep */
-    .primary-diagnosis-box::after {
-        content: ""; position: absolute; inset: 0;
-        background: linear-gradient(90deg, transparent, rgba(167, 255, 131, 0.1), transparent);
-        width: 200%; transform: translateX(-100%);
-        animation: laserSweep 5s linear infinite;
-    }
-    @keyframes laserSweep {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
-    }
-
-    /* 5. "Liquid Mercury" Buttons */
+    /* 5. "The Monolith" Button */
     .stButton button {
         width: 100% !important;
-        background: #000000 !important;
-        color: #ffffff !important;
-        border: 1px solid rgba(255,255,255,0.2) !important;
-        border-radius: 0px !important; /* Sharp industrial look */
-        padding: 20px !important;
-        font-size: 1.2rem !important;
-        letter-spacing: 3px;
-        transition: 0.5s;
-        position: relative;
-        overflow: hidden;
+        height: 80px !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        border-radius: 0px !important;
+        font-size: 1.5rem !important;
+        font-weight: 900 !important;
+        text-transform: uppercase;
+        border: none !important;
+        transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
     }
 
     .stButton button:hover {
-        background: #a7ff83 !important;
-        color: #000000 !important;
-        border-color: #a7ff83 !important;
-        box-shadow: 0 0 40px rgba(167, 255, 131, 0.8);
+        background: #00ff87 !important;
+        transform: scale(0.98); /* "Press" effect instead of "Grow" */
     }
 
-    /* 6. Sidebar - Deep Carbon Texture */
+    /* 6. Sidebar - Minimalist Tech */
     section[data-testid="stSidebar"] {
-        background: #050505 !important;
-        border-right: 1px solid #1a1a1a;
-    }
-    
-    /* 7. Image Hover Effect */
-    [data-testid="stImage"] img {
-        border-radius: 20px;
-        border: 2px solid rgba(167, 255, 131, 0.1);
-        transition: 0.3s;
-    }
-    [data-testid="stImage"] img:hover {
-        border-color: #a7ff83;
-        transform: scale(1.02);
-        box-shadow: 0 0 30px rgba(167, 255, 131, 0.2);
+        background: #000000 !important;
+        border-right: 1px solid #111;
+        padding-top: 50px;
     }
 
-    /* Custom Scrollbar for the Dark Mode */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #000; }
-    ::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #a7ff83; }
+    /* Control Label Styling */
+    .stSelectbox label, .stRadio label {
+        color: #555 !important;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.8rem;
+    }
+
+    /* 7. Full-Width Layout Overrides */
+    .block-container {
+        padding-top: 2rem !important;
+        max-width: 95% !important;
+    }
 
 </style>
 """, unsafe_allow_html=True)
