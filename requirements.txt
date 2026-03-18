@@ -4,4 +4,3 @@ pillow
 pandas
 reportlab
 opencv-python-headless
-tensorflow-cpu
