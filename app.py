@@ -53,6 +53,7 @@ treatments = {
     "Tomato__Early_blight": "Use crop rotation and fungicides.",
     "Tomato__healthy": "Your plant is healthy. Keep watering properly."
 }
+disease_treatments = treatments
 
 # ---------------- PREDICTION FUNCTION (NO TENSORFLOW) ----------------
 def predict_disease(img):
