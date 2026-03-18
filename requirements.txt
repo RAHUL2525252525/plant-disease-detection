@@ -1,7 +1,7 @@
 streamlit
-tensorflow-cpu==2.10.0
 numpy
 pillow
 pandas
 reportlab
-opencv-python
+opencv-python-headless
+tensorflow-cpu
