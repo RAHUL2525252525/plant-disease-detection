@@ -957,6 +957,34 @@ if page == "Home":
 
 # ---------------- Chatbot ----------------
 # ---------------- Home ----------------
+import streamlit as st
+from PIL import Image
+
+# ---------------- Mock Functions ----------------
+def mock_predict(image):
+    """Mock prediction function"""
+    return "Early Blight", 0.92
+
+def save_history(diagnosis, confidence):
+    """Mock save function"""
+    pass
+
+def load_history():
+    """Mock history loader"""
+    return []
+
+def history_to_df(history_data):
+    import pandas as pd
+    return pd.DataFrame(history_data)
+
+def mock_chatbot_response(prompt):
+    """Mock chatbot response"""
+    return f"Response to: {prompt}"
+
+# ---------------- Sidebar Page Selection ----------------
+page = st.sidebar.selectbox("Choose Page", ["Home", "Chatbot", "History", "About"])
+
+# ---------------- Home ----------------
 if page == "Home":
     st.markdown("## 🌿 AI Plant Disease Detection")
     
@@ -979,7 +1007,6 @@ if page == "Home":
             # Run prediction and show results
             diagnosis, confidence = mock_predict(image_obj)
             st.success(f"Prediction: {diagnosis} ({confidence*100:.2f}%)")
-            # Optionally, generate PDF or save history
             save_history(diagnosis, confidence)
             st.info("Prediction saved to history.")
 
@@ -1024,9 +1051,7 @@ elif page == "History":
         st.info("No prediction history found. Start analyzing images on the Home page!")
     else:
         st.dataframe(df, use_container_width=True)
-        
         st.markdown("---")
-        
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button(
             label="Download CSV",
@@ -1052,10 +1077,6 @@ elif page == "About":
     Always confirm with agricultural experts.
     """)
 
-# ---------------- FALLBACK (OPTIONAL) ----------------
+# ---------------- Fallback ----------------
 else:
     st.warning("Invalid page selection.")
-
-# ---------------- MAIN ----------------
-if __name__ == "__main__":
-    pass
