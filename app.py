@@ -444,10 +444,11 @@ def mock_chatbot_response(prompt):
         
 # 1. Background Video Injection (Place this at the very top of your app)
 # 1. CINEMATIC BACKGROUND VIDEO
+# 1. CINEMATIC BACKGROUND VIDEO (Nature Overlay)
 st.markdown("""
     <video autoplay loop muted playsinline  style="
         position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;
-        z-index: -1; filter: brightness(0.15) contrast(1.3) grayscale(0.2); object-fit: cover;">
+        z-index: -1; filter: brightness(0.15) contrast(1.2) saturate(0.5); object-fit: cover;">
         <source src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-video-of-leaves-in-a-branch-11440-large.mp4" type="video/mp4">
     </video>
 """, unsafe_allow_html=True)
@@ -470,59 +471,59 @@ st.markdown("""
         filter: drop-shadow(0 30px 60px rgba(0,0,0,1));
     }
 
-    /* --- 2. MICRO-UI: CONTROLS & ALERTS (REDUCED SIZE) --- */
-    /* Target Sidebar labels, selection boxes, and radio text */
+    /* --- 2. MICRO-UI: CONTROLS & ALERTS (SIZE 5 EQUIVALENT) --- */
+    /* Target Sidebar labels, radio buttons, and selectbox headers */
     section[data-testid="stSidebar"] label, 
     section[data-testid="stSidebar"] p,
     .stSelectbox label, 
     .stTextInput label,
     .stRadio label p {
-        font-size: 0.6rem !important; /* Ultra-small pro font */
+        font-size: 7px !important; /* Precision Size 5 equivalent */
         font-weight: 700 !important;
         letter-spacing: 3px !important;
         text-transform: uppercase;
         color: rgba(167, 255, 131, 0.4) !important;
-        margin-bottom: 5px !important;
+        margin-bottom: 4px !important;
     }
 
     /* Target the Alert/Warning Boxes (Ultra Compact) */
     .stAlert {
-        background: rgba(0, 0, 0, 0.6) !important;
-        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.7) !important;
+        backdrop-filter: blur(15px);
         border: 1px solid rgba(167, 255, 131, 0.1) !important;
-        border-radius: 2px !important;
-        padding: 8px 15px !important;
+        border-radius: 0px !important;
+        padding: 5px 12px !important;
         min-height: 0px !important;
     }
     
-    /* Alert Text Size */
+    /* Alert Text Size 5 */
     .stAlert p, .stAlert div {
-        font-size: 0.65rem !important;
+        font-size: 7px !important;
         font-weight: 400 !important;
-        letter-spacing: 1px;
+        letter-spacing: 1.5px;
         color: #a7ff83 !important;
         margin: 0 !important;
+        text-transform: uppercase;
     }
 
     /* --- 3. THE "MONOLITH" GLASS CARDS --- */
     .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(0, 0, 0, 0.75) !important;
+        background: rgba(0, 0, 0, 0.8) !important;
         backdrop-filter: blur(80px) saturate(200%);
         -webkit-backdrop-filter: blur(80px) saturate(200%);
         border: 1px solid rgba(255, 255, 255, 0.03) !important;
         border-radius: 0px !important; 
-        padding: 50px !important;
+        padding: 60px !important;
         box-shadow: 0 100px 200px rgba(0,0,0,1);
         margin: 20px 0;
     }
 
-    /* --- 4. THE COMMAND BUTTON (MASSIVE CONTRAST) --- */
+    /* --- 4. THE COMMAND BUTTON --- */
     .stButton button {
         width: 100% !important;
         height: 100px !important;
         background: #ffffff !important;
         color: #000000 !important;
-        border: none !important;
         border-radius: 0px !important;
         font-size: 2rem !important;
         font-weight: 900 !important;
@@ -539,21 +540,21 @@ st.markdown("""
 
     /* --- 5. SIDEBAR STEALTH MODE --- */
     section[data-testid="stSidebar"] {
-        background: rgba(0, 0, 0, 0.85) !important;
-        backdrop-filter: blur(40px);
+        background: rgba(0, 0, 0, 0.9) !important;
+        backdrop-filter: blur(50px);
         border-right: 1px solid rgba(255, 255, 255, 0.05);
-        width: 380px !important;
+        width: 350px !important;
     }
 
-    /* Inputs - Dark Chrome Style */
+    /* Inputs - Nano-Sized for Pro Look */
     .stSelectbox div[data-baseweb="select"], 
     .stTextInput input {
         background: rgba(255, 255, 255, 0.02) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
         border-radius: 0px !important;
-        height: 35px !important;
-        font-size: 0.75rem !important;
-        color: #888 !important;
+        height: 30px !important;
+        font-size: 10px !important;
+        color: #666 !important;
     }
 
     /* Hide standard UI clutter */
