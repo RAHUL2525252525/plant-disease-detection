@@ -946,45 +946,6 @@ if 'current_disease' in locals() and current_disease in disease_treatments:
 else:
     st.info("No clear prediction could be made. Please upload a clear image of the diseased leaf.")
 
-# ---------------- Chatbot (Feature 3) ----------------
-# ---------------- PAGE NAVIGATION ----------------
-
-# ---------------- PAGE NAVIGATION ----------------
-
-if page == "Home":
-    #st.markdown("## 🌿 AI Plant Disease Detection")
-    # 👉 your existing Home code here (image upload, prediction, PDF, etc)
-
-# ---------------- Chatbot ----------------
-# ---------------- Home ----------------
-import streamlit as st
-from PIL import Image
-
-# ---------------- Mock Functions ----------------
-def mock_predict(image):
-    """Mock prediction function"""
-    return "Early Blight", 0.92
-
-def save_history(diagnosis, confidence):
-    """Mock save function"""
-    pass
-
-def load_history():
-    """Mock history loader"""
-    return []
-
-def history_to_df(history_data):
-    import pandas as pd
-    return pd.DataFrame(history_data)
-
-def mock_chatbot_response(prompt):
-    """Mock chatbot response"""
-    return f"Response to: {prompt}"
-
-# ---------------- Sidebar Page Selection ----------------
-page = st.sidebar.selectbox("Choose Page", ["Home", "Chatbot", "History", "About"])
-
-# ---------------- Home ----------------
 if page == "Home":
     st.markdown("## 🌿 AI Plant Disease Detection")
     
