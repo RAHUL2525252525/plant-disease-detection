@@ -442,131 +442,107 @@ def mock_chatbot_response(prompt):
     else:
         return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
         
+# 1. Background Video Injection (Place this at the very top of your app)
+st.markdown("""
+    <video autoplay loop muted playsinline  style="
+        position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;
+        z-index: -1; filter: brightness(0.2) contrast(1.2); object-fit: cover;">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-video-of-leaves-in-a-branch-11440-large.mp4" type="video/mp4">
+    </video>
+""", unsafe_allow_html=True)
+
+# 2. The High-End Kinetic CSS
 st.markdown("""
 <style>
-    /* 1. THE FOUNDATION - KINETIC OBSIDIAN */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;900&display=swap');
     
     .stApp {
-        background: radial-gradient(circle at 2% 2%, #051a14 0%, #000000 100%);
-        background-attachment: fixed;
+        background: transparent;
         font-family: 'Inter', sans-serif;
     }
 
-    /* 2. THE TITAN HEADER - VARIABLE WEIGHT */
+    /* 1. TITAN HEADER - SHADOW DEPTH */
     h1 {
         font-weight: 900 !important;
-        font-size: clamp(3rem, 10vw, 8.5rem) !important;
-        letter-spacing: -10px !important;
-        background: linear-gradient(180deg, #ffffff 30%, rgba(167, 255, 131, 0.5) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        line-height: 0.8 !important;
-        margin-bottom: 0.5rem !important;
-        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+        font-size: clamp(3rem, 12vw, 9rem) !important;
+        letter-spacing: -12px !important;
+        color: #ffffff;
+        line-height: 0.75 !important;
+        margin-bottom: 2rem !important;
+        filter: drop-shadow(0 20px 50px rgba(0,0,0,1));
     }
 
-    /* 3. MICRO-UI CONTROLS (THE "INSTRUMENTATION" LOOK) */
-    /* Shrink labels and inputs for professional UX */
+    /* 2. MICRO-UI CONTROLS (Professional Instrument Look) */
+    /* Target Sidebar Labels, Radio buttons, and Selectboxes */
     section[data-testid="stSidebar"] label, 
+    section[data-testid="stSidebar"] p,
     .stSelectbox label, 
     .stTextInput label {
-        font-size: 0.65rem !important;
+        font-size: 0.65rem !important; /* Tiny font for pro look */
         font-weight: 700 !important;
-        letter-spacing: 2px;
+        letter-spacing: 2.5px;
         text-transform: uppercase;
-        color: rgba(167, 255, 131, 0.5) !important;
-        margin-bottom: 8px !important;
+        color: rgba(167, 255, 131, 0.6) !important;
+        margin-bottom: 10px !important;
     }
 
-    .stSelectbox div[data-baseweb="select"], 
-    .stTextInput input {
-        background: rgba(255, 255, 255, 0.03) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 8px !important;
-        color: #fff !important;
-        font-size: 0.8rem !important;
-        height: 45px !important;
+    /* Target the Alert/Warning Boxes */
+    .stAlert {
+        background: rgba(0, 0, 0, 0.4) !important;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(167, 255, 131, 0.2) !important;
+        border-radius: 4px !important;
+        padding: 10px !important;
+    }
+    .stAlert p {
+        font-size: 0.75rem !important; /* Small alert text */
+        color: #a7ff83 !important;
     }
 
-    /* 4. THE MIRAGE SLAB (GLASSMORPHISM) */
+    /* 3. TRIPLE-LAYERED GLASS CARDS */
     .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(255, 255, 255, 0.02) !important;
-        backdrop-filter: blur(50px) saturate(200%);
-        -webkit-backdrop-filter: blur(50px) saturate(200%);
-        border: 1px solid rgba(167, 255, 131, 0.1) !important;
-        border-radius: 0px !important; /* Sharp Brutalist Edges */
+        background: rgba(0, 0, 0, 0.5) !important;
+        backdrop-filter: blur(60px) saturate(200%);
+        -webkit-backdrop-filter: blur(60px) saturate(200%);
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        border-radius: 0px !important; /* Sharp Industrial edges */
         padding: 60px !important;
-        box-shadow: 0 60px 120px rgba(0,0,0,0.9);
+        box-shadow: 0 80px 160px rgba(0,0,0,0.8);
         margin: 40px 0;
-        position: relative;
     }
 
-    /* Floating Light Trace on top of boxes */
-    .prediction-box::after {
-        content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
-        background: linear-gradient(90deg, transparent, #a7ff83, transparent);
-        animation: trace 6s linear infinite;
-    }
-
-    @keyframes trace {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
-    }
-
-    /* 5. THE RESULT CENTER - BIOMETRIC GLOW */
-    .primary-diagnosis-box {
-        background: radial-gradient(circle, rgba(167, 255, 131, 0.12) 0%, transparent 70%);
-        text-align: left;
-        padding: 40px 0 !important;
-    }
-
-    .primary-diagnosis-box h2 {
-        font-size: clamp(2rem, 5vw, 4.5rem) !important;
-        font-weight: 900;
-        color: #ffffff;
-        letter-spacing: -3px;
-        text-shadow: 0 0 30px rgba(167, 255, 131, 0.4);
-    }
-
-    /* 6. THE TACTILE BUTTON - NEON SHIFT */
+    /* 4. TACTILE NEON BUTTON */
     .stButton button {
         width: 100% !important;
-        background: transparent !important;
-        color: #a7ff83 !important;
-        border: 1px solid #a7ff83 !important;
+        height: 100px !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        border: none !important;
         border-radius: 0px !important;
-        padding: 30px !important;
-        font-size: 1.2rem !important;
-        font-weight: 400 !important;
-        letter-spacing: 8px;
+        font-size: 1.8rem !important;
+        font-weight: 900 !important;
         text-transform: uppercase;
-        transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        letter-spacing: 10px;
+        transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .stButton button:hover {
         background: #a7ff83 !important;
-        color: #000 !important;
-        box-shadow: 0 0 60px rgba(167, 255, 131, 0.5);
-        letter-spacing: 12px;
+        box-shadow: 0 0 100px rgba(167, 255, 131, 0.5);
+        transform: translateY(-5px);
     }
 
-    /* 7. IMAGE - SCANNER MODE */
-    [data-testid="stImage"] img {
-        border-radius: 0px;
-        filter: grayscale(1) contrast(1.2);
-        border: 1px solid rgba(167, 255, 131, 0.2);
-        transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
-    }
-    [data-testid="stImage"] img:hover {
-        filter: grayscale(0) contrast(1);
-        border-color: #a7ff83;
-        transform: scale(1.02);
+    /* 5. SIDEBAR - TRANSPECTRAL BLACK */
+    section[data-testid="stSidebar"] {
+        background: rgba(0, 0, 0, 0.7) !important;
+        backdrop-filter: blur(30px);
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+        width: 400px !important;
     }
 
     /* Hide standard UI clutter */
     #MainMenu, footer, header {visibility: hidden;}
-    .block-container { padding: 4rem !important; }
+    .block-container { padding: 4rem !important; max-width: 95% !important; }
 
 </style>
 """, unsafe_allow_html=True)
