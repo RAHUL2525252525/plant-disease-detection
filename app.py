@@ -15,54 +15,62 @@ import random
 
 # Optional: text-to-speech
 try:
-    # Note: pyttsx3 installation is required for this feature to work locally
     import pyttsx3
     TTS_AVAILABLE = True
 except Exception:
     TTS_AVAILABLE = False
 
-# --- CONFIGURATION & SETUP ---
-
 # ---------------- Page Config ----------------
-st.set_page_config(page_title="AI Plant Doctor", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(
+    page_title="AI Plant Doctor",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-# IMPORTANT: These paths are local to the user's machine and must be adjusted for deployment
-# **CRITICAL FIX**: This TRAIN_DIR path must be changed or removed for deployment.
-# Use relative path for deployment
-TRAIN_DIR = "Train"  # Optional: Only works if Train folder exists in repo
-HISTORY_FILE = "history.json"
+# ---------------- PATH CONFIG (FIXED) ----------------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# Model path (IMPORTANT)
+MODEL_PATH = os.path.join(BASE_DIR, "model/plant_disease_model.h5")
+
+# Optional training folder (for class names)
+TRAIN_DIR = os.path.join(BASE_DIR, "Train")
+
+# History file
+HISTORY_FILE = os.path.join(BASE_DIR, "history.json")
+
+
+# ---------------- LOAD MODEL FUNCTION (FIXED) ----------------
 @st.cache_resource
 def load_ai_model(path):
-    """Loads the Keras model, suppressing errors if the file is missing."""
+    """Loads the Keras model safely."""
     if not os.path.exists(path):
-        st.warning(f"Model file not found at {path}. Prediction functionality will be disabled.")
+        st.error(f"❌ Model file NOT found at: {path}")
         return None
     try:
-        # Suppress compile warnings if model was saved without optimizer config
-        return load_model(path, compile=False) 
+        return load_model(path, compile=False)
     except Exception as e:
-        st.error(f"Error loading model: {e}")
-        st.error("Please ensure the model file is correctly formatted and accessible.")
+        st.error(f"❌ Error loading model: {e}")
         return None
 
+
+# Load model
 model = load_ai_model(MODEL_PATH)
 
-# Fallback class names and Treatments
-FALLBACK_CLASSES = [
-    "Corn__Northern_Leaf_Blight", "Grape__Black_rot", "Grape__healthy", 
-    "Peach__Bacterial_spot", "Tomato__Early_blight", "Tomato__healthy"
-]
 
-# Fallback class names
+# ---------------- CLASS NAMES SETUP ----------------
 FALLBACK_CLASSES = [
-    "Corn__Northern_Leaf_Blight", "Grape__Black_rot", "Grape__healthy", 
-    "Peach__Bacterial_spot", "Tomato__Early_blight", "Tomato__healthy"
+    "Corn__Northern_Leaf_Blight",
+    "Grape__Black_rot",
+    "Grape__healthy",
+    "Peach__Bacterial_spot",
+    "Tomato__Early_blight",
+    "Tomato__healthy"
 ]
 
 class_names = []
 
-# Try loading class names from Train folder (if exists in GitHub repo)
+# Try loading from Train folder
 if os.path.exists(TRAIN_DIR) and os.path.isdir(TRAIN_DIR):
     try:
         class_names = sorted([
@@ -74,8 +82,8 @@ if os.path.exists(TRAIN_DIR) and os.path.isdir(TRAIN_DIR):
 else:
     class_names = FALLBACK_CLASSES
 
-    # APPLE
-    "Apple___Apple_scab": {
+    disease_treatments = {
+        "Apple___Apple_scab": {
         "medicines": "Copper fungicide, Mancozeb, Captan",
         "treatment": "Spray fungicides during early spring. Remove fallen leaves.",
         "suggestions": "Use resistant varieties, prune dense branches.",
@@ -958,7 +966,8 @@ elif page=="About":
     **Medicines** are general suggestions and may require specific dosage and timing based on local regulations and crop stage.
     """)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+
 
 # Clean up/End of file.
+if __name__ == "__main__":
+    app.run(debug=True)
