@@ -884,11 +884,12 @@ if page=="Home":
                                 st.write(f"**{res['class']}** ({res['confidence']:.2f}%)")
                     
                     # 5. Get Treatment Info & Nutrients (Feature 4)
-                    current_info = disease_treatments.get(cls, {})
-                    meds = current_info.get("medicines","None")
-                    treatment = current_info.get("treatment","No treatment info available.")
-                    suggestions = current_info.get("suggestions","No suggestions available.")
-                    nutrients = current_info.get("nutrients", "Consult a local expert for specific fertilizer advice.") # Feature 4
+                    current_info = disease_treatments.get(current_disease, {})
+
+meds = current_info.get("medicines", "None")
+treatment = current_info.get("treatment", "No treatment info available.")
+suggestions = current_info.get("suggestions", "No suggestions available.")
+nutrients = current_info.get("nutrients", "N/A")
 
                     # 6. PDF Download
                     pdf_width, pdf_height = A4
