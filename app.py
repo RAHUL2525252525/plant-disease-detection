@@ -822,16 +822,17 @@ st.markdown("---")
 page = st.sidebar.radio("Go to / ತೆರೆಯಿರಿ", ["Home","Chatbot","History","About"], key="main_nav")
 
 # ---------------- Home ----------------
-if page=="Home":
+if page == "Home":
     st.markdown("### 📷 Select Image Source")
     
     # Input Section
     with st.container(border=True):
-        input_method = st.radio("Input Method", ["Camera","Upload"], key="input_method_radio", horizontal=True)
+        input_method = st.radio("Input Method", ["Camera", "Upload"], key="input_method_radio", horizontal=True)
         image_obj = None
-        source_label = "camera" if input_method=="Camera" else "upload"
+        source_label = "camera" if input_method == "Camera" else "upload"
 
-        if input_method=="Camera":
+        # Camera Input
+        if input_method == "Camera":
             cam = st.camera_input("Take a clear close-up picture of the leaf", key="camera_input")
             if cam:
                 image_obj = Image.open(cam).convert("RGB")
@@ -840,93 +841,77 @@ if page=="Home":
             if up:
                 image_obj = Image.open(up).convert("RGB")
         
+        # If image is available
         if image_obj:
-            # Displaying the image at a fixed, small size (250px)
-            st.image(image_obj, caption="Input Image", width=250) 
-            
+            st.image(image_obj, caption="Input Image", width=250)
+
+            # Analyze Button
             if st.button(txt["analyze"], key="analyze_button", use_container_width=True):
-                
-                prediction_results = []
                 try:
+                    # 1️⃣ Predict
                     prediction_results = predict_disease(image_obj, top_n=3)
+
+                    if prediction_results:
+                        top_result = prediction_results[0]
+                        cls = top_result["class"]
+                        confidence = top_result["confidence"]
+
+                        # 2️⃣ Record History
+                        record = {
+                            "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                            "disease": cls,
+                            "confidence": float(confidence),
+                            "source": source_label
+                        }
+                        save_history(record)
+                        speak_text(f"{cls} detected.")
+
+                        # 3️⃣ Display Top Prediction
+                        st.markdown(
+                            f"<div class='primary-diagnosis-box'><h2>✅ Detected: {cls}</h2>"
+                            f"<p style='color: white; font-size:1.2em;'>Confidence: **{confidence:.2f}%**</p></div>",
+                            unsafe_allow_html=True
+                        )
+
+                        # 4️⃣ Confidence Warning
+                        CONFIDENCE_THRESHOLD = 80.0
+                        if confidence < CONFIDENCE_THRESHOLD:
+                            st.markdown(f"<div class='warning-box'>{txt['low_confidence']}</div>", unsafe_allow_html=True)
+
+                        # 5️⃣ Display Top 3 Predictions
+                        if len(prediction_results) > 1:
+                            with st.expander(f"🔮 {txt['top_predictions']}"):
+                                for i, res in enumerate(prediction_results[1:]):
+                                    st.write(f"**{res['class']}** ({res['confidence']:.2f}%)")
+
+                        # 6️⃣ Generate PDF Report
+                        pdf_width, pdf_height = A4
+                        pdf_buffer = generate_pdf_report(
+                            current_diagnosis=cls,
+                            confidence=confidence,
+                            record=record,
+                            treatments=disease_treatments,
+                            image=image_obj,
+                            width=pdf_width,
+                            height=pdf_height
+                        )
+
+                        # 7️⃣ PDF Download Button
+                        st.download_button(
+                            label="📄 Download PDF Report",
+                            data=pdf_buffer,
+                            file_name="plant_disease_report.pdf",
+                            mime="application/pdf"
+                        )
+
+                    else:
+                        st.error("No predictions returned.")
+
                 except RuntimeError as e:
                     st.error(str(e))
                 except Exception as e:
                     st.error(f"Prediction failed: {e}")
-                
-                if prediction_results:
-                    top_result = prediction_results[0]
-                    cls = top_result["class"]
-                    confidence = top_result["confidence"]
-
-                    # 1. Record History
-                    record = {
-                        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
-                        "disease": cls, 
-                        "confidence": float(confidence), 
-                        "source": source_label
-                    }
-                    save_history(record)
-                    speak_text(f"{cls} detected.")
                     
-                    # 2. Display Top Prediction
-                    st.markdown(f"<div class='primary-diagnosis-box'><h2>✅ Detected: {cls}</h2><p style='color: white; font-size:1.2em;'>Confidence: **{confidence:.2f}%**</p></div>", unsafe_allow_html=True)
-                    
-                    # 3. Confidence Warning Check
-                    CONFIDENCE_THRESHOLD = 80.0
-                    if confidence < CONFIDENCE_THRESHOLD:
-                        st.markdown(f"<div class='warning-box'>{txt['low_confidence']}</div>", unsafe_allow_html=True)
-                    
-                    # 4. Display Top 3
-                    if len(prediction_results) > 1:
-                        with st.expander(f"🔮 {txt['top_predictions']}"):
-                            for i, res in enumerate(prediction_results[1:]):
-                                st.write(f"**{res['class']}** ({res['confidence']:.2f}%)")
-
-#uploaded_file = st.file_uploader("Upload Leaf Image", type=["jpg","png","jpeg"])
-
-#if uploaded_file is not None:
-    img = Image.open(uploaded_file)
-
-    results = predict_disease(img)
-
-    if results:
-        current_disease = results[0]["class"]
-        confidence = results[0]["confidence"]
-    else:
-        current_disease = "Unknown"
-        confidence = 0
-
-    current_info = disease_treatments.get(current_disease, {})
-
-    meds = current_info.get("medicines", "None")
-    treatment = current_info.get("treatment", "No treatment info available.")
-    suggestions = current_info.get("suggestions", "No suggestions available.")
-    nutrients = current_info.get("nutrients", "N/A")
-
-if uploaded_file is not None:
-    st.image(img, caption="Uploaded Image", width=300)
-    st.success(f"Prediction: {current_disease} ({confidence:.2f}%)")
-
-    # 6. PDF Download
-    pdf_width, pdf_height = A4
-    pdf_buffer = generate_pdf_report(
-        current_diagnosis=cls,
-        confidence=confidence,
-        record=record,
-        treatments=disease_treatments,
-        image=image_obj,
-        width=pdf_width,
-        height=pdf_height
-    )
-
-    st.download_button(
-        label="Download PDF Report",
-        data=pdf_buffer,
-        file_name="plant_disease_report.pdf",
-        mime="application/pdf"
-    )
-
                     # 7. Streamlit Display of Treatment (Completed Blocif current_disease in disease_treatments:
 if 'current_disease' in locals() and current_disease in disease_treatments:
     txt = disease_treatments[current_disease]
