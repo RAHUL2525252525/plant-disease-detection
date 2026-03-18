@@ -365,7 +365,7 @@ if uploaded_file:
 }
 
 # Ensure fallbacks are complete
-if "Tomato___healthy" not in disease_treatments:
+if "Tomato___healthy" not in treatments:
     disease_treatments["Tomato___healthy"] = {"medicines": "None", "treatment": "N/A", "suggestions": "N/A", "nutrients": "Balanced NPK"}
 if "Tomato___Early_blight" not in disease_treatments:
      disease_treatments["Tomato___Early_blight"] = {"medicines": "Mancozeb", "treatment": "N/A", "suggestions": "N/A", "nutrients": "K/Mg"}
