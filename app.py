@@ -11,133 +11,277 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black, white, HexColor
 import random
 
-# ---------------- Optional TTS ----------------
+# Optional: Text-to-Speech
 try:
     import pyttsx3
     TTS_AVAILABLE = True
-except:
+except Exception:
     TTS_AVAILABLE = False
 
-# ---------------- Page Configuration ----------------
+# ---------------- Page Config ----------------
 st.set_page_config(
     page_title="AI Plant Doctor",
-    page_icon="🌿",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# ---------------- Paths ----------------
+# ---------------- PATH CONFIG ----------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 HISTORY_FILE = os.path.join(BASE_DIR, "history.json")
 
-# ---------------- Custom CSS (Premium Look) ----------------
-st.markdown("""
-<style>
-    .stApp {
-        background: linear-gradient(135deg, #0a1f1c 0%, #02120f 100%);
-    }
-    .main-header {
-        font-size: 3.8rem;
-        background: linear-gradient(90deg, #a7ff83, #4db6ac, #00bfa5);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 900;
-        text-align: center;
-        margin-bottom: 0.5rem;
-        letter-spacing: -2px;
-    }
-    .subtitle {
-        text-align: center;
-        color: #a7ff83;
-        font-size: 1.35rem;
-        margin-bottom: 2rem;
-        opacity: 0.9;
-    }
-    .glass-card {
-        background: rgba(255, 255, 255, 0.06);
-        backdrop-filter: blur(20px);
-        border-radius: 20px;
-        border: 1px solid rgba(167, 255, 131, 0.15);
-        padding: 25px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    }
-    .diagnosis-box {
-        background: linear-gradient(135deg, rgba(0, 77, 64, 0.4), rgba(0, 150, 136, 0.2));
-        border: 2px solid #a7ff83;
-        border-radius: 22px;
-        padding: 30px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
-    .diagnosis-box::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 40%;
-        height: 300%;
-        background: linear-gradient(120deg, transparent, rgba(167,255,131,0.3), transparent);
-        animation: shine 4s linear infinite;
-    }
-    @keyframes shine {
-        0% { transform: translateX(-100%) rotate(25deg); }
-        100% { transform: translateX(400%) rotate(25deg); }
-    }
-    .result-text {
-        font-size: 2.1rem;
-        font-weight: 800;
-        color: #a7ff83;
-    }
-    .confidence {
-        font-size: 1.6rem;
-        color: #ffffff;
-        margin: 10px 0;
-    }
-    .stButton>button {
-        background: linear-gradient(90deg, #a7ff83, #4db6ac);
-        color: #02120f;
-        font-weight: 800;
-        border-radius: 50px;
-        padding: 14px 40px;
-        font-size: 1.1rem;
-        border: none;
-        transition: all 0.3s ease;
-    }
-    .stButton>button:hover {
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 15px 25px rgba(167, 255, 131, 0.4);
-    }
-    .treatment-card {
-        background: rgba(0, 77, 64, 0.25);
-        border-left: 6px solid #a7ff83;
-        border-radius: 15px;
-        padding: 20px;
-        margin: 15px 0;
-    }
-    .sidebar .stRadio > label {
-        font-weight: 600;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# ---------------- Data & Functions ----------------
-class_names = [
+# ---------------- CLASS NAMES ----------------
+FALLBACK_CLASSES = [
     "Corn__Northern_Leaf_Blight", "Grape__Black_rot", "Grape__healthy",
     "Peach__Bacterial_spot", "Tomato__Early_blight", "Tomato__healthy"
 ]
+class_names = FALLBACK_CLASSES
 
-disease_treatments = { ... }   # ← Keep your full disease_treatments dictionary here (same as previous code)
+# ---------------- DISEASE TREATMENTS (Full Dictionary) ----------------
+disease_treatments = {
+    "Apple___Apple_scab": {
+        "medicines": "Copper fungicide, Mancozeb, Captan",
+        "treatment": "Spray fungicides during early spring. Remove fallen leaves.",
+        "suggestions": "Use resistant varieties, prune dense branches.",
+        "nutrients": "Balanced NPK, emphasis on Calcium"
+    },
+    "Apple___Black_rot": {
+        "medicines": "Thiophanate-methyl, Myclobutanil",
+        "treatment": "Remove infected fruit mummies and cankers.",
+        "suggestions": "Avoid overhead watering, prune infected limbs.",
+        "nutrients": "Potassium rich fertilizer"
+    },
+    "Apple___Cedar_apple_rust": {
+        "medicines": "Mancozeb, Myclobutanil",
+        "treatment": "Apply fungicides before petal fall.",
+        "suggestions": "Remove nearby juniper trees when possible.",
+        "nutrients": "Maintain balanced NPK"
+    },
+    "Apple___healthy": {
+        "medicines": "No treatment needed",
+        "treatment": "Maintain proper watering & fertilizing.",
+        "suggestions": "Prevent overwatering & monitor routinely.",
+        "nutrients": "Balanced NPK"
+    },
+    "Blueberry___healthy": {
+        "medicines": "No disease present",
+        "treatment": "Good soil drainage, pH 5 – 5.5 recommended.",
+        "suggestions": "Mulch and prune old stems.",
+        "nutrients": "Acid-forming fertilizers (Ammonium sulfate)"
+    },
+    "Cherry___healthy": {
+        "medicines": "No treatment needed",
+        "treatment": "Balanced fertilizer, remove weeds.",
+        "suggestions": "Ensure good sunlight and air flow.",
+        "nutrients": "Balanced NPK"
+    },
+    "Cherry___Powdery_mildew": {
+        "medicines": "Sulfur, Potassium bicarbonate",
+        "treatment": "Spray fungicide at first sign of powder.",
+        "suggestions": "Avoid overhead irrigation.",
+        "nutrients": "Avoid excessive Nitrogen"
+    },
+    "Corn___Cercospora_leaf_spot Gray_leaf_spot": {
+        "medicines": "Strobilurin fungicides, Propiconazole",
+        "treatment": "Apply at VT stage (tasseling).",
+        "suggestions": "Rotate crops, use resistant hybrids.",
+        "nutrients": "Balanced NPK"
+    },
+    "Corn___Common_rust": {
+        "medicines": "Triazole fungicides (Propiconazole)",
+        "treatment": "Spray when rust pustules appear.",
+        "suggestions": "Grow rust-resistant varieties.",
+        "nutrients": "Zinc and Manganese"
+    },
+    "Corn___Northern_Leaf_Blight": {
+        "medicines": "Azoxystrobin, Pyraclostrobin",
+        "treatment": "Apply fungicides at tasseling.",
+        "suggestions": "Use resistant seed, field sanitation.",
+        "nutrients": "Balanced NPK"
+    },
+    "Corn___healthy": {
+        "medicines": "No treatment needed",
+        "treatment": "Maintain nitrogen and spacing.",
+        "suggestions": "Avoid waterlogging.",
+        "nutrients": "High Nitrogen"
+    },
+    "Grape___Black_rot": {
+        "medicines": "Myclobutanil, Captan",
+        "treatment": "Remove mummified berries and prune infected shoots.",
+        "suggestions": "Improve air circulation, avoid overhead irrigation.",
+        "nutrients": "Potassium and Magnesium"
+    },
+    "Grape___Esca_(Black_Measles)": {
+        "medicines": "No cure, only prevention",
+        "treatment": "Remove infected vines, disinfect pruning tools.",
+        "suggestions": "Avoid drought stress.",
+        "nutrients": "Boron and Zinc"
+    },
+    "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)": {
+        "medicines": "Mancozeb, Copper-based fungicide",
+        "treatment": "Apply fungicide in early infection stages.",
+        "suggestions": "Avoid wet foliage.",
+        "nutrients": "Balanced NPK"
+    },
+    "Grape___healthy": {
+        "medicines": "No disease",
+        "treatment": "Regular pruning and fertigation.",
+        "suggestions": "Maintain good air circulation.",
+        "nutrients": "Balanced NPK"
+    },
+    "Orange___Haunglongbing_(Citrus_greening)": {
+        "medicines": "No chemical cure",
+        "treatment": "Remove infected trees immediately.",
+        "suggestions": "Control psyllid insect using imidacloprid.",
+        "nutrients": "Foliar Zinc, Manganese, and Boron"
+    },
+    "Peach___Bacterial_spot": {
+        "medicines": "Copper fungicides, Oxytetracycline",
+        "treatment": "Apply copper during dormancy.",
+        "suggestions": "Use resistant cultivars.",
+        "nutrients": "Calcium"
+    },
+    "Peach___healthy": {
+        "medicines": "None",
+        "treatment": "Maintain proper soil moisture.",
+        "suggestions": "Use organic fertilizers.",
+        "nutrients": "Balanced NPK"
+    },
+    "Pepper,_bell___Bacterial_spot": {
+        "medicines": "Copper-based sprays, Streptomycin",
+        "treatment": "Spray weekly during wet conditions.",
+        "suggestions": "Rotate crops, avoid overhead irrigation.",
+        "nutrients": "Calcium and Magnesium"
+    },
+    "Pepper,_bell___healthy": {
+        "medicines": "Not applicable",
+        "treatment": "Balanced NPK every 15 days.",
+        "suggestions": "Proper sunlight and watering.",
+        "nutrients": "Balanced NPK"
+    },
+    "Potato___Early_blight": {
+        "medicines": "Chlorothalonil, Mancozeb",
+        "treatment": "Spray at first appearance of leaf spots.",
+        "suggestions": "Remove infected leaves.",
+        "nutrients": "Potassium and Calcium"
+    },
+    "Potato___Late_blight": {
+        "medicines": "Metalaxyl, Cymoxanil",
+        "treatment": "Apply fungicides during cool/wet weather.",
+        "suggestions": "Destroy infected tubers.",
+        "nutrients": "Balanced NPK"
+    },
+    "Potato___healthy": {
+        "medicines": "None",
+        "treatment": "Maintain proper soil drainage.",
+        "suggestions": "Rotate crops every 2-3 years.",
+        "nutrients": "Potassium"
+    },
+    "Raspberry___healthy": {
+        "medicines": "No disease",
+        "treatment": "Organic compost, rooting hormone spray.",
+        "suggestions": "Prune old canes.",
+        "nutrients": "Balanced NPK"
+    },
+    "Soybean___healthy": {
+        "medicines": "None",
+        "treatment": "Maintain fertilizers and irrigation.",
+        "suggestions": "Pest monitoring recommended.",
+        "nutrients": "Phosphorus and Potassium"
+    },
+    "Squash___Powdery_mildew": {
+        "medicines": "Sulfur, Neem oil, Bicarbonate spray",
+        "treatment": "Spray early morning or evening.",
+        "suggestions": "Increase spacing, remove infected leaves.",
+        "nutrients": "Balanced NPK"
+    },
+    "Strawberry___Leaf_scorch": {
+        "medicines": "Copper fungicides",
+        "treatment": "Apply fungicide before fruiting.",
+        "suggestions": "Use drip irrigation.",
+        "nutrients": "Calcium"
+    },
+    "Strawberry___healthy": {
+        "medicines": "Not required",
+        "treatment": "Fertilize with NPK 10-10-10",
+        "suggestions": "Avoid waterlogging.",
+        "nutrients": "Balanced NPK"
+    },
+    "Tomato___Bacterial_spot": {
+        "medicines": "Copper sprays, Streptomycin",
+        "treatment": "Apply every 7–10 days.",
+        "suggestions": "Avoid working on wet plants.",
+        "nutrients": "Calcium and Magnesium"
+    },
+    "Tomato___Early_blight": {
+        "medicines": "Mancozeb, Chlorothalonil",
+        "treatment": "Spray fungicide every 14 days.",
+        "suggestions": "Remove old infected leaves.",
+        "nutrients": "Potassium and Magnesium"
+    },
+    "Tomato___healthy": {
+        "medicines": "None",
+        "treatment": "Provide support stakes.",
+        "suggestions": "Mulch soil to avoid fungus splash.",
+        "nutrients": "Balanced NPK"
+    },
+    "Tomato___Late_blight": {
+        "medicines": "Fluazinam, Metalaxyl",
+        "treatment": "Spray during humidity outbreaks.",
+        "suggestions": "Burn infected plant parts.",
+        "nutrients": "Potassium and Calcium"
+    },
+    "Tomato___Leaf_Mold": {
+        "medicines": "Copper oxychloride, Chlorothalonil",
+        "treatment": "Spray at first mold patches.",
+        "suggestions": "Increase airflow, reduce humidity.",
+        "nutrients": "Avoid excessive Nitrogen"
+    },
+    "Tomato___Septoria_leaf_spot": {
+        "medicines": "Mancozeb, Copper fungicide",
+        "treatment": "Start spraying when spots appear.",
+        "suggestions": "Remove bottom leaves.",
+        "nutrients": "Balanced NPK"
+    },
+    "Tomato___Spider_mites Two-spotted_spider_mite": {
+        "medicines": "Neem oil, Abamectin",
+        "treatment": "Spray underside of leaves.",
+        "suggestions": "Maintain humidity to reduce mites.",
+        "nutrients": "Silicon"
+    },
+    "Tomato___Target_Spot": {
+        "medicines": "Copper oxychloride, Mancozeb",
+        "treatment": "Start fungicide before fruiting.",
+        "suggestions": "Avoid leaf wetness.",
+        "nutrients": "Potassium"
+    },
+    "Tomato___Tomato_mosaic_virus": {
+        "medicines": "No cure for virus",
+        "treatment": "Remove affected plants completely.",
+        "suggestions": "Use virus-free seeds, disinfect tools.",
+        "nutrients": "Avoid stress and balance nutrients"
+    },
+    "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+        "medicines": "No chemical cure",
+        "treatment": "Remove infected plants & control whiteflies.",
+        "suggestions": "Use resistant cultivars & net protection.",
+        "nutrients": "Avoid excessive Nitrogen"
+    }
+}
 
+# ---------------- MOCK PREDICTION FUNCTION ----------------
 def predict_disease(img, top_n=3):
     results = []
     selected = random.sample(class_names, min(top_n, len(class_names)))
     for cls in selected:
-        confidence = random.uniform(75, 99.5)
-        results.append({"class": cls, "confidence": confidence})
+        confidence = random.uniform(70, 99)
+        results.append({
+            "class": cls,
+            "confidence": confidence
+        })
     return sorted(results, key=lambda x: x["confidence"], reverse=True)
 
-def save_history(record):
+# ---------------- HISTORY FUNCTIONS ----------------
+def save_history(record: dict):
     with open(HISTORY_FILE, "a", encoding="utf-8") as f:
         f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
@@ -148,9 +292,10 @@ def load_history():
     try:
         with open(HISTORY_FILE, "r", encoding="utf-8") as f:
             for line in f:
-                if line.strip():
-                    items.append(json.loads(line.strip()))
-    except:
+                line = line.strip()
+                if line:
+                    items.append(json.loads(line))
+    except Exception:
         pass
     return items
 
@@ -158,219 +303,341 @@ def clear_history():
     if os.path.exists(HISTORY_FILE):
         os.remove(HISTORY_FILE)
 
-def generate_pdf_report(diagnosis, confidence, record, image):
+def history_to_df(items):
+    if not items:
+        return pd.DataFrame(columns=["time", "disease", "confidence", "source"])
+    data = []
+    for it in items:
+        confidence = it.get("confidence", 0.0)
+        conf_str = f"{confidence:.2f}%" if isinstance(confidence, (int, float)) else "N/A"
+        data.append({
+            "time": it.get("time"),
+            "disease": it.get("disease"),
+            "confidence": conf_str,
+            "source": it.get("source", "unknown")
+        })
+    return pd.DataFrame(data)
+
+# ---------------- PDF REPORT ----------------
+def generate_pdf_report(current_diagnosis: str, confidence: float, record: dict, treatments: dict, image: Image.Image):
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=A4)
-    w, h = A4
-    y = h - 70
+    width, height = A4
+    y = height - 50
 
-    # Header
-    c.setFillColor(HexColor('#004d40'))
-    c.rect(0, y, w, 40, fill=1)
+    GREEN_HEADER = HexColor('#004d40')
+    c.setFillColor(GREEN_HEADER)
+    c.rect(0, y + 10, width, 25, fill=1)
     c.setFillColor(white)
-    c.setFont("Helvetica-Bold", 22)
-    c.drawCentredString(w/2, y+15, "AI PLANT DOCTOR - DIAGNOSIS REPORT")
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(50, y + 15, "AI Plant Doctor - Diagnosis Report")
 
     c.setFillColor(black)
-    c.setFont("Helvetica-Bold", 16)
-    c.drawString(60, y-50, f"Disease Detected: {diagnosis}")
-    c.setFont("Helvetica", 13)
-    c.drawString(60, y-75, f"Confidence: {confidence:.2f}%")
-    c.drawString(60, y-95, f"Date & Time: {record['time']}")
-
-    y -= 160
-    c.drawImage(Image.open(io.BytesIO(image.tobytes())), 60, y-120, width=200, height=200, preserveAspectRatio=True)
-
-    # Treatment Section
-    info = disease_treatments.get(diagnosis, {})
-    y -= 180
     c.setFont("Helvetica-Bold", 14)
-    c.drawString(60, y, "RECOMMENDED TREATMENT")
-    c.setFont("Helvetica", 11)
-    y -= 30
-    c.drawString(70, y, f"Medicines : {info.get('medicines', 'N/A')}")
+    c.drawString(50, y - 30, f"Predicted Disease: {current_diagnosis} ({confidence:.2f}%)")
+    c.setFont("Helvetica", 10)
+    c.drawString(50, y - 50, f"Time of Diagnosis: {record['time']}")
+
+    y -= 100
+
+    # Treatment Info
+    info = treatments.get(current_diagnosis, {})
+    meds = info.get("medicines", "None")
+    treatment = info.get("treatment", "No treatment info available.")
+    suggestions = info.get("suggestions", "No suggestions available.")
+    nutrients = info.get("nutrients", "Consult local expert.")
+
+    # Image
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Input Image:")
     y -= 25
-    c.drawString(70, y, f"Treatment : {info.get('treatment', 'N/A')}")
+
+    img_w, img_h = 180, 180
+    c.drawInlineImage(image, 50, y - img_h, width=img_w, height=img_h, preserveAspectRatio=True)
+    y -= img_h + 30
+
+    # Treatment Details
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Treatment Plan:")
     y -= 25
-    c.drawString(70, y, f"Suggestions : {info.get('suggestions', 'N/A')}")
-    y -= 25
-    c.drawString(70, y, f"Nutrients   : {info.get('nutrients', 'N/A')}")
+    c.setFont("Helvetica", 10)
+
+    c.drawString(60, y, f"• Recommended Medicines: {meds}"); y -= 20
+    c.drawString(60, y, "• Suggested Treatment:"); y -= 15
+    for line in [treatment[i:i+90] for i in range(0, len(treatment), 90)]:
+        c.drawString(70, y, line); y -= 15
+    y -= 10
+    c.drawString(60, y, "• Additional Suggestions:"); y -= 15
+    for line in [suggestions[i:i+90] for i in range(0, len(suggestions), 90)]:
+        c.drawString(70, y, line); y -= 15
+    y -= 10
+    c.drawString(60, y, f"• Key Nutrient Focus: {nutrients}")
 
     c.save()
     buf.seek(0)
     return buf
 
-def speak_text(text):
-    if TTS_AVAILABLE:
-        try:
-            engine = pyttsx3.init()
-            engine.say(text)
-            engine.runAndWait()
-        except:
-            pass
+# ---------------- TTS ----------------
+def speak_text(text: str):
+    if not TTS_AVAILABLE:
+        return
+    try:
+        engine = pyttsx3.init()
+        engine.say(text)
+        engine.runAndWait()
+    except Exception:
+        pass
 
-# ---------------- Translations ----------------
-TRANSLATIONS = { ... }   # ← Keep your full TRANSLATIONS dictionary
+# ---------------- TRANSLATIONS ----------------
+TRANSLATIONS = {
+    "en": {
+        "title": "AI Plant Doctor 🌳",
+        "subtitle": "Instant diagnosis for common leaf diseases",
+        "analyze": "Analyze",
+        "medicines": "Recommended Medicines",
+        "treatment": "Suggested Treatment",
+        "suggestions": "Additional Suggestions",
+        "clear_history": "Clear History",
+        "download": "Download CSV",
+        "low_confidence": "⚠️ Low Confidence: The model confidence is low. Please confirm the diagnosis visually.",
+        "top_predictions": "Top Predictions:",
+        "alert_title": "🚨 Farmer Alert System"
+    },
+    "kn": {
+        "title": "ಎಐ ಗಿಡ ವೈದ್ಯ 🌳",
+        "subtitle": "ಎಐ ಬಳಸಿ ಎಲೆ ರೋಗಗಳನ್ನು ಗುರುತಿಸಿ",
+        "analyze": "ವಿಶ್ಲೇಷಿಸಿ",
+        "medicines": "ಔಷಧಿಗಳು",
+        "treatment": "ಉಪಚಾರ",
+        "suggestions": "ಹೆಚ್ಚುವರಿ ಸಲಹೆಗಳು",
+        "clear_history": "ಇತಿಹಾಸ ಅಳಿಸಿ",
+        "download": "ಸಿಎಸ್ವಿ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
+        "low_confidence": "⚠️ ಕಡಿಮೆ ವಿಶ್ವಾಸ: ಮಾಡೆಲ್ ವಿಶ್ವಾಸಾರ್ಹತೆ ಕಡಿಮೆಯಾಗಿದೆ. ದಯವಿಟ್ಟು ದೃಷ್ಟಿ ದೃಢೀಕರಿಸಿ.",
+        "top_predictions": "ಪ್ರಮುಖ ಭವಿಷ್ಯಗಳು:",
+        "alert_title": "🚨 ರೈತ ಎಚ್ಚರಿಕೆ ವ್ಯವಸ್ಥೆ"
+    }
+}
 
+def flipkart_search_link(query):
+    return f'<a href="https://www.flipkart.com/search?q={query.replace(" ", "+")}" target="_blank" style="color:#a7ff83; font-weight:bold;">🛒 Find "{query}" on Flipkart</a>'
+
+# ---------------- MOCK FARMER ALERT ----------------
 def get_farmer_alert():
-    month = datetime.now().month
-    if month in [6,7,8,9]:
-        return {"title": "🌧️ Monsoon Disease Alert!", "message": "High risk of fungal diseases. Avoid overhead watering.", "type": "warning"}
-    elif month in [11,12]:
-        return {"title": "🍂 Winter Fungal Risk High", "message": "Monitor leaves closely. Consider preventive fungicide spray.", "type": "info"}
+    current_month = datetime.now().month
+    if current_month in [11, 12]:
+        return {"title": "🍂 High Fungal Risk Season Alert!", "message": "Monitor lower canopy and consider preventative Copper spray.", "type": "warning"}
+    elif current_month == 5:
+        return {"title": "☀️ Pest Monitoring Alert!", "message": "Hot dry conditions increase spider mites risk.", "type": "info"}
     return None
 
+# ---------------- MOCK CHATBOT ----------------
 def mock_chatbot_response(prompt):
     prompt = prompt.lower()
-    if "early blight" in prompt:
-        return "For **Tomato Early Blight**, remove infected lower leaves and apply Mancozeb or Chlorothalonil every 10-14 days. Mulch the soil to prevent spore splash."
-    elif "how to prevent" in prompt:
-        return "Prevention is better than cure! Use disease-resistant varieties, maintain proper spacing, avoid overhead watering, and rotate crops every season."
-    elif "fertilizer" in prompt or "npk" in prompt:
-        return "Use balanced NPK fertilizer. Nitrogen for leaves, Phosphorus for roots & flowers, Potassium for disease resistance."
-    return "I'm your AI Plant Doctor assistant. Ask me about any disease, treatment, or farming best practices!"
+    if "help" in prompt or "support" in prompt:
+        return "I can help with crop care, disease management, or finding nearest agricultural centers."
+    elif "early blight" in prompt:
+        return "Early Blight in Tomato: Remove infected leaves and spray Mancozeb or Chlorothalonil every 14 days."
+    elif "hello" in prompt or "hi" in prompt:
+        return "Hello! I'm your AI Crop Assistant. Ask me about diseases, fertilizers, or crop care!"
+    else:
+        return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
 
-# ---------------- Sidebar ----------------
-st.sidebar.image("https://img.icons8.com/fluency/96/000000/plant.png", width=80)
-st.sidebar.title("🌿 AI Plant Doctor")
-lang_choice = st.sidebar.selectbox("🌐 Language", ["en", "kn"], 
-                                   format_func=lambda x: "English" if x=="en" else "ಕನ್ನಡ")
+# ---------------- CUSTOM CSS (Your Beautiful Design) ----------------
+st.markdown("""
+<style>
+    .stApp { background: radial-gradient(circle at 50% 50%, #0a1f1c 0%, #040d0b 100%); background-attachment: fixed; }
+    .stApp::before {
+        content: ""; position: fixed; inset: 0;
+        background: linear-gradient(125deg, rgba(0,77,64,0.1) 0%, rgba(27,94,32,0.05) 50%, rgba(56,142,60,0.1) 100%);
+        background-size: 400% 400%; animation: meshFlow 15s ease infinite alternate; z-index: 0;
+    }
+    @keyframes meshFlow { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+    .prediction-box, .solution-box, .stChatMessage {
+        background: rgba(255,255,255,0.02) !important; backdrop-filter: blur(20px);
+        border-radius: 24px !important; padding: 25px; color: #f0fff4;
+        border: 1px solid rgba(167,255,131,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+    .primary-diagnosis-box {
+        background: rgba(0,77,64,0.3); border: 1px solid #a7ff83; border-radius: 20px;
+        padding: 35px; position: relative; overflow: hidden;
+    }
+    .primary-diagnosis-box::after {
+        content: ""; position: absolute; top: -100%; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(to bottom, transparent, rgba(167,255,131,0.2), transparent);
+        animation: scanner 4s linear infinite;
+    }
+    @keyframes scanner { 0% { top: -100%; } 100% { top: 100%; } }
+    h1 { font-weight: 900 !important; background: linear-gradient(135deg, #a7ff83 0%, #4db6ac 100%);
+         -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 3.5rem !important; }
+    .stButton button {
+        background: transparent !important; color: #a7ff83 !important; border: 1px solid #a7ff83 !important;
+        border-radius: 50px !important; padding: 15px 30px !important; font-weight: 800 !important;
+        transition: all 0.4s ease;
+    }
+    .stButton button:hover { background: #a7ff83 !important; color: #020806 !important; transform: scale(1.05); }
+</style>
+""", unsafe_allow_html=True)
+
+# ---------------- SIDEBAR ----------------
+st.sidebar.title("🌿 Controls & Alerts")
+lang_choice = st.sidebar.selectbox("Language / ಭಾಷೆ", ("en", "kn"), 
+                                   format_func=lambda k: "English" if k=="en" else "ಕನ್ನಡ (Kannada)")
 txt = TRANSLATIONS[lang_choice]
 
+st.sidebar.markdown(f"### {txt['alert_title']}")
 alert = get_farmer_alert()
 if alert:
-    st.sidebar.markdown(f"**{alert['title']}**")
-    st.sidebar.info(alert['message'])
+    st.sidebar.warning(f"**{alert['title']}**\n\n{alert['message']}")
+else:
+    st.sidebar.info("No major alerts currently active.")
 
-if st.sidebar.button("🗑️ Clear History"):
+if st.sidebar.button(txt["clear_history"], key="clear_hist_btn"):
     clear_history()
-    st.sidebar.success("History cleared successfully!")
+    st.sidebar.success("History cleared.")
 
-# ---------------- Main UI ----------------
-st.markdown("<h1 class='main-header'>AI Plant Doctor</h1>", unsafe_allow_html=True)
-st.markdown("<p class='subtitle'>Instant AI Diagnosis • Smart Treatment • Farmer First</p>", unsafe_allow_html=True)
+# ---------------- MAIN TITLE ----------------
+st.markdown(f"<h1>{txt['title']}</h1>", unsafe_allow_html=True)
+st.markdown(f"<p style='color:#a7ff83; font-size:1.2em;'>{txt['subtitle']}</p>", unsafe_allow_html=True)
+st.markdown("---")
 
-page = st.sidebar.radio("Navigate", ["🏠 Home", "🤖 Chat Assistant", "📖 History", "ℹ️ About"])
+# ---------------- NAVIGATION ----------------
+page = st.sidebar.radio("Go to / ತೆರೆಯಿರಿ", ["Home", "Chatbot", "History", "About"], key="main_nav")
 
-# ====================== HOME PAGE ======================
-if page == "🏠 Home":
-    col1, col2 = st.columns([3, 2])
+# ---------------- HOME PAGE ----------------
+if page == "Home":
+    st.markdown("### 📷 Select Image Source")
+    
+    input_method = st.radio("Input Method", ["Camera", "Upload"], horizontal=True)
+    image_obj = None
 
-    with col1:
-        st.markdown("### 📸 Upload or Capture Leaf Image")
-        input_method = st.radio("Choose Input", ["📷 Camera", "📤 Upload Image"], horizontal=True)
+    if input_method == "Camera":
+        cam = st.camera_input("Take a clear close-up picture of the leaf")
+        if cam:
+            image_obj = Image.open(cam).convert("RGB")
+    else:
+        up = st.file_uploader("Upload leaf image (jpg/png)", type=["jpg", "jpeg", "png"])
+        if up:
+            image_obj = Image.open(up).convert("RGB")
 
-        image_obj = None
-        if input_method == "📷 Camera":
-            cam = st.camera_input("Take a clear photo of the affected leaf")
-            if cam: image_obj = Image.open(cam).convert("RGB")
-        else:
-            uploaded = st.file_uploader("Upload leaf image", type=["jpg", "jpeg", "png"])
-            if uploaded: image_obj = Image.open(uploaded).convert("RGB")
+    if image_obj:
+        st.image(image_obj, caption="Uploaded Leaf Image", use_column_width=True)
 
-        if image_obj:
-            st.image(image_obj, caption="📷 Analyzed Image", use_column_width=True)
+        if st.button(txt["analyze"], use_container_width=True):
+            with st.spinner("Analyzing..."):
+                prediction_results = predict_disease(image_obj, top_n=3)
+                top_result = prediction_results[0]
+                cls = top_result["class"]
+                confidence = top_result["confidence"]
 
-            if st.button("🔍 Analyze Leaf", type="primary", use_container_width=True):
-                with st.spinner("Diagnosing with AI..."):
-                    results = predict_disease(image_obj, top_n=3)
-                    top = results[0]
-                    cls = top["class"]
-                    conf = top["confidence"]
+                # Save History
+                record = {
+                    "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "disease": cls,
+                    "confidence": float(confidence),
+                    "source": "camera" if input_method == "Camera" else "upload"
+                }
+                save_history(record)
+                speak_text(f"{cls} detected.")
 
-                    record = {
-                        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        "disease": cls,
-                        "confidence": round(conf, 2),
-                        "source": "camera" if "Camera" in input_method else "upload"
-                    }
-                    save_history(record)
-                    speak_text(f"{cls.replace('_', ' ')} detected with {conf:.1f} percent confidence.")
+                # Display Result
+                st.markdown(
+                    f"<div class='primary-diagnosis-box'>"
+                    f"<h2>✅ Detected: {cls}</h2>"
+                    f"<p style='color:white; font-size:1.3em;'>Confidence: <strong>{confidence:.2f}%</strong></p>"
+                    f"</div>", unsafe_allow_html=True
+                )
 
-                    # === Diagnosis Result ===
-                    st.markdown(f"""
-                    <div class="diagnosis-box glass-card">
-                        <h2 class="result-text">🌿 {cls.replace('_', ' ').replace('__', ': ')}</h2>
-                        <p class="confidence">Confidence: <strong>{conf:.2f}%</strong></p>
+                if confidence < 80:
+                    st.warning(txt["low_confidence"])
+
+                # Top Predictions
+                if len(prediction_results) > 1:
+                    with st.expander(txt["top_predictions"]):
+                        for res in prediction_results[1:]:
+                            st.write(f"**{res['class']}** — {res['confidence']:.2f}%")
+
+                # PDF Download
+                pdf_buffer = generate_pdf_report(cls, confidence, record, disease_treatments, image_obj)
+                st.download_button(
+                    label="📄 Download PDF Report",
+                    data=pdf_buffer,
+                    file_name="plant_disease_report.pdf",
+                    mime="application/pdf"
+                )
+
+                # Treatment Display
+                if cls in disease_treatments:
+                    info = disease_treatments[cls]
+                    meds_list = [m.strip() for m in info["medicines"].split(",") if m.strip().lower() not in ["none", "no cure"]]
+
+                    solution_html = f"""
+                    <div class='solution-box'>
+                        <h3>💊 {txt['medicines']}:</h3><p>{info['medicines']}</p>
+                        {"".join(f"{flipkart_search_link(m)}<br>" for m in meds_list)}
+                        <h3>🛠️ {txt['treatment']}:</h3><p>{info['treatment']}</p>
+                        <h3>💡 {txt['suggestions']}:</h3><p>{info['suggestions']}</p>
+                        <h3>🌱 Nutrient Focus:</h3><p>{info['nutrients']}</p>
                     </div>
-                    """, unsafe_allow_html=True)
+                    """
+                    st.markdown(solution_html, unsafe_allow_html=True)
+                else:
+                    st.info("No detailed treatment information available for this disease.")
 
-                    if conf < 82:
-                        st.warning("⚠️ Confidence is moderate. Please cross-verify with visual inspection.")
+# ---------------- CHATBOT PAGE ----------------
+elif page == "Chatbot":
+    st.markdown("## 🤖 AI Crop Assistant Chatbot")
+    st.markdown("Ask me anything about crop care, fertilizers, or disease management.")
 
-                    # Top 3 Predictions
-                    with st.expander("🔬 Other Possible Diseases"):
-                        for r in results[1:]:
-                            st.write(f"**{r['class'].replace('_',' ')}** — {r['confidence']:.2f}%")
+    if 'messages' not in st.session_state:
+        st.session_state.messages = []
 
-                    # PDF Download
-                    pdf_buf = generate_pdf_report(cls, conf, record, image_obj)
-                    st.download_button("📄 Download Professional PDF Report", 
-                                     pdf_buf, "AI_Plant_Doctor_Report.pdf", "application/pdf", use_container_width=True)
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"], avatar="🧑‍🌾" if message["role"] == "user" else "🤖"):
+            st.markdown(message["content"])
 
-                    # Treatment Section
-                    if cls in disease_treatments:
-                        info = disease_treatments[cls]
-                        st.markdown("### 💊 Recommended Treatment Plan")
-                        st.markdown(f"""
-                        <div class="treatment-card">
-                            <strong>💊 Medicines:</strong> {info.get('medicines','N/A')}<br><br>
-                            <strong>🛠️ Treatment:</strong> {info.get('treatment','N/A')}<br><br>
-                            <strong>💡 Suggestions:</strong> {info.get('suggestions','N/A')}<br><br>
-                            <strong>🌱 Key Nutrients:</strong> {info.get('nutrients','N/A')}
-                        </div>
-                        """, unsafe_allow_html=True)
-
-    with col2:
-        st.markdown("### 🌟 Quick Tips")
-        st.info("📌 Take photo in natural daylight\n📌 Focus on diseased area\n📌 Avoid blurry or dark images")
-
-# ====================== CHATBOT ======================
-elif page == "🤖 Chat Assistant":
-    st.markdown("## 🤖 AI Crop Assistant")
-    st.caption("Ask anything about plant diseases, treatment, or farming practices")
-
-    if "chat_history" not in st.session_state:
-        st.session_state.chat_history = []
-
-    for msg in st.session_state.chat_history:
-        with st.chat_message(msg["role"]):
-            st.markdown(msg["content"])
-
-    if prompt := st.chat_input("Type your question here..."):
-        st.session_state.chat_history.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
+    prompt = st.chat_input("How can I treat my tomato's early blight?")
+    if prompt:
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user", avatar="🧑‍🌾"):
             st.markdown(prompt)
 
-        response = mock_chatbot_response(prompt)
-        st.session_state.chat_history.append({"role": "assistant", "content": response})
-        with st.chat_message("assistant"):
+        with st.chat_message("assistant", avatar="🤖"):
+            response = mock_chatbot_response(prompt)
             st.markdown(response)
 
-# ====================== HISTORY ======================
-elif page == "📖 History":
-    st.markdown("## 📜 Diagnosis History")
-    data = load_history()
-    if data:
-        df = pd.DataFrame(data)
-        st.dataframe(df, use_container_width=True)
-        st.download_button("Download History (CSV)", df.to_csv(index=False).encode(), "plant_history.csv", "text/csv")
-    else:
-        st.info("No diagnoses yet. Start analyzing leaves on the Home page!")
+        st.session_state.messages.append({"role": "assistant", "content": response})
 
-# ====================== ABOUT ======================
-else:
+# ---------------- HISTORY PAGE ----------------
+elif page == "History":
+    st.markdown("## 📜 Prediction History")
+    history_data = load_history()
+    df = history_to_df(history_data)
+
+    if df.empty:
+        st.info("No prediction history yet. Start analyzing images on the Home page!")
+    else:
+        st.dataframe(df, use_container_width=True)
+        csv = df.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="📥 Download CSV",
+            data=csv,
+            file_name='plant_doctor_history.csv',
+            mime='text/csv'
+        )
+
+# ---------------- ABOUT PAGE ----------------
+elif page == "About":
     st.markdown("## ℹ️ About AI Plant Doctor")
     st.markdown("""
-    A smart, beautiful, and farmer-friendly AI tool that helps identify plant leaf diseases instantly.
+    This application helps farmers and gardeners quickly identify plant leaf diseases using AI.
 
-    **Features:**
-    - Real-time leaf disease detection
-    - Professional PDF reports
-    - Smart treatment recommendations
-    - Voice feedback (local)
-    - Beautiful modern UI with glassmorphism effect
-    - Multi-language support
+    **Built with:**
+    - Streamlit (UI)
+    - ReportLab (PDF Generation)
+    - Mock AI Model (Ready for real TensorFlow/Keras model)
 
-    Made with ❤️ for Indian Farmers
+    **Disclaimer:** This tool is for informational purposes only. Always consult local agricultural experts for final diagnosis and treatment.
     """)
+
+else:
+    st.warning("Invalid page selection.")
