@@ -630,122 +630,129 @@ def generate_pdf_report(current_diagnosis: str, confidence: float, record: dict,
 
 st.markdown("""
 <style>
-/* ** Dynamic Greenery Background (Video Simulation) ** */
-.stApp::before { 
-    content: ""; 
-    position: fixed; 
-    inset: 0; 
-    /* Gradient: Deep Teal, Dark Forest, Vibrant Lime, Olive, Earth Brown */
-    background: linear-gradient(145deg, #004d40, #1b5e20, #388e3c, #004d40, #2e7d32, #4e342e); 
-    background-size: 800% 800%; /* Larger background for wider, sweeping effect */
-    animation: smoothGreenery 12s ease-in-out infinite alternate; /* Faster and more complex movement (simulating wind/video) */
-    z-index: -1;
-}
-@keyframes smoothGreenery { 
-    0% {background-position: 0% 70%;} 
-    33% {background-position: 70% 30%;}
-    66% {background-position: 30% 90%;}
-    100% {background-position: 0% 70%;} 
-}
-/* Card Styling */
-.prediction-box, .solution-box { 
-    background: rgba(0,0,0,0.3); /* Darker semi-transparent background */
-    border-radius: 12px; 
-    padding: 18px; 
-    color: #e8ffe6; /* Light text */
-    border: 1px solid rgba(255,255,255,0.1); /* Subtle border */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    margin-bottom: 15px; 
-}
-/* Highlight box for primary prediction */
-.primary-diagnosis-box {
-    background-color: #004d40; /* Deep Teal/Green */
-    border: 2px solid #a7ff83; /* Very light, vibrant green border */
-    border-radius: 15px;
-    padding: 20px;
-    color: white;
-    box-shadow: 0 8px 15px rgba(0,0,0,0.4);
-    margin-top: 15px;
-}
-.warning-box {
-    background: rgba(255, 140, 0, 0.2); /* Darker Orange tone */
-    border: 2px solid #ff9900;
-    padding: 10px;
-    border-radius: 8px;
-    color: #ffd99f;
-    margin-top: 10px;
-}
-/* Notification Box Style */
-.notification-box-warn {
-    background: #4d0000; /* Dark Red/Maroon */
-    color: #ffcccc;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ff4d4d;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
-.notification-box-info {
-    background: #002e4d; /* Dark Blue/Teal */
-    color: #ccffff;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #4d8aff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-}
+    /* 1. Animated Mesh Gradient Background */
+    .stApp {
+        background: radial-gradient(circle at 50% 50%, #0a1f1c 0%, #040d0b 100%);
+        background-attachment: fixed;
+    }
+    
+    /* Animated Bio-Mesh Overlay */
+    .stApp::before { 
+        content: ""; 
+        position: fixed; 
+        inset: 0; 
+        background: linear-gradient(125deg, rgba(0,77,64,0.1) 0%, rgba(27,94,32,0.05) 50%, rgba(56,142,60,0.1) 100%);
+        background-size: 400% 400%;
+        animation: meshFlow 15s ease infinite alternate;
+        z-index: 0;
+    }
 
+    @keyframes meshFlow {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 100% 50%; }
+    }
 
-h1, h2, h3, h4 { color: #d1ffd1 !important; text-shadow: 1px 1px 3px rgba(0,0,0,0.7); }
-p { color: #e8ffe6; }
-/* General Button Styling (Main content) */
-.stButton button {
-    background-color: #2e7d32; /* Medium Forest Green */
-    color: white;
-    border-radius: 8px;
-    transition: all 0.2s;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: 1px solid #a7ff83;
-}
-.stButton button:hover {
-    background-color: #388e3c; /* Lighter shade on hover */
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-}
-/* Download Button Styling (PDF/CSV) */
-.stDownloadButton button {
-    background-color: #004d40; /* Deep Teal */
-    color: white; /* Ensure text is white */
-    border: 1px solid #d1ffd1;
-}
-.stDownloadButton button:hover {
-    background-color: #00695c;
-}
-/* Sidebar Enhancements */
-/* Rectangular, Dark Green Container for Sidebar Select Boxes/Radios */
-.stSidebar .stSelectbox > div:first-child > div:first-child,
-.stSidebar .stRadio > div:first-child {
-    background-color: #004d40; /* Deep Teal/Green for a rectangular block */
-    color: white !important;
-    border-radius: 5px; /* Subtle round corners */
-    padding: 5px;
-    margin-bottom: 10px;
-    border: 1px solid #d1ffd1;
-}
-.stSidebar .stSelectbox, .stSidebar .stRadio {
-    color: #d1ffd1; /* Text color for surrounding labels */
-}
+    /* 2. Cyber-Organic Glass Cards */
+    .prediction-box, .solution-box, .stChatMessage { 
+        background: rgba(255, 255, 255, 0.02) !important;
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-radius: 24px !important; 
+        padding: 25px; 
+        color: #f0fff4;
+        border: 1px solid rgba(167, 255, 131, 0.1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        margin-bottom: 25px; 
+        transition: transform 0.3s ease;
+    }
 
-/* Ensure selected radio button text is visible */
-.stSidebar .stRadio label > div:first-child {
-    background-color: #1b5e20; /* Darker green for radio option background */
-    border: 1px solid #a7ff83;
-}
-/* File Uploader label color */
-.st-bb { 
-    color: #d1ffd1 !important;
-}
+    .prediction-box:hover, .solution-box:hover {
+        transform: translateY(-5px);
+        border: 1px solid rgba(167, 255, 131, 0.3);
+    }
+
+    /* 3. The "Vital-Sign" Diagnosis Box */
+    .primary-diagnosis-box {
+        background: rgba(0, 77, 64, 0.3);
+        border: 1px solid #a7ff83;
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+        padding: 35px;
+        color: #ffffff;
+    }
+
+    /* Neon Scan-line Effect */
+    .primary-diagnosis-box::after {
+        content: "";
+        position: absolute;
+        top: -100%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, transparent, rgba(167, 255, 131, 0.2), transparent);
+        animation: scanner 4s linear infinite;
+    }
+
+    @keyframes scanner {
+        0% { top: -100%; }
+        100% { top: 100%; }
+    }
+
+    /* 4. Futuristic Typography */
+    h1 { 
+        font-family: 'Inter', sans-serif;
+        font-weight: 900 !important;
+        background: linear-gradient(135deg, #a7ff83 0%, #4db6ac 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 3.5rem !important;
+        letter-spacing: -2px !important;
+        margin-bottom: 0 !important;
+    }
+
+    h2, h3 { color: #a7ff83 !important; font-weight: 700 !important; }
+
+    /* 5. Aether-Glow Sidebar */
+    [data-testid="stSidebar"] {
+        background: #020806 !important;
+        border-right: 1px solid rgba(167, 255, 131, 0.15);
+    }
+
+    /* 6. Precision Controls (Buttons) */
+    .stButton button {
+        background: transparent !important;
+        color: #a7ff83 !important;
+        border: 1px solid #a7ff83 !important;
+        border-radius: 50px !important;
+        padding: 15px 30px !important;
+        font-size: 0.9rem !important;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 800 !important;
+        transition: 0.4s all cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .stButton button:hover {
+        background: #a7ff83 !important;
+        color: #020806 !important;
+        box-shadow: 0 0 30px rgba(167, 255, 131, 0.6);
+        transform: scale(1.05);
+    }
+
+    /* 7. Enhanced Data Tables & Charts */
+    .stDataFrame {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 15px;
+        border: 1px solid rgba(167, 255, 131, 0.1);
+    }
+
+    /* Custom File Uploader */
+    [data-testid="stFileUploader"] {
+        background: rgba(167, 255, 131, 0.03);
+        border: 2px dashed rgba(167, 255, 131, 0.2);
+        border-radius: 20px;
+    }
 
 </style>
 """, unsafe_allow_html=True)
@@ -969,5 +976,6 @@ elif page=="About":
 
 
 # Clean up/End of file.
+
 if __name__ == "__main__":
     app.run(debug=True)
