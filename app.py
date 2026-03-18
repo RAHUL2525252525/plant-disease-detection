@@ -928,7 +928,7 @@ if uploaded_file is not None:
     )
 
                     # 7. Streamlit Display of Treatment (Completed Blocif current_disease in disease_treatments:
-if current_disease in disease_treatments:
+if 'current_disease' in locals() and current_disease in disease_treatments:
     txt = disease_treatments[current_disease]
 
     meds_label = txt['medicines']
