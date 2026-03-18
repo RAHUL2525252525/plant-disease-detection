@@ -905,7 +905,8 @@ if uploaded_file is not None:
     nutrients = current_info.get("nutrients", "N/A")
 
     st.image(img, caption="Uploaded Image", width=300)
-    st.success(f"Prediction: {current_disease} ({confidence:.2f}%)")
+st.success(f"Prediction: {current_disease} ({confidence:.2f}%)")
+
                     # 6. PDF Download
                     pdf_width, pdf_height = A4
                     pdf_buffer = generate_pdf_report(
