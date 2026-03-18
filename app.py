@@ -954,39 +954,47 @@ else:
     st.info("No clear prediction could be made. Please upload a clear image of the diseased leaf.")
 
 # ---------------- Chatbot (Feature 3) ----------------
-elif page=="Chatbot":
+# ---------------- PAGE NAVIGATION ----------------
+
+# ---------------- PAGE NAVIGATION ----------------
+
+if page == "Home":
+    st.markdown("## 🌿 AI Plant Disease Detection")
+    # 👉 your existing Home code here (image upload, prediction, PDF, etc)
+
+# ---------------- Chatbot ----------------
+elif page == "Chatbot":
     st.markdown("## 🤖 AI Crop Assistant Chatbot")
     st.markdown("Ask me anything about crop care, fertilizers, or general disease management.")
     
     if 'messages' not in st.session_state:
         st.session_state.messages = []
 
-    # Display chat messages from history on app rerun
+    # Display chat messages
     for message in st.session_state.messages:
         avatar = "🧑‍🌾" if message["role"] == "user" else "🤖"
         with st.chat_message(message["role"], avatar=avatar):
             st.markdown(message["content"])
 
-    # Accept user input
-    if prompt := st.chat_input("How can I treat my tomato's early blight?"):
-        # Add user message to chat history
+    # User input
+    prompt = st.chat_input("How can I treat my tomato's early blight?")
+    if prompt:
         st.session_state.messages.append({"role": "user", "content": prompt})
-        # Display user message in chat message container
+
         with st.chat_message("user", avatar="🧑‍🌾"):
             st.markdown(prompt)
 
-        # Get assistant response
         with st.chat_message("assistant", avatar="🤖"):
             response = mock_chatbot_response(prompt)
             st.markdown(response)
-        # Add assistant response to chat history
+
         st.session_state.messages.append({"role": "assistant", "content": response})
 
-# ---------------- History (Feature 2) ----------------
-elif page=="History":
+
+# ---------------- History ----------------
+elif page == "History":
     st.markdown("## 📜 Prediction History")
     
-    # Load and prepare data
     history_data = load_history()
     df = history_to_df(history_data)
     
@@ -995,39 +1003,42 @@ elif page=="History":
     if df.empty:
         st.info("No prediction history found. Start analyzing images on the Home page!")
     else:
-        # Feature 2: Display the history data table
         st.dataframe(df, use_container_width=True)
         
         st.markdown("---")
         
-        # Download CSV button
         csv = df.to_csv(index=False).encode('utf-8')
         st.download_button(
-            label=txt["download"],
+            label="Download CSV",
             data=csv,
             file_name='plant_doctor_history.csv',
             mime='text/csv',
             key="download_csv_btn"
         )
 
+
 # ---------------- About ----------------
-elif page=="About":
+elif page == "About":
     st.markdown("## ℹ️ About AI Plant Doctor")
     st.markdown("""
     This application is built using **Streamlit** for the UI and **TensorFlow/Keras** for the deep learning model.
     
     **Model Details:**
-    * **Architecture:** Convolutional Neural Network (CNN) - *Assumed to be a common architecture like ResNet or VGG.*
-    * **Input Size:** $128 \times 128$ pixels (3 color channels).
-    * **Data Source:** Trained on a dataset of various common plant leaf diseases (e.g., PlantVillage or similar open-source datasets).
+    * **Architecture:** Convolutional Neural Network (CNN)
+    * **Input Size:** 128 x 128 pixels (3 color channels)
+    * **Dataset:** Plant disease dataset (PlantVillage or similar)
     
     **Disclaimer:**
-    This AI diagnosis is for **informational purposes only**. Always confirm the diagnosis and treatment plan with a local agricultural expert, agronomist, or Krishi Vigyan Kendra (KVK).
-    **Medicines** are general suggestions and may require specific dosage and timing based on local regulations and crop stage.
+    This AI diagnosis is for **informational purposes only**.
+    Always confirm with agricultural experts.
     """)
 
 
+# ---------------- FALLBACK (OPTIONAL) ----------------
+else:
+    st.warning("Invalid page selection.")
 
-# Clean up/End of file.
+
+# ---------------- MAIN ----------------
 if __name__ == "__main__":
-    pass 
+    pass
