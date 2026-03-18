@@ -563,15 +563,102 @@ def speak_text(text: str):
 # ===== SAFE TREATMENT INFO BLOCK =====
 info = treatments.get(current_diagnosis, {})
 
-# Safety check (VERY IMPORTANT)
-if not isinstance(info, dict):
-    info = {}
+def generate_pdf_report(current_diagnosis: str, confidence: float, record: dict, treatments: dict, image: Image.Image, width, height):
+    """Generates a PDF report for the current diagnosis, with embedded image and confidence."""
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=A4)
+    y_start = height - 50
 
-# Extract values safely
-meds = info.get("medicines", "None")
-treatment = info.get("treatment", "No treatment info available.")
-suggestions = info.get("suggestions", "No suggestions available.")
-nutrients = info.get("nutrients", "Consult local expert.")
+    # Colors (Themed for PDF)
+    GREEN_HEADER = HexColor('#004d40') 
+    TEXT_COLOR = black
+
+    # 1. Title and Current Diagnosis
+    c.setFillColor(GREEN_HEADER)
+    c.rect(0, y_start + 10, width, 25, fill=1)
+    c.setFillColor(white)
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(50, y_start + 15, "AI Plant Doctor - Diagnosis Report")
+    
+    c.setFillColor(TEXT_COLOR)
+    c.setFont("Helvetica-Bold", 14)
+    c.drawString(50, y_start - 30, f"Predicted Disease: {current_diagnosis} ({confidence:.2f}%)")
+    c.setFont("Helvetica", 10)
+    c.drawString(50, y_start - 50, f"Time of Diagnosis: {record['time']}")
+    y = y_start - 80
+
+    # Get treatment info
+    info = treatments.get(current_diagnosis, {})
+    meds = info.get("medicines","None")
+    treatment = info.get("treatment","No treatment info available.")
+    suggestions = info.get("suggestions","No suggestions available.")
+    nutrients = info.get("nutrients", "Consult local expert.")
+    
+    # 2. Input Image Embedding
+    img_x, img_y, img_w, img_h = 50, y - 170, 150, 150 
+    
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Input Image for Diagnosis:")
+    y -= 20
+
+    original_w, original_h = image.size
+    aspect_ratio = original_w / original_h
+    
+    display_w = img_w
+    display_h = img_w / aspect_ratio
+    
+    if display_h > img_h:
+        display_h = img_h
+        display_w = img_h * aspect_ratio
+    
+    draw_x = img_x + (img_w - display_w) / 2
+    draw_y = img_y + (img_h - display_h) / 2
+    
+    # Draw the image using calculated dimensions for aspect ratio preservation
+    c.drawInlineImage(image, draw_x, draw_y, width=display_w, height=display_h, preserveAspectRatio=True) 
+    
+    c.setLineWidth(0.5)
+    c.setStrokeColor(TEXT_COLOR)
+    c.rect(img_x, img_y, img_w, img_h)
+    
+    y = img_y - 20
+    
+    # 3. Treatment Details
+    c.setFont("Helvetica-Bold", 12)
+    c.drawString(50, y, "Treatment Plan:")
+    y -= 20
+    c.setFont("Helvetica", 10)
+    
+    # Medicines
+    c.drawString(60, y, f"• Recommended Medicines: {meds}")
+    y -= 20
+    
+    # Treatment
+    c.drawString(60, y, "• Suggested Treatment:")
+    y -= 15
+    treatment_lines = [treatment[i:i+90] for i in range(0, len(treatment), 90)]
+    for line in treatment_lines:
+        c.drawString(70, y, line)
+        y -= 15
+    y -= 10
+    
+    # Suggestions
+    c.drawString(60, y, "• Additional Suggestions:")
+    y -= 15
+    suggestions_lines = [suggestions[i:i+90] for i in range(0, len(suggestions), 90)]
+    for line in suggestions_lines:
+        c.drawString(70, y, line)
+        y -= 15
+    y -= 10
+    
+    # Nutrients
+    c.drawString(60, y, f"• Key Nutrient Focus: {nutrients}")
+    y -= 30
+
+    # 4. Save and return buffer
+    c.save()
+    buf.seek(0)
+    return 
 
 # --- UI IMPLEMENTATION (Main Body) ---
 
