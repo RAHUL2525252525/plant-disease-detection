@@ -1,7 +1,5 @@
 import streamlit as st
 from PIL import Image
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image as kimage
 import numpy as np
 import os
 import json
@@ -11,7 +9,7 @@ import pandas as pd
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black, white, HexColor
-import random 
+import random
 
 # Optional: text-to-speech
 try:
@@ -27,38 +25,14 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ---------------- PATH CONFIG (FIXED) ----------------
+st.title("🌿 AI Plant Doctor")
+st.write("Upload a plant leaf image to detect disease")
+
+# ---------------- PATH CONFIG ----------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Model path (IMPORTANT)
-MODEL_PATH = os.path.join(BASE_DIR, "model/plant_disease_model.h5")
-
-# Optional training folder (for class names)
-TRAIN_DIR = os.path.join(BASE_DIR, "Train")
-
-# History file
 HISTORY_FILE = os.path.join(BASE_DIR, "history.json")
 
-
-# ---------------- LOAD MODEL FUNCTION (FIXED) ----------------
-@st.cache_resource
-def load_ai_model(path):
-    """Loads the Keras model safely."""
-    if not os.path.exists(path):
-        st.error(f"❌ Model file NOT found at: {path}")
-        return None
-    try:
-        return load_model(path, compile=False)
-    except Exception as e:
-        st.error(f"❌ Error loading model: {e}")
-        return None
-
-
-# Load model
-model = load_ai_model(MODEL_PATH)
-
-
-# ---------------- CLASS NAMES SETUP ----------------
+# ---------------- CLASS NAMES ----------------
 FALLBACK_CLASSES = [
     "Corn__Northern_Leaf_Blight",
     "Grape__Black_rot",
@@ -68,19 +42,71 @@ FALLBACK_CLASSES = [
     "Tomato__healthy"
 ]
 
-class_names = []
+class_names = FALLBACK_CLASSES
 
-# Try loading from Train folder
-if os.path.exists(TRAIN_DIR) and os.path.isdir(TRAIN_DIR):
-    try:
-        class_names = sorted([
-            name for name in os.listdir(TRAIN_DIR)
-            if os.path.isdir(os.path.join(TRAIN_DIR, name))
-        ])
-    except Exception:
-        class_names = FALLBACK_CLASSES
-else:
-    class_names = FALLBACK_CLASSES
+# ---------------- DISEASE TREATMENTS ----------------
+treatments = {
+    "Corn__Northern_Leaf_Blight": "Use resistant hybrids and apply fungicides.",
+    "Grape__Black_rot": "Remove infected parts and spray fungicide regularly.",
+    "Grape__healthy": "Your plant is healthy. Maintain good care.",
+    "Peach__Bacterial_spot": "Use copper sprays and remove infected leaves.",
+    "Tomato__Early_blight": "Use crop rotation and fungicides.",
+    "Tomato__healthy": "Your plant is healthy. Keep watering properly."
+}
+disease_treatments = treatments
+
+# ---------------- PREDICTION FUNCTION (NO TENSORFLOW) ----------------
+def predict_disease(img):
+    results = []
+    selected = random.sample(class_names, min(3, len(class_names)))
+
+    for cls in selected:
+        confidence = random.uniform(70, 98)
+        results.append((cls, confidence))
+
+    return results
+
+# ---------------- HISTORY SAVE ----------------
+def save_history(disease):
+    data = []
+    if os.path.exists(HISTORY_FILE):
+        try:
+            with open(HISTORY_FILE, "r") as f:
+                data = json.load(f)
+        except:
+            data = []
+
+    data.append({
+        "disease": disease,
+        "time": str(datetime.now())
+    })
+
+    with open(HISTORY_FILE, "w") as f:
+        json.dump(data, f)
+
+# ---------------- IMAGE UPLOAD ----------------
+uploaded_file = st.file_uploader("📤 Upload Leaf Image", type=["jpg", "png", "jpeg"])
+
+if uploaded_file:
+    img = Image.open(uploaded_file)
+    st.image(img, caption="Uploaded Image", use_column_width=True)
+
+    # Predict
+    results = predict_disease(img)
+
+    st.subheader("🔍 Prediction Results")
+
+    for disease, conf in results:
+        st.write(f"**{disease}** : {conf:.2f}%")
+
+        # Save history
+        save_history(disease)
+
+        # Show treatment
+        if disease in treatments:
+            st.info(f"💊 Treatment: {treatments[disease]}")
+        else:
+            st.warning("No treatment available")
 
     disease_treatments = {
         "Apple___Apple_scab": {
@@ -340,7 +366,7 @@ else:
 }
 
 # Ensure fallbacks are complete
-if "Tomato___healthy" not in disease_treatments:
+if "Tomato___healthy" not in treatments:
     disease_treatments["Tomato___healthy"] = {"medicines": "None", "treatment": "N/A", "suggestions": "N/A", "nutrients": "Balanced NPK"}
 if "Tomato___Early_blight" not in disease_treatments:
      disease_treatments["Tomato___Early_blight"] = {"medicines": "Mancozeb", "treatment": "N/A", "suggestions": "N/A", "nutrients": "K/Mg"}
@@ -486,17 +512,37 @@ def history_to_df(items):
         })
     return pd.DataFrame(data)
 
-def predict_disease(img, top_n=3):
-    import random
+def predict_disease(img: Image.Image, top_n: int = 3):
+    """
+    Processes image and makes prediction, returning Top N results.
+    Image is resized to 128x128 for model input.
+    """
+    if model is None:
+        raise RuntimeError("AI model is not loaded. Please check the model path.")
+    
+    # Preprocessing
+    IMAGE_SIZE = 128 
+    img_resized = img.resize((IMAGE_SIZE, IMAGE_SIZE))
+    arr = kimage.img_to_array(img_resized)
+    arr = np.expand_dims(arr, axis=0) / 255.0
+    
+    # Prediction
+    preds = model.predict(arr, verbose=0)[0]
+    
+    # Get Top N indices and confidences
+    top_indices = np.argsort(preds)[::-1][:top_n]
     
     results = []
-    for cls in class_names:
-        results.append({
-            "class": cls,
-            "confidence": random.uniform(70, 99)
-        })
-    
-    return sorted(results, key=lambda x: x["confidence"], reverse=True)[:top_n]
+    for idx in top_indices:
+        confidence = preds[idx] * 100
+        cls = class_names[idx].strip() if idx < len(class_names) else f"Prediction_Index_{idx}"
+        
+        # Only include results if confidence is above 0.01%
+        if confidence > 0.01:
+            results.append({"class": cls, "confidence": confidence})
+
+    # Return the list of top prediction dictionaries
+    return results
 
 def speak_text(text: str):
     """Uses pyttsx3 to speak the diagnosis (local execution only)."""
@@ -956,3 +1002,5 @@ elif page=="About":
 
 
 # Clean up/End of file.
+if __name__ == "__main__":
+    pass identify the exact line number and tell me
