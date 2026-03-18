@@ -883,9 +883,9 @@ if page=="Home":
                             for i, res in enumerate(prediction_results[1:]):
                                 st.write(f"**{res['class']}** ({res['confidence']:.2f}%)")
 
-uploaded_file = st.file_uploader("Upload Leaf Image", type=["jpg","png","jpeg"])
+#uploaded_file = st.file_uploader("Upload Leaf Image", type=["jpg","png","jpeg"])
 
-if uploaded_file is not None:
+#if uploaded_file is not None:
     img = Image.open(uploaded_file)
 
     results = predict_disease(img)
