@@ -904,27 +904,28 @@ if uploaded_file is not None:
     suggestions = current_info.get("suggestions", "No suggestions available.")
     nutrients = current_info.get("nutrients", "N/A")
 
+if uploaded_file is not None:
     st.image(img, caption="Uploaded Image", width=300)
-st.success(f"Prediction: {current_disease} ({confidence:.2f}%)")
+    st.success(f"Prediction: {current_disease} ({confidence:.2f}%)")
 
-                    # 6. PDF Download
-                    pdf_width, pdf_height = A4
-                    pdf_buffer = generate_pdf_report(
-                        current_diagnosis=cls, 
-                        confidence=confidence, 
-                        record=record, 
-                        treatments=disease_treatments,
-                        image=image_obj, 
-                        width=pdf_width,
-                        height=pdf_height
-                    )
-                    
-                    st.download_button(
-                        label="📄 Download Diagnosis as PDF", 
-                        data=pdf_buffer, 
-                        file_name=f"{cls}_report_{datetime.now().strftime('%Y%m%d')}.pdf",
-                        mime="application/pdf"
-                    )
+    # 6. PDF Download
+    pdf_width, pdf_height = A4
+    pdf_buffer = generate_pdf_report(
+        current_diagnosis=cls,
+        confidence=confidence,
+        record=record,
+        treatments=disease_treatments,
+        image=image_obj,
+        width=pdf_width,
+        height=pdf_height
+    )
+
+    st.download_button(
+        label="Download PDF Report",
+        data=pdf_buffer,
+        file_name="plant_disease_report.pdf",
+        mime="application/pdf"
+    )
 
                     # 7. Streamlit Display of Treatment (Completed Block)
                     meds_label = txt['medicines']
