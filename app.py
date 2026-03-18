@@ -444,107 +444,114 @@ def mock_chatbot_response(prompt):
 
 st.markdown("""
 <style>
-    /* 1. The Canvas - Deep Emerald Liquid Gradient */
+    /* 1. The Foundation - Dynamic Deep Space */
     .stApp {
-        background: linear-gradient(135deg, #020a08 0%, #041a12 50%, #010504 100%);
+        background: radial-gradient(at 0% 0%, #0a2e24 0%, #000000 100%);
         background-attachment: fixed;
     }
 
-    /* 2. Floating Title - Massive & Ethereal */
+    /* 2. Massive Background Text - "Watermark" Style */
+    .stApp::before {
+        content: "PLANT DOCTOR AI";
+        position: fixed;
+        bottom: -50px;
+        right: -50px;
+        font-size: 15rem;
+        font-weight: 900;
+        color: rgba(167, 255, 131, 0.03);
+        z-index: -1;
+        white-space: nowrap;
+        pointer-events: none;
+    }
+
+    /* 3. Hero Header - Massive & Left-Heavy */
     h1 {
         font-family: 'Inter', sans-serif;
-        font-weight: 800 !important;
-        font-size: 6rem !important;
-        letter-spacing: -5px !important;
-        background: linear-gradient(to bottom, #ffffff 30%, rgba(167, 255, 131, 0.8) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        line-height: 0.85 !important;
-        margin-bottom: 40px !important;
-        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+        font-weight: 900 !important;
+        font-size: 8rem !important; /* Extremely Massive */
+        letter-spacing: -8px !important;
+        color: #ffffff;
+        line-height: 0.8 !important;
+        margin-top: 50px !important;
+        margin-bottom: 20px !important;
+        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
     }
 
-    /* 3. The "Frost-Glass" Action Cards */
+    /* 4. The "Glass-Slab" - Floating Depth */
     .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(255, 255, 255, 0.03) !important;
-        backdrop-filter: blur(40px) saturate(150%);
-        -webkit-backdrop-filter: blur(40px) saturate(150%);
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 50px !important; /* Extremely rounded for "Organic" feel */
-        padding: 60px !important;
-        box-shadow: 0 40px 100px rgba(0,0,0,0.4);
-        margin: 20px 0;
-        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        background: rgba(15, 15, 15, 0.6) !important;
+        backdrop-filter: blur(50px) saturate(200%);
+        -webkit-backdrop-filter: blur(50px) saturate(200%);
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 0px !important; /* Sharp Brutalist Edges */
+        padding: 80px !important;
+        box-shadow: 0 100px 200px rgba(0,0,0,1);
+        margin: 40px 0;
+        position: relative;
     }
 
-    .prediction-box:hover {
-        background: rgba(255, 255, 255, 0.05) !important;
-        transform: scale(1.01) translateY(-10px);
-        border: 1px solid rgba(167, 255, 131, 0.3) !important;
-    }
-
-    /* 4. The "Pulse" Result Center */
+    /* 5. The "Hyper-Result" Display */
     .primary-diagnosis-box {
-        background: radial-gradient(circle at center, rgba(167, 255, 131, 0.15) 0%, transparent 70%);
+        background: transparent !important;
         border: none !important;
-        text-align: center;
-        padding: 80px 20px !important;
-        animation: breath 4s ease-in-out infinite;
-    }
-
-    @keyframes breath {
-        0%, 100% { transform: scale(1); opacity: 0.8; }
-        50% { transform: scale(1.05); opacity: 1; }
+        text-align: left;
+        padding: 0 !important;
+        margin-bottom: 50px;
     }
 
     .primary-diagnosis-box h2 {
-        font-size: 4rem !important;
-        color: #ffffff;
+        font-size: 5rem !important;
+        color: #a7ff83;
         font-weight: 900;
-        text-shadow: 0 0 30px rgba(167, 255, 131, 0.5);
+        text-transform: uppercase;
+        letter-spacing: -2px;
+        line-height: 1;
     }
 
-    /* 5. The "Fluid" CTA Button */
+    /* 6. The "Tactile" Industrial Button */
     .stButton button {
-        background: #a7ff83 !important;
-        color: #020a08 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
         border: none !important;
-        border-radius: 100px !important; /* Pill shape */
-        padding: 25px 60px !important;
-        font-size: 1.4rem !important;
-        font-weight: 700 !important;
-        box-shadow: 0 20px 40px rgba(167, 255, 131, 0.2);
-        transition: 0.5s all cubic-bezier(0.16, 1, 0.3, 1);
+        border-radius: 0px !important;
+        padding: 35px 80px !important;
+        font-size: 1.8rem !important;
+        font-weight: 900 !important;
+        text-transform: uppercase;
+        width: 100% !important;
+        transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        letter-spacing: 5px;
     }
 
     .stButton button:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 30px 60px rgba(167, 255, 131, 0.4);
-        letter-spacing: 2px;
+        background: #a7ff83 !important;
+        transform: scale(0.97); /* Haptic feel */
+        box-shadow: 0 0 100px rgba(167, 255, 131, 0.4);
     }
 
-    /* 6. Sidebar - Subtle & Transparent */
+    /* 7. Sidebar - Pure Minimal Black */
     section[data-testid="stSidebar"] {
-        background: rgba(0, 0, 0, 0.2) !important;
-        backdrop-filter: blur(20px);
-        border-right: 1px solid rgba(255, 255, 255, 0.05);
+        background: #000000 !important;
+        border-right: 1px solid #111;
+        width: 400px !important;
     }
 
-    /* 7. Image - Subtle Floating Effect */
+    /* Hide standard Streamlit clutter */
+    #MainMenu, footer, header {visibility: hidden;}
+
+    /* Custom Image Display */
     [data-testid="stImage"] img {
-        border-radius: 40px;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-        animation: float 6s ease-in-out infinite;
+        border-radius: 0px;
+        filter: grayscale(20%) contrast(110%);
+        transition: 0.5s;
     }
-
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-20px); }
+    [data-testid="stImage"] img:hover {
+        filter: grayscale(0%) contrast(100%);
+        transform: scale(1.02);
     }
 
 </style>
 """, unsafe_allow_html=True)
-
 # ---------------- SIDEBAR ----------------
 st.sidebar.title("🌿 Controls & Alerts")
 lang_choice = st.sidebar.selectbox("Language / ಭಾಷೆ", ("en", "kn"), 
