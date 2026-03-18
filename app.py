@@ -452,90 +452,116 @@ st.markdown("""
     </video>
 """, unsafe_allow_html=True)
 
-# 2. THE SLIDING DASHBOARD & BUTTON CSS
+# 2. THE FLOATING ARROW & SLIDE-OUT CSS
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
     
     .stApp { background: transparent; font-family: 'Inter', sans-serif; }
 
-    /* --- 1. THE SWIPE BUTTON (System Toggle) --- */
-    /* This button stays fixed at the top right */
-    .stButton > button {
-        position: fixed !important;
-        top: 20px !important;
-        right: 20px !important;
-        width: 180px !important;
-        height: 50px !important;
-        z-index: 1000 !important;
+    /* --- 1. THE FLOATING PULL ARROW --- */
+    /* This targets the standard sidebar toggle button and makes it a "Pro Arrow" */
+    button[kind="headerNoPadding"] {
+        display: none !important; /* Hide original */
+    }
+    
+    [data-testid="collapsedControl"] {
         background: rgba(167, 255, 131, 0.1) !important;
-        backdrop-filter: blur(10px) !important;
-        border: 1px solid rgba(167, 255, 131, 0.5) !important;
-        color: #a7ff83 !important;
-        border-radius: 100px !important;
-        font-weight: 700 !important;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: 0.4s all ease;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(167, 255, 131, 0.3);
+        border-radius: 0 50px 50px 0 !important;
+        width: 50px !important;
+        height: 100px !important;
+        top: 45% !important;
+        left: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: 0.3s all ease;
+        cursor: pointer;
     }
 
-    .stButton > button:hover {
-        background: #a7ff83 !important;
-        color: #000 !important;
-        box-shadow: 0 0 30px rgba(167, 255, 131, 0.4);
+    [data-testid="collapsedControl"]:hover {
+        background: rgba(167, 255, 131, 0.4) !important;
+        width: 70px !important;
+        box-shadow: 20px 0 50px rgba(167, 255, 131, 0.2);
     }
 
-    /* --- 2. THE CONTROL DASHBOARD (SIDEBAR REPLACEMENT) --- */
+    /* Create the custom Arrow Icon */
+    [data-testid="collapsedControl"]::after {
+        content: "→";
+        font-size: 24px;
+        color: #a7ff83;
+        font-weight: 900;
+    }
+
+    /* --- 2. THE GLASS DASHBOARD (SIDEBAR) --- */
     section[data-testid="stSidebar"] {
-        background: rgba(0, 0, 0, 0.85) !important;
-        backdrop-filter: blur(40px) !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.05);
-        transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1) !important;
+        background: rgba(0, 0, 0, 0.8) !important;
+        backdrop-filter: blur(50px) saturate(180%) !important;
+        border-right: 1px solid rgba(167, 255, 131, 0.2);
+        width: 400px !important;
     }
 
     /* --- 3. MICRO-UI FOR DASHBOARD --- */
-    section[data-testid="stSidebar"] label, 
-    section[data-testid="stSidebar"] p {
-        font-size: 0.75rem !important;
+    section[data-testid="stSidebar"] label {
+        font-size: 0.7rem !important;
         font-weight: 700 !important;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
         color: #a7ff83 !important;
         text-transform: uppercase;
-        opacity: 0.8;
+        margin-top: 20px !important;
     }
 
     .stAlert {
-        background: rgba(255, 255, 255, 0.03) !important;
+        background: rgba(167, 255, 131, 0.05) !important;
         border: 1px solid rgba(167, 255, 131, 0.2) !important;
-        border-radius: 8px !important;
-        font-size: 0.8rem !important;
+        border-radius: 0px !important;
+        padding: 10px !important;
+    }
+    
+    .stAlert p {
+        font-size: 0.75rem !important;
+        color: #a7ff83 !important;
+        text-transform: uppercase;
     }
 
     /* --- 4. MAIN CONTENT AREA --- */
     h1 {
         font-weight: 900 !important;
-        font-size: clamp(3rem, 10vw, 6rem) !important;
-        letter-spacing: -4px !important;
+        font-size: clamp(3rem, 10vw, 7rem) !important;
+        letter-spacing: -5px !important;
         color: #ffffff;
-        line-height: 0.9 !important;
-        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+        line-height: 0.85 !important;
+        margin-bottom: 2rem !important;
     }
 
-    .prediction-box, .solution-box {
+    .prediction-box {
         background: rgba(255, 255, 255, 0.03) !important;
-        backdrop-filter: blur(30px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 30px !important;
-        padding: 40px !important;
-        box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+        backdrop-filter: blur(30px);
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 40px !important;
+        padding: 50px !important;
+        box-shadow: 0 50px 100px rgba(0,0,0,0.5);
     }
 
     /* Hide standard UI clutter */
     #MainMenu, footer, header {visibility: hidden;}
-    .block-container { padding-top: 5rem !important; }
+    .block-container { padding-left: 5rem !important; }
 
 </style>
 """, unsafe_allow_html=True)
+
+# 3. DASHBOARD CONTENT (Inside the Slide-out)
+with st.sidebar:
+    st.markdown("### 🛰️ SYSTEM HUD")
+    st.warning("ACTIVE SCANNING: Sensors Normal")
+    
+    st.selectbox("ANALYSIS MODE", ["Deep Scan", "Quick Check", "Neural Map"])
+    st.slider("SENSITIVITY", 0, 100, 75)
+    
+    st.markdown("---")
+    st.markdown("<p style='font-size: 10px; color: #666;'>SYSTEM VERSION: 4.0.2-EMERALD</p>", unsafe_allow_html=True)
 
 # 3. IMPLEMENTATION
 # This acts as the "Toggle" button for the dashboard
