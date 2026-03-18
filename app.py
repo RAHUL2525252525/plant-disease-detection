@@ -460,89 +460,52 @@ h1 {
     filter: drop-shadow(0 30px 60px rgba(0,0,0,1));
 }
 
-/* --- 2. MICRO-UI: CONTROLS & ALERTS (Ultra Nano) --- */
+/* --- 2. MICRO-UI: CONTROLS & ALERTS (ULTRA MICRO) --- */
 /* Sidebar & Input Labels */
 section[data-testid="stSidebar"] label, 
 section[data-testid="stSidebar"] p,
 .stSelectbox label, 
 .stTextInput label,
 .stRadio label p {
-    font-size: 5px !important;  /* Reduced from 7px to 5px */
-    font-weight: 700 !important;
-    letter-spacing: 2px !important;
+    font-size: 3px !important;   /* Ultra tiny */
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
     text-transform: uppercase;
-    color: rgba(167, 255, 131, 0.3) !important; /* Slightly dimmer */
-    margin-bottom: 2px !important; /* Tighter spacing */
+    color: rgba(167, 255, 131, 0.25) !important;
+    margin-bottom: 1px !important;
 }
 
 /* Alert/Warning Boxes */
 .stAlert {
-    background: rgba(0, 0, 0, 0.75) !important;
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(167, 255, 131, 0.05) !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(167, 255, 131, 0.03) !important;
     border-radius: 0px !important;
-    padding: 3px 8px !important;  /* Reduced padding */
+    padding: 1px 4px !important;   /* Tiny padding */
     min-height: 0px !important;
 }
 
 /* Alert Text */
 .stAlert p, .stAlert div {
-    font-size: 5px !important;  /* Reduced from 7px to 5px */
+    font-size: 3px !important;  /* Tiny text */
     font-weight: 400 !important;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     color: #a7ff83 !important;
     margin: 0 !important;
     text-transform: uppercase;
 }
 
-/* --- 3. THE "MONOLITH" GLASS CARDS --- */
-.prediction-box, .solution-box, .stChatMessage {
-    background: rgba(0, 0, 0, 0.8) !important;
-    backdrop-filter: blur(80px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.03) !important;
-    border-radius: 0px !important; 
-    padding: 60px !important;
-    box-shadow: 0 100px 200px rgba(0,0,0,1);
-    margin: 20px 0;
-}
-
-/* --- 4. THE COMMAND BUTTON --- */
-.stButton button {
-    width: 100% !important;
-    height: 100px !important;
-    background: #ffffff !important;
-    color: #000000 !important;
-    border-radius: 0px !important;
-    font-size: 2rem !important;
-    font-weight: 900 !important;
-    text-transform: uppercase;
-    letter-spacing: 15px;
-    transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-.stButton button:hover {
-    background: #a7ff83 !important;
-    box-shadow: 0 0 120px rgba(167, 255, 131, 0.4);
-    transform: scale(0.98);
-}
-
-/* --- 5. SIDEBAR STEALTH MODE --- */
-section[data-testid="stSidebar"] {
-    background: rgba(0, 0, 0, 0.9) !important;
-    backdrop-filter: blur(50px);
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
-    width: 350px !important;
-}
-
 /* Inputs - Nano-Sized for Pro Look */
 .stSelectbox div[data-baseweb="select"], 
-.stTextInput input {
+.stTextInput input,
+.stRadio {
     background: rgba(255, 255, 255, 0.02) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
     border-radius: 0px !important;
-    height: 28px !important; /* Slightly smaller */
-    font-size: 9px !important; /* Slightly smaller font */
+    height: 22px !important;    /* Tiny height */
+    font-size: 7px !important;  /* Tiny font inside input */
     color: #666 !important;
+    padding: 0 4px !important;
 }
 
 /* Hide standard UI clutter */
