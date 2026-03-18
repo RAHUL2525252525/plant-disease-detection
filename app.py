@@ -890,73 +890,54 @@ if uploaded_file is not None:
 
     results = predict_disease(img)
 
-    if results:
-        current_disease = results[0]["class"]
-        confidence = results[0]["confidence"]
-    else:
-        current_disease = "Unknown"
-        confidence = 0
-
-    current_info = disease_treatments.get(current_disease, {})
-
-    meds = current_info.get("medicines", "None")
-    treatment = current_info.get("treatment", "No treatment info available.")
-    suggestions = current_info.get("suggestions", "No suggestions available.")
-    nutrients = current_info.get("nutrients", "N/A")
+if results:
+    current_disease = results[0]["class"]
+    confidence = results[0]["confidence"]
 
     st.image(img, caption="Uploaded Image", width=300)
-st.success(f"Prediction: {current_disease} ({confidence:.2f}%)")
+    st.success(f"Prediction: {current_disease} ({confidence:.2f}%)")
 
-# 6. PDF Download
-pdf_width, pdf_height = A4
-pdf_buffer = generate_pdf_report(
-    current_diagnosis=current_disease,
-    confidence=confidence,
-    record=record,
-    treatments=disease_treatments,
-    image=img,
-    width=pdf_width,
-    height=pdf_height
-)
+    # PDF
+    pdf_width, pdf_height = A4
+    pdf_buffer = generate_pdf_report(
+        current_diagnosis=current_disease,
+        confidence=confidence,
+        record=record,
+        treatments=disease_treatments,
+        image=img,
+        width=pdf_width,
+        height=pdf_height
+    )
 
-st.download_button(
-    label="📄 Download Diagnosis as PDF",
-    data=pdf_buffer,
-    file_name=f"{current_disease}_report_{datetime.now().strftime('%Y%m%d')}.pdf",
-    mime="application/pdf"
-)
+    st.download_button(
+        label="📄 Download Diagnosis as PDF",
+        data=pdf_buffer,
+        file_name=f"{current_disease}_report.pdf",
+        mime="application/pdf"
+    )
 
-# 7. Streamlit Display of Treatment
-meds_label = txt['medicines']
-treatment_label = txt['treatment']
-suggestions_label = txt['suggestions']
+    # Treatment UI
+    meds_label = txt['medicines']
+    treatment_label = txt['treatment']
+    suggestions_label = txt['suggestions']
 
-meds_list = [m.strip() for m in meds.split(",") if m.strip() and m.strip().lower() not in ["none", "no cure"]]
+    meds_list = [m.strip() for m in meds.split(",") if m.strip()]
 
-link_html = "<div style='margin-top: 10px;'>" + "".join(
-    f"{flipkart_search_link(m)}<br>" for m in meds_list
-) + "</div>"
+    link_html = "<div>" + "".join(
+        f"{flipkart_search_link(m)}<br>" for m in meds_list
+    ) + "</div>"
 
-solution_html = f"""
-<div class='solution-box'>
-    <h3>💊 {meds_label}:</h3>
-    <p style="margin-top:-10px;">{meds}</p>
-    {link_html}
+    solution_html = f"""
+    <div class='solution-box'>
+        <h3>💊 {meds_label}:</h3><p>{meds}</p>
+        {link_html}
+        <h3>🛠️ {treatment_label}:</h3><p>{treatment}</p>
+        <h3>💡 {suggestions_label}:</h3><p>{suggestions}</p>
+        <h3>🌱 Nutrient Focus:</h3><p>{nutrients}</p>
+    </div>
+    """
 
-    <h3>🛠️ {treatment_label}:</h3>
-    <p style="margin-top:-10px;">{treatment}</p>
-
-    <h3>💡 {suggestions_label}:</h3>
-    <p style="margin-top:-10px;">{suggestions}</p>
-
-    <hr style='border-top: 1px solid rgba(255,255,255,0.1); margin: 10px 0;'>
-
-    <h3>🌱 Nutrient Focus:</h3>
-    <p style="margin-top:-10px;">{nutrients}</p>
-</div>
-"""
-
-st.markdown(solution_html, unsafe_allow_html=True)
+    st.markdown(solution_html, unsafe_allow_html=True)
 
 else:
-    st.info("No clear prediction could be made. Please upload a clear image of the diseased leaf.")
+    st.info("No clear prediction could be made. Please upload a clear image.")
