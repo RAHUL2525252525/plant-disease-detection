@@ -443,75 +443,80 @@ def mock_chatbot_response(prompt):
         return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
         
 # 1. Background Video Injection (Place this at the very top of your app)
+# 1. CINEMATIC BACKGROUND VIDEO
 st.markdown("""
     <video autoplay loop muted playsinline  style="
         position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;
-        z-index: -1; filter: brightness(0.2) contrast(1.2); object-fit: cover;">
+        z-index: -1; filter: brightness(0.15) contrast(1.3) grayscale(0.2); object-fit: cover;">
         <source src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-video-of-leaves-in-a-branch-11440-large.mp4" type="video/mp4">
     </video>
 """, unsafe_allow_html=True)
 
-# 2. The High-End Kinetic CSS
+# 2. ULTRA-MINIMALIST PRO CSS
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;900&display=swap');
     
-    .stApp {
-        background: transparent;
-        font-family: 'Inter', sans-serif;
-    }
+    .stApp { background: transparent; font-family: 'Inter', sans-serif; }
 
-    /* 1. TITAN HEADER - SHADOW DEPTH */
+    /* --- 1. TITAN HEADER --- */
     h1 {
         font-weight: 900 !important;
-        font-size: clamp(3rem, 12vw, 9rem) !important;
+        font-size: clamp(3rem, 15vw, 10rem) !important;
         letter-spacing: -12px !important;
         color: #ffffff;
         line-height: 0.75 !important;
-        margin-bottom: 2rem !important;
-        filter: drop-shadow(0 20px 50px rgba(0,0,0,1));
+        margin: 0 !important;
+        filter: drop-shadow(0 30px 60px rgba(0,0,0,1));
     }
 
-    /* 2. MICRO-UI CONTROLS (Professional Instrument Look) */
-    /* Target Sidebar Labels, Radio buttons, and Selectboxes */
+    /* --- 2. MICRO-UI: CONTROLS & ALERTS (REDUCED SIZE) --- */
+    /* Target Sidebar labels, selection boxes, and radio text */
     section[data-testid="stSidebar"] label, 
     section[data-testid="stSidebar"] p,
     .stSelectbox label, 
-    .stTextInput label {
-        font-size: 0.65rem !important; /* Tiny font for pro look */
+    .stTextInput label,
+    .stRadio label p {
+        font-size: 0.6rem !important; /* Ultra-small pro font */
         font-weight: 700 !important;
-        letter-spacing: 2.5px;
+        letter-spacing: 3px !important;
         text-transform: uppercase;
-        color: rgba(167, 255, 131, 0.6) !important;
-        margin-bottom: 10px !important;
+        color: rgba(167, 255, 131, 0.4) !important;
+        margin-bottom: 5px !important;
     }
 
-    /* Target the Alert/Warning Boxes */
+    /* Target the Alert/Warning Boxes (Ultra Compact) */
     .stAlert {
-        background: rgba(0, 0, 0, 0.4) !important;
+        background: rgba(0, 0, 0, 0.6) !important;
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(167, 255, 131, 0.2) !important;
-        border-radius: 4px !important;
-        padding: 10px !important;
+        border: 1px solid rgba(167, 255, 131, 0.1) !important;
+        border-radius: 2px !important;
+        padding: 8px 15px !important;
+        min-height: 0px !important;
     }
-    .stAlert p {
-        font-size: 0.75rem !important; /* Small alert text */
+    
+    /* Alert Text Size */
+    .stAlert p, .stAlert div {
+        font-size: 0.65rem !important;
+        font-weight: 400 !important;
+        letter-spacing: 1px;
         color: #a7ff83 !important;
+        margin: 0 !important;
     }
 
-    /* 3. TRIPLE-LAYERED GLASS CARDS */
+    /* --- 3. THE "MONOLITH" GLASS CARDS --- */
     .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(0, 0, 0, 0.5) !important;
-        backdrop-filter: blur(60px) saturate(200%);
-        -webkit-backdrop-filter: blur(60px) saturate(200%);
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        border-radius: 0px !important; /* Sharp Industrial edges */
-        padding: 60px !important;
-        box-shadow: 0 80px 160px rgba(0,0,0,0.8);
-        margin: 40px 0;
+        background: rgba(0, 0, 0, 0.75) !important;
+        backdrop-filter: blur(80px) saturate(200%);
+        -webkit-backdrop-filter: blur(80px) saturate(200%);
+        border: 1px solid rgba(255, 255, 255, 0.03) !important;
+        border-radius: 0px !important; 
+        padding: 50px !important;
+        box-shadow: 0 100px 200px rgba(0,0,0,1);
+        margin: 20px 0;
     }
 
-    /* 4. TACTILE NEON BUTTON */
+    /* --- 4. THE COMMAND BUTTON (MASSIVE CONTRAST) --- */
     .stButton button {
         width: 100% !important;
         height: 100px !important;
@@ -519,25 +524,36 @@ st.markdown("""
         color: #000000 !important;
         border: none !important;
         border-radius: 0px !important;
-        font-size: 1.8rem !important;
+        font-size: 2rem !important;
         font-weight: 900 !important;
         text-transform: uppercase;
-        letter-spacing: 10px;
-        transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        letter-spacing: 15px;
+        transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .stButton button:hover {
         background: #a7ff83 !important;
-        box-shadow: 0 0 100px rgba(167, 255, 131, 0.5);
-        transform: translateY(-5px);
+        box-shadow: 0 0 120px rgba(167, 255, 131, 0.4);
+        transform: scale(0.98);
     }
 
-    /* 5. SIDEBAR - TRANSPECTRAL BLACK */
+    /* --- 5. SIDEBAR STEALTH MODE --- */
     section[data-testid="stSidebar"] {
-        background: rgba(0, 0, 0, 0.7) !important;
-        backdrop-filter: blur(30px);
+        background: rgba(0, 0, 0, 0.85) !important;
+        backdrop-filter: blur(40px);
         border-right: 1px solid rgba(255, 255, 255, 0.05);
-        width: 400px !important;
+        width: 380px !important;
+    }
+
+    /* Inputs - Dark Chrome Style */
+    .stSelectbox div[data-baseweb="select"], 
+    .stTextInput input {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 0px !important;
+        height: 35px !important;
+        font-size: 0.75rem !important;
+        color: #888 !important;
     }
 
     /* Hide standard UI clutter */
