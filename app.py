@@ -444,42 +444,130 @@ def mock_chatbot_response(prompt):
         
 st.markdown("""
 <style>
-/* Background - Fresh Garden */
-.stApp {
-    background: linear-gradient(135deg, #e0f7e9 0%, #d4f1e0 50%, #f0fff5 100%);
-}
+    /* 1. THE FOUNDATION - KINETIC OBSIDIAN */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;900&display=swap');
+    
+    .stApp {
+        background: radial-gradient(circle at 2% 2%, #051a14 0%, #000000 100%);
+        background-attachment: fixed;
+        font-family: 'Inter', sans-serif;
+    }
 
-/* Title */
-h1 {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 800 !important;
-    font-size: 4.5rem !important;
-    color: #2f6f46;
-    margin-bottom: 30px !important;
-}
+    /* 2. THE TITAN HEADER - VARIABLE WEIGHT */
+    h1 {
+        font-weight: 900 !important;
+        font-size: clamp(3rem, 10vw, 8.5rem) !important;
+        letter-spacing: -10px !important;
+        background: linear-gradient(180deg, #ffffff 30%, rgba(167, 255, 131, 0.5) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 0.8 !important;
+        margin-bottom: 0.5rem !important;
+        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+    }
 
-/* Cards & Chat */
-.prediction-box, .solution-box, .stChatMessage {
-    background: rgba(255, 255, 255, 0.7) !important;
-    border-radius: 30px !important;
-    padding: 40px !important;
-    margin: 20px 0;
-}
+    /* 3. MICRO-UI CONTROLS (THE "INSTRUMENTATION" LOOK) */
+    /* Shrink labels and inputs for professional UX */
+    section[data-testid="stSidebar"] label, 
+    .stSelectbox label, 
+    .stTextInput label {
+        font-size: 0.65rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: rgba(167, 255, 131, 0.5) !important;
+        margin-bottom: 8px !important;
+    }
 
-/* Button */
-.stButton button {
-    background: #70c497 !important;
-    color: #ffffff !important;
-    border-radius: 60px !important;
-    padding: 20px 50px !important;
-    font-size: 1.2rem !important;
-}
+    .stSelectbox div[data-baseweb="select"], 
+    .stTextInput input {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px !important;
+        color: #fff !important;
+        font-size: 0.8rem !important;
+        height: 45px !important;
+    }
 
-/* Sidebar */
-section[data-testid="stSidebar"] {
-    background: rgba(255, 255, 255, 0.5) !important;
-    backdrop-filter: blur(10px);
-}
+    /* 4. THE MIRAGE SLAB (GLASSMORPHISM) */
+    .prediction-box, .solution-box, .stChatMessage {
+        background: rgba(255, 255, 255, 0.02) !important;
+        backdrop-filter: blur(50px) saturate(200%);
+        -webkit-backdrop-filter: blur(50px) saturate(200%);
+        border: 1px solid rgba(167, 255, 131, 0.1) !important;
+        border-radius: 0px !important; /* Sharp Brutalist Edges */
+        padding: 60px !important;
+        box-shadow: 0 60px 120px rgba(0,0,0,0.9);
+        margin: 40px 0;
+        position: relative;
+    }
+
+    /* Floating Light Trace on top of boxes */
+    .prediction-box::after {
+        content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 1px;
+        background: linear-gradient(90deg, transparent, #a7ff83, transparent);
+        animation: trace 6s linear infinite;
+    }
+
+    @keyframes trace {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    /* 5. THE RESULT CENTER - BIOMETRIC GLOW */
+    .primary-diagnosis-box {
+        background: radial-gradient(circle, rgba(167, 255, 131, 0.12) 0%, transparent 70%);
+        text-align: left;
+        padding: 40px 0 !important;
+    }
+
+    .primary-diagnosis-box h2 {
+        font-size: clamp(2rem, 5vw, 4.5rem) !important;
+        font-weight: 900;
+        color: #ffffff;
+        letter-spacing: -3px;
+        text-shadow: 0 0 30px rgba(167, 255, 131, 0.4);
+    }
+
+    /* 6. THE TACTILE BUTTON - NEON SHIFT */
+    .stButton button {
+        width: 100% !important;
+        background: transparent !important;
+        color: #a7ff83 !important;
+        border: 1px solid #a7ff83 !important;
+        border-radius: 0px !important;
+        padding: 30px !important;
+        font-size: 1.2rem !important;
+        font-weight: 400 !important;
+        letter-spacing: 8px;
+        text-transform: uppercase;
+        transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .stButton button:hover {
+        background: #a7ff83 !important;
+        color: #000 !important;
+        box-shadow: 0 0 60px rgba(167, 255, 131, 0.5);
+        letter-spacing: 12px;
+    }
+
+    /* 7. IMAGE - SCANNER MODE */
+    [data-testid="stImage"] img {
+        border-radius: 0px;
+        filter: grayscale(1) contrast(1.2);
+        border: 1px solid rgba(167, 255, 131, 0.2);
+        transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+    [data-testid="stImage"] img:hover {
+        filter: grayscale(0) contrast(1);
+        border-color: #a7ff83;
+        transform: scale(1.02);
+    }
+
+    /* Hide standard UI clutter */
+    #MainMenu, footer, header {visibility: hidden;}
+    .block-container { padding: 4rem !important; }
+
 </style>
 """, unsafe_allow_html=True)
 # ---------------- SIDEBAR ----------------
