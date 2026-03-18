@@ -928,26 +928,27 @@ if uploaded_file is not None:
     )
 
                     # 7. Streamlit Display of Treatment (Completed Block)
-                    meds_label = txt['medicines']
-                    treatment_label = txt['treatment']
-                    suggestions_label = txt['suggestions']
-                    
-                    meds_list = [m.strip() for m in meds.split(",") if m.strip() and m.strip().lower() not in ["none", "no cure"]]
-                    link_html = "<div style='margin-top: 10px;'>" + "".join(f"{flipkart_search_link(m)}<br>" for m in meds_list) + "</div>"
-                    
-                    solution_html = f"""
-                    <div class='solution-box'>
-                        <h3>💊 {meds_label}:</h3><p style="margin-top:-10px;">{meds}</p>{link_html}
-                        <h3>🛠️ {treatment_label}:</h3><p style="margin-top:-10px;">{treatment}</p>
-                        <h3>💡 {suggestions_label}:</h3><p style="margin-top:-10px;">{suggestions}</p>
-                        <hr style='border-top: 1px solid rgba(255,255,255,0.1); margin: 10px 0;'>
-                        <h3>🌱 Nutrient Focus:</h3><p style="margin-top:-10px;">{nutrients}</p>
-                    </div>
-                    """
-                    st.markdown(solution_html, unsafe_allow_html=True)
-        
-                else:
-                    st.info("No clear prediction could be made. Please upload a clear image of the diseased leaf.")
+meds_label = txt['medicines']
+treatment_label = txt['treatment']
+suggestions_label = txt['suggestions']
+
+meds_list = [m.strip() for m in meds.split(",") if m.strip() and m.strip().lower() not in ["none", "no cure"]]
+link_html = "<div style='margin-top: 10px;'>" + "".join(f"{flipkart_search_link(m)}<br>" for m in meds_list) + "</div>"
+
+solution_html = f"""
+<div class='solution-box'>
+    <h3>💊 {meds_label}:</h3><p style="margin-top:-10px;">{meds}</p>{link_html}
+    <h3>🛠️ {treatment_label}:</h3><p style="margin-top:-10px;">{treatment}</p>
+    <h3>💡 {suggestions_label}:</h3><p style="margin-top:-10px;">{suggestions}</p>
+    <hr style='border-top: 1px solid rgba(255,255,255,0.1); margin: 10px 0;'>
+    <h3>🌱 Nutrient Focus:</h3><p style="margin-top:-10px;">{nutrients}</p>
+</div>
+"""
+
+st.markdown(solution_html, unsafe_allow_html=True)
+
+else:
+    st.info("No clear prediction could be made. Please upload a clear image of the diseased leaf.")
 
 # ---------------- Chatbot (Feature 3) ----------------
 elif page=="Chatbot":
