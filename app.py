@@ -890,62 +890,71 @@ if uploaded_file is not None:
 
     results = predict_disease(img)
 
-    if results:
-        current_disease = results[0]["class"]
-        confidence = results[0]["confidence"]
+   if results:
+    current_disease = results[0]["class"]
+    confidence = results[0]["confidence"]
 
-        st.image(img, caption="Uploaded Image", width=300)
-        st.success(f"Prediction: {current_disease} ({confidence:.2f}%)")
+    # ✅ CREATE RECORD (MISSING ERROR FIX)
+    from datetime import datetime
+    record = {
+        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "disease": current_disease,
+        "confidence": confidence,
+        "source": "upload"
+    }
 
-        # PDF
-        pdf_width, pdf_height = A4
-        pdf_buffer = generate_pdf_report(
-            current_diagnosis=current_disease,
-            confidence=confidence,
-            record=record,
-            treatments=disease_treatments,
-            image=img,
-            width=pdf_width,
-            height=pdf_height
-        )
+    st.image(img, caption="Uploaded Image", width=300)
+    st.success(f"Prediction: {current_disease} ({confidence:.2f}%)")
 
-        st.download_button(
-            label="📄 Download Diagnosis as PDF",
-            data=pdf_buffer,
-            file_name=f"{current_disease}_report.pdf",
-            mime="application/pdf"
-        )
+    # PDF
+    pdf_width, pdf_height = A4
+    pdf_buffer = generate_pdf_report(
+        current_diagnosis=current_disease,
+        confidence=confidence,
+        record=record,
+        treatments=disease_treatments,
+        image=img,
+        width=pdf_width,
+        height=pdf_height
+    )
 
-        # Treatment Data
-        current_info = disease_treatments.get(current_disease, {})
+    st.download_button(
+        label="📄 Download Diagnosis as PDF",
+        data=pdf_buffer,
+        file_name=f"{current_disease}_report.pdf",
+        mime="application/pdf"
+    )
 
-        meds = current_info.get("medicines", "None")
-        treatment = current_info.get("treatment", "No treatment info available.")
-        suggestions = current_info.get("suggestions", "No suggestions available.")
-        nutrients = current_info.get("nutrients", "N/A")
+    # Treatment Data
+    current_info = disease_treatments.get(current_disease, {})
 
-        # UI Labels
-        meds_label = txt['medicines']
-        treatment_label = txt['treatment']
-        suggestions_label = txt['suggestions']
+    meds = current_info.get("medicines", "None")
+    treatment = current_info.get("treatment", "No treatment info available.")
+    suggestions = current_info.get("suggestions", "No suggestions available.")
+    nutrients = current_info.get("nutrients", "N/A")
 
-        meds_list = [m.strip() for m in meds.split(",") if m.strip()]
+    # UI Labels
+    meds_label = txt['medicines']
+    treatment_label = txt['treatment']
+    suggestions_label = txt['suggestions']
 
-        link_html = "<div>" + "".join(
-            f"{flipkart_search_link(m)}<br>" for m in meds_list
-        ) + "</div>"
+    meds_list = [m.strip() for m in meds.split(",") if m.strip()]
 
-        solution_html = f"""
-        <div class='solution-box'>
-            <h3>💊 {meds_label}:</h3><p>{meds}</p>
-            {link_html}
-            <h3>🛠️ {treatment_label}:</h3><p>{treatment}</p>
-            <h3>💡 {suggestions_label}:</h3><p>{suggestions}</p>
-            <h3>🌱 Nutrient Focus:</h3><p>{nutrients}</p>
-        </div>
-        """
+    link_html = "<div>" + "".join(
+        f"{flipkart_search_link(m)}<br>" for m in meds_list
+    ) + "</div>"
 
-        st.markdown(solution_html, unsafe_allow_html=True)
+    solution_html = f"""
+    <div class='solution-box'>
+        <h3>💊 {meds_label}:</h3><p>{meds}</p>
+        {link_html}
+        <h3>🛠️ {treatment_label}:</h3><p>{treatment}</p>
+        <h3>💡 {suggestions_label}:</h3><p>{suggestions}</p>
+        <h3>🌱 Nutrient Focus:</h3><p>{nutrients}</p>
+    </div>
+    """
 
-    else:
-        st.info("No clear prediction could be made. Please upload a clear image.")
+    st.markdown(solution_html, unsafe_allow_html=True)
+
+else:
+    st.info("No clear prediction could be made. Please upload a clear image.")
