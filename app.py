@@ -444,116 +444,110 @@ def mock_chatbot_response(prompt):
 
 st.markdown("""
 <style>
-    /* 1. THE FOUNDATION - Deep Obsidian with Kinetic Glow */
+    /* 1. The Foundation - Dynamic Deep Space */
     .stApp {
-        background-color: #020504;
-        background-image: 
-            radial-gradient(at 0% 0%, rgba(167, 255, 131, 0.12) 0%, transparent 40%),
-            radial-gradient(at 100% 100%, rgba(0, 255, 135, 0.08) 0%, transparent 40%);
+        background: radial-gradient(at 0% 0%, #0a2e24 0%, #000000 100%);
         background-attachment: fixed;
     }
 
-    /* 2. THE TITAN HEADER - Ultra-Thin & Massive */
+    /* 2. Massive Background Text - "Watermark" Style */
+    .stApp::before {
+        content: "PLANT DOCTOR AI";
+        position: fixed;
+        bottom: -50px;
+        right: -50px;
+        font-size: 15rem;
+        font-weight: 900;
+        color: rgba(167, 255, 131, 0.03);
+        z-index: -1;
+        white-space: nowrap;
+        pointer-events: none;
+    }
+
+    /* 3. Hero Header - Massive & Left-Heavy */
     h1 {
         font-family: 'Inter', sans-serif;
-        font-weight: 100 !important; /* The "Pro" secret: Ultra-light weight */
-        font-size: clamp(4rem, 12vw, 8.5rem) !important;
+        font-weight: 900 !important;
+        font-size: 8rem !important; /* Extremely Massive */
         letter-spacing: -8px !important;
-        line-height: 0.8 !important;
         color: #ffffff;
-        text-transform: uppercase;
-        margin-top: 1rem !important;
-        margin-bottom: 2rem !important;
-        filter: drop-shadow(0 20px 50px rgba(0,0,0,1));
+        line-height: 0.8 !important;
+        margin-top: 50px !important;
+        margin-bottom: 20px !important;
+        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
     }
 
-    /* 3. THE "GLAZE" CONTAINERS - Multi-layered Depth */
+    /* 4. The "Glass-Slab" - Floating Depth */
     .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(255, 255, 255, 0.02) !important;
+        background: rgba(15, 15, 15, 0.6) !important;
         backdrop-filter: blur(50px) saturate(200%);
         -webkit-backdrop-filter: blur(50px) saturate(200%);
-        border: 1px solid rgba(167, 255, 131, 0.15) !important;
-        border-radius: 0px !important; /* Brutalist sharp corners */
-        padding: 60px !important;
-        box-shadow: 0 50px 100px rgba(0,0,0,0.8);
-        margin-bottom: 3rem;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 0px !important; /* Sharp Brutalist Edges */
+        padding: 80px !important;
+        box-shadow: 0 100px 200px rgba(0,0,0,1);
+        margin: 40px 0;
         position: relative;
-        overflow: hidden;
     }
 
-    /* Animated Accent Bar */
-    .prediction-box::before {
-        content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
-        background: linear-gradient(to bottom, #a7ff83, transparent);
-        animation: glowPulse 4s ease-in-out infinite;
+    /* 5. The "Hyper-Result" Display */
+    .primary-diagnosis-box {
+        background: transparent !important;
+        border: none !important;
+        text-align: left;
+        padding: 0 !important;
+        margin-bottom: 50px;
     }
 
-    @keyframes glowPulse {
-        0%, 100% { opacity: 0.5; }
-        50% { opacity: 1; }
-    }
-
-    /* 4. THE RESULT TYPOGRAPHY */
     .primary-diagnosis-box h2 {
         font-size: 5rem !important;
+        color: #a7ff83;
         font-weight: 900;
-        background: linear-gradient(90deg, #ffffff, #a7ff83);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        letter-spacing: -3px;
         text-transform: uppercase;
+        letter-spacing: -2px;
+        line-height: 1;
     }
 
-    /* 5. THE "TACTILE" COMMAND BUTTON */
+    /* 6. The "Tactile" Industrial Button */
     .stButton button {
-        width: 100% !important;
-        height: 100px !important;
-        background: transparent !important;
-        color: #a7ff83 !important;
-        border: 1px solid rgba(167, 255, 131, 0.5) !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        border: none !important;
         border-radius: 0px !important;
+        padding: 35px 80px !important;
         font-size: 1.8rem !important;
-        font-weight: 300 !important;
+        font-weight: 900 !important;
         text-transform: uppercase;
-        letter-spacing: 12px;
-        transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-        cursor: pointer;
+        width: 100% !important;
+        transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        letter-spacing: 5px;
     }
 
     .stButton button:hover {
         background: #a7ff83 !important;
-        color: #000000 !important;
-        transform: scale(0.98); /* Tactile "clicky" feel */
-        box-shadow: 0 0 80px rgba(167, 255, 131, 0.4);
-        letter-spacing: 18px;
+        transform: scale(0.97); /* Haptic feel */
+        box-shadow: 0 0 100px rgba(167, 255, 131, 0.4);
     }
 
-    /* 6. THE SIDEBAR - CARBON STEALTH */
+    /* 7. Sidebar - Pure Minimal Black */
     section[data-testid="stSidebar"] {
-        background-color: #000000 !important;
-        border-right: 1px solid rgba(167, 255, 131, 0.1);
-        width: 450px !important;
+        background: #000000 !important;
+        border-right: 1px solid #111;
+        width: 400px !important;
     }
 
-    /* Custom Scrollbar for Pro Apps */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #a7ff83; border-radius: 10px; }
-
-    /* Hide Standard UI Clutter */
+    /* Hide standard Streamlit clutter */
     #MainMenu, footer, header {visibility: hidden;}
-    .block-container { padding: 2rem !important; max-width: 95% !important; }
 
-    /* IMAGE - HIGH-CONTRAST LAB STYLE */
+    /* Custom Image Display */
     [data-testid="stImage"] img {
         border-radius: 0px;
-        filter: contrast(1.1) brightness(0.9);
-        border: 1px solid rgba(255,255,255,0.05);
-        transition: 0.5s ease;
+        filter: grayscale(20%) contrast(110%);
+        transition: 0.5s;
     }
     [data-testid="stImage"] img:hover {
-        filter: contrast(1) brightness(1);
-        border-color: #a7ff83;
+        filter: grayscale(0%) contrast(100%);
+        transform: scale(1.02);
     }
 
 </style>
