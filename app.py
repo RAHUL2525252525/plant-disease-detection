@@ -442,112 +442,122 @@ def mock_chatbot_response(prompt):
     else:
         return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
 
-
-# 1. NATURAL MOTION BACKGROUND (High-Quality Forest)
+# 1. KINETIC BACKGROUND - Swaying Plants in Slow Motion
 st.markdown("""
     <video autoplay loop muted playsinline  style="
         position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;
-        z-index: -2; filter: brightness(0.2) contrast(1.1); object-fit: cover;">
+        z-index: -2; filter: brightness(0.25) contrast(1.1) saturate(0.8); object-fit: cover;">
         <source src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-video-of-leaves-in-a-branch-11440-large.mp4" type="video/mp4">
     </video>
     <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-        background: rgba(0,0,0,0.4); z-index: -1;"></div>
+        background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%); 
+        z-index: -1; pointer-events: none;"></div>
 """, unsafe_allow_html=True)
 
-# 2. MODERN GLASS UI CSS
+# 2. ELITE GLASS UI CSS
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap');
     
     .stApp { 
         background: transparent; 
         font-family: 'Inter', sans-serif;
-        color: #ffffff;
     }
 
-    /* --- 1. CLEAN MODERN HEADER --- */
+    /* --- 1. THE TITAN HEADER --- */
     h1 {
         font-weight: 900 !important;
-        font-size: clamp(2.5rem, 8vw, 5rem) !important;
-        letter-spacing: -2px !important;
-        color: #ffffff;
-        margin-bottom: 1rem !important;
-        text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        font-size: clamp(2.5rem, 8vw, 5.5rem) !important;
+        letter-spacing: -3px !important;
+        background: linear-gradient(180deg, #ffffff 40%, rgba(167, 255, 131, 0.8) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1 !important;
+        margin-bottom: 1.5rem !important;
+        filter: drop-shadow(0 15px 30px rgba(0,0,0,0.5));
     }
 
-    /* --- 2. READABLE SIDEBAR & ALERTS --- */
-    /* Normal, readable font sizes for better UX */
+    /* --- 2. CONTROLS & ALERTS (Standard Readable UX) --- */
+    /* Sidebar Labels & System Text */
     section[data-testid="stSidebar"] label, 
     section[data-testid="stSidebar"] p,
     .stSelectbox label, 
-    .stTextInput label {
-        font-size: 0.9rem !important;
+    .stTextInput label,
+    .stRadio label p {
+        font-size: 0.85rem !important; /* Normal, clean, readable */
         font-weight: 600 !important;
+        letter-spacing: 0.5px;
         color: rgba(255, 255, 255, 0.8) !important;
         margin-bottom: 8px !important;
     }
 
+    /* Professional Alerts */
     .stAlert {
-        background: rgba(167, 255, 131, 0.1) !important;
-        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.4) !important;
+        backdrop-filter: blur(15px);
         border: 1px solid rgba(167, 255, 131, 0.3) !important;
         border-radius: 12px !important;
-        color: #ffffff !important;
+        padding: 15px !important;
+    }
+    .stAlert p {
+        font-size: 0.9rem !important;
+        color: #a7ff83 !important;
     }
 
     /* --- 3. PREMIUM GLASS CONTAINERS --- */
     .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(255, 255, 255, 0.05) !important;
-        backdrop-filter: blur(25px) saturate(150%);
-        -webkit-backdrop-filter: blur(25px) saturate(150%);
+        background: rgba(255, 255, 255, 0.04) !important;
+        backdrop-filter: blur(30px) saturate(160%);
+        -webkit-backdrop-filter: blur(30px) saturate(160%);
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 24px !important; /* Rounded for a modern feel */
-        padding: 40px !important;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-        margin: 20px 0;
+        border-radius: 28px !important;
+        padding: 45px !important;
+        box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+        margin: 25px 0;
+        transition: transform 0.4s ease, border 0.4s ease;
     }
 
-    /* --- 4. THE ACTION BUTTON --- */
+    .prediction-box:hover {
+        transform: translateY(-8px);
+        border: 1px solid rgba(167, 255, 131, 0.4) !important;
+    }
+
+    /* --- 4. THE COMMAND BUTTON --- */
     .stButton button {
         width: 100% !important;
-        background: #a7ff83 !important;
+        background: linear-gradient(135deg, #a7ff83 0%, #17ad4b 100%) !important;
         color: #000000 !important;
         border: none !important;
-        border-radius: 12px !important;
-        padding: 15px 30px !important;
+        border-radius: 14px !important;
+        padding: 18px 40px !important;
         font-size: 1.1rem !important;
         font-weight: 700 !important;
-        transition: 0.3s all ease;
-        box-shadow: 0 10px 20px rgba(167, 255, 131, 0.2);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        transition: 0.4s all cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 10px 30px rgba(167, 255, 131, 0.3);
     }
 
     .stButton button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 30px rgba(167, 255, 131, 0.4);
+        transform: scale(1.03);
+        box-shadow: 0 20px 50px rgba(167, 255, 131, 0.5);
         background: #ffffff !important;
     }
 
-    /* --- 5. CLEAN SIDEBAR --- */
+    /* --- 5. SIDEBAR STEALTH --- */
     section[data-testid="stSidebar"] {
-        background: rgba(0, 0, 0, 0.5) !important;
-        backdrop-filter: blur(20px);
+        background: rgba(0, 0, 0, 0.6) !important;
+        backdrop-filter: blur(25px);
         border-right: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    /* Modern Inputs */
-    .stSelectbox div[data-baseweb="select"], 
-    .stTextInput input {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 8px !important;
-        color: white !important;
+        width: 350px !important;
     }
 
     /* Hide standard UI clutter */
     #MainMenu, footer, header {visibility: hidden;}
+    .block-container { padding: 3rem !important; max-width: 95% !important; }
+
 </style>
 """, unsafe_allow_html=True)
-
 # ---------------- SIDEBAR ----------------
 st.sidebar.title("🌿 Controls & Alerts")
 lang_choice = st.sidebar.selectbox("Language / ಭಾಷೆ", ("en", "kn"), 
