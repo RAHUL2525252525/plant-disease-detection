@@ -442,6 +442,7 @@ def mock_chatbot_response(prompt):
     else:
         return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
 
+
 # 1. KINETIC BACKGROUND - Swaying Plants
 st.markdown("""
     <video autoplay loop muted playsinline  style="
@@ -543,7 +544,8 @@ if st.button("⚙️ SYSTEM COMMAND"):
     # Add your alerts and controls here
     st.sidebar.warning("ALERT: High Humidity Detected")
     st.sidebar.selectbox("Language Select", ["English", "Kannada", "Hindi"])
-    st.sidebar.slider("Scan Sensitivity", 0, 100, 85)-------
+    st.sidebar.slider("Scan Sensitivity", 0, 100, 85)
+# ---------------- SIDEBAR ----------------
 st.sidebar.title("🌿 Controls & Alerts")
 lang_choice = st.sidebar.selectbox("Language / ಭಾಷೆ", ("en", "kn"), 
                                    format_func=lambda k: "English" if k=="en" else "ಕನ್ನಡ (Kannada)")
