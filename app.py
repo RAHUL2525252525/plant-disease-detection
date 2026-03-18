@@ -441,105 +441,117 @@ def mock_chatbot_response(prompt):
         return "Hello! I'm your AI Crop Assistant. Ask me about diseases, fertilizers, or crop care!"
     else:
         return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
+        
 st.markdown("""
 <style>
-    /* 1. The Canvas - Deep Emerald Liquid Gradient */
+    /* 1. Global Refinement */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700;900&display=swap');
+    
     .stApp {
-        background: linear-gradient(135deg, #020a08 0%, #041a12 50%, #010504 100%);
+        background: radial-gradient(circle at 0% 0%, #031510 0%, #000000 100%);
         background-attachment: fixed;
+        font-family: 'Inter', sans-serif;
     }
 
-    /* 2. Floating Title - Massive & Ethereal */
+    /* 2. Massive Kinetic Header */
     h1 {
-        font-family: 'Inter', sans-serif;
-        font-weight: 800 !important;
-        font-size: 6rem !important;
-        letter-spacing: -5px !important;
-        background: linear-gradient(to bottom, #ffffff 30%, rgba(167, 255, 131, 0.8) 100%);
+        font-weight: 900 !important;
+        font-size: clamp(3rem, 8vw, 7rem) !important;
+        letter-spacing: -6px !important;
+        background: linear-gradient(180deg, #ffffff 40%, rgba(167, 255, 131, 0.7) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        line-height: 0.85 !important;
-        margin-bottom: 40px !important;
-        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+        line-height: 0.8 !important;
+        filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
     }
 
-    /* 3. The "Frost-Glass" Action Cards */
+    /* 3. Sidebar Micro-UI (Controls & Alerts) */
+    section[data-testid="stSidebar"] {
+        background: rgba(0, 0, 0, 0.4) !important;
+        backdrop-filter: blur(30px) saturate(150%);
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+        width: 320px !important;
+    }
+
+    /* Shrink font for Sidebar Controls */
+    section[data-testid="stSidebar"] .stText, 
+    section[data-testid="stSidebar"] label,
+    section[data-testid="stSidebar"] p {
+        font-size: 0.75rem !important;
+        font-weight: 400 !important;
+        letter-spacing: 0.5px;
+        color: rgba(255, 255, 255, 0.6) !important;
+        text-transform: uppercase;
+    }
+
+    /* Alert Boxes - Minimalist Glass */
+    .stAlert {
+        background: rgba(167, 255, 131, 0.05) !important;
+        border: 1px solid rgba(167, 255, 131, 0.2) !important;
+        border-radius: 15px !important;
+        color: #a7ff83 !important;
+    }
+
+    /* 4. Action Cards (Glassmorphism) */
     .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(255, 255, 255, 0.03) !important;
+        background: rgba(255, 255, 255, 0.02) !important;
         backdrop-filter: blur(40px) saturate(150%);
-        -webkit-backdrop-filter: blur(40px) saturate(150%);
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 50px !important; /* Extremely rounded for "Organic" feel */
-        padding: 60px !important;
-        box-shadow: 0 40px 100px rgba(0,0,0,0.4);
-        margin: 20px 0;
-        transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        border-radius: 40px !important;
+        padding: 40px !important;
+        box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .prediction-box:hover {
-        background: rgba(255, 255, 255, 0.05) !important;
-        transform: scale(1.01) translateY(-10px);
-        border: 1px solid rgba(167, 255, 131, 0.3) !important;
+        transform: translateY(-10px) scale(1.01);
+        border: 1px solid rgba(167, 255, 131, 0.4) !important;
+        background: rgba(255, 255, 255, 0.04) !important;
     }
 
-    /* 4. The "Pulse" Result Center */
+    /* 5. Fluid Result Pulse */
     .primary-diagnosis-box {
-        background: radial-gradient(circle at center, rgba(167, 255, 131, 0.15) 0%, transparent 70%);
-        border: none !important;
-        text-align: center;
-        padding: 80px 20px !important;
-        animation: breath 4s ease-in-out infinite;
+        background: radial-gradient(circle, rgba(167, 255, 131, 0.1) 0%, transparent 70%);
+        padding: 60px 20px !important;
+        animation: pulse 4s ease-in-out infinite;
     }
 
-    @keyframes breath {
-        0%, 100% { transform: scale(1); opacity: 0.8; }
-        50% { transform: scale(1.05); opacity: 1; }
+    @keyframes pulse {
+        0%, 100% { opacity: 0.7; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.02); }
     }
 
-    .primary-diagnosis-box h2 {
-        font-size: 4rem !important;
-        color: #ffffff;
-        font-weight: 900;
-        text-shadow: 0 0 30px rgba(167, 255, 131, 0.5);
-    }
-
-    /* 5. The "Fluid" CTA Button */
+    /* 6. Professional Buttons */
     .stButton button {
         background: #a7ff83 !important;
-        color: #020a08 !important;
+        color: #000 !important;
+        border-radius: 100px !important;
+        padding: 18px 40px !important;
+        font-weight: 800 !important;
+        font-size: 1rem !important;
+        text-transform: uppercase;
+        letter-spacing: 2px;
         border: none !important;
-        border-radius: 100px !important; /* Pill shape */
-        padding: 25px 60px !important;
-        font-size: 1.4rem !important;
-        font-weight: 700 !important;
-        box-shadow: 0 20px 40px rgba(167, 255, 131, 0.2);
-        transition: 0.5s all cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .stButton button:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 30px 60px rgba(167, 255, 131, 0.4);
-        letter-spacing: 2px;
+        box-shadow: 0 0 40px rgba(167, 255, 131, 0.6);
+        transform: scale(1.05);
     }
 
-    /* 6. Sidebar - Subtle & Transparent */
-    section[data-testid="stSidebar"] {
-        background: rgba(0, 0, 0, 0.2) !important;
-        backdrop-filter: blur(20px);
-        border-right: 1px solid rgba(255, 255, 255, 0.05);
+    /* 7. Inputs & Selectors - Stealth Mode */
+    .stSelectbox div[data-baseweb="select"], 
+    .stTextInput input {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px !important;
+        color: white !important;
+        font-size: 0.85rem !important;
     }
 
-    /* 7. Image - Subtle Floating Effect */
-    [data-testid="stImage"] img {
-        border-radius: 40px;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-        animation: float 6s ease-in-out infinite;
-    }
-
-    @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-20px); }
-    }
+    /* Hide standard clutter */
+    #MainMenu, footer, header {visibility: hidden;}
 
 </style>
 """, unsafe_allow_html=True)
