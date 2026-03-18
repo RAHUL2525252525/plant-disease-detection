@@ -442,122 +442,108 @@ def mock_chatbot_response(prompt):
     else:
         return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
 
-# 1. KINETIC BACKGROUND - Swaying Plants in Slow Motion
+# 1. KINETIC BACKGROUND - Swaying Plants
 st.markdown("""
     <video autoplay loop muted playsinline  style="
         position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;
-        z-index: -2; filter: brightness(0.25) contrast(1.1) saturate(0.8); object-fit: cover;">
+        z-index: -2; filter: brightness(0.2) contrast(1.1); object-fit: cover;">
         <source src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-video-of-leaves-in-a-branch-11440-large.mp4" type="video/mp4">
     </video>
-    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-        background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 100%); 
-        z-index: -1; pointer-events: none;"></div>
 """, unsafe_allow_html=True)
 
-# 2. ELITE GLASS UI CSS
+# 2. THE SLIDING DASHBOARD & BUTTON CSS
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
     
-    .stApp { 
-        background: transparent; 
-        font-family: 'Inter', sans-serif;
-    }
+    .stApp { background: transparent; font-family: 'Inter', sans-serif; }
 
-    /* --- 1. THE TITAN HEADER --- */
-    h1 {
-        font-weight: 900 !important;
-        font-size: clamp(2.5rem, 8vw, 5.5rem) !important;
-        letter-spacing: -3px !important;
-        background: linear-gradient(180deg, #ffffff 40%, rgba(167, 255, 131, 0.8) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        line-height: 1 !important;
-        margin-bottom: 1.5rem !important;
-        filter: drop-shadow(0 15px 30px rgba(0,0,0,0.5));
-    }
-
-    /* --- 2. CONTROLS & ALERTS (Standard Readable UX) --- */
-    section[data-testid="stSidebar"] label, 
-    section[data-testid="stSidebar"] p,
-    .stSelectbox label, 
-    .stTextInput label,
-    .stRadio label p {
-        font-size: 0.85rem !important; 
-        font-weight: 600 !important;
-        letter-spacing: 0.5px;
-        color: rgba(255, 255, 255, 0.8) !important;
-        margin-bottom: 8px !important;
-    }
-
-    /* Professional Alerts */
-    .stAlert {
-        background: rgba(0, 0, 0, 0.4) !important;
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(167, 255, 131, 0.3) !important;
-        border-radius: 12px !important;
-        padding: 15px !important;
-    }
-    .stAlert p {
-        font-size: 0.9rem !important;
+    /* --- 1. THE SWIPE BUTTON (System Toggle) --- */
+    /* This button stays fixed at the top right */
+    .stButton > button {
+        position: fixed !important;
+        top: 20px !important;
+        right: 20px !important;
+        width: 180px !important;
+        height: 50px !important;
+        z-index: 1000 !important;
+        background: rgba(167, 255, 131, 0.1) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(167, 255, 131, 0.5) !important;
         color: #a7ff83 !important;
-    }
-
-    /* --- 3. PREMIUM GLASS CONTAINERS --- */
-    .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(255, 255, 255, 0.04) !important;
-        backdrop-filter: blur(30px) saturate(160%);
-        -webkit-backdrop-filter: blur(30px) saturate(160%);
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 28px !important;
-        padding: 45px !important;
-        box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-        margin: 25px 0;
-        transition: transform 0.4s ease, border 0.4s ease;
-    }
-
-    .prediction-box:hover {
-        transform: translateY(-8px);
-        border: 1px solid rgba(167, 255, 131, 0.4) !important;
-    }
-
-    /* --- 4. THE COMMAND BUTTON --- */
-    .stButton button {
-        width: 100% !important;
-        background: linear-gradient(135deg, #a7ff83 0%, #17ad4b 100%) !important;
-        color: #000000 !important;
-        border: none !important;
-        border-radius: 14px !important;
-        padding: 18px 40px !important;
-        font-size: 1.1rem !important;
+        border-radius: 100px !important;
         font-weight: 700 !important;
         text-transform: uppercase;
-        letter-spacing: 1.5px;
-        transition: 0.4s all cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: 0 10px 30px rgba(167, 255, 131, 0.3);
+        letter-spacing: 1px;
+        transition: 0.4s all ease;
     }
 
-    .stButton button:hover {
-        transform: scale(1.03);
-        box-shadow: 0 20px 50px rgba(167, 255, 131, 0.5);
-        background: #ffffff !important;
+    .stButton > button:hover {
+        background: #a7ff83 !important;
+        color: #000 !important;
+        box-shadow: 0 0 30px rgba(167, 255, 131, 0.4);
     }
 
-    /* --- 5. SIDEBAR STEALTH --- */
+    /* --- 2. THE CONTROL DASHBOARD (SIDEBAR REPLACEMENT) --- */
     section[data-testid="stSidebar"] {
-        background: rgba(0, 0, 0, 0.6) !important;
-        backdrop-filter: blur(25px);
+        background: rgba(0, 0, 0, 0.85) !important;
+        backdrop-filter: blur(40px) !important;
         border-right: 1px solid rgba(255, 255, 255, 0.05);
-        width: 350px !important;
+        transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1) !important;
+    }
+
+    /* --- 3. MICRO-UI FOR DASHBOARD --- */
+    section[data-testid="stSidebar"] label, 
+    section[data-testid="stSidebar"] p {
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 1px;
+        color: #a7ff83 !important;
+        text-transform: uppercase;
+        opacity: 0.8;
+    }
+
+    .stAlert {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(167, 255, 131, 0.2) !important;
+        border-radius: 8px !important;
+        font-size: 0.8rem !important;
+    }
+
+    /* --- 4. MAIN CONTENT AREA --- */
+    h1 {
+        font-weight: 900 !important;
+        font-size: clamp(3rem, 10vw, 6rem) !important;
+        letter-spacing: -4px !important;
+        color: #ffffff;
+        line-height: 0.9 !important;
+        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+    }
+
+    .prediction-box, .solution-box {
+        background: rgba(255, 255, 255, 0.03) !important;
+        backdrop-filter: blur(30px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 30px !important;
+        padding: 40px !important;
+        box-shadow: 0 40px 80px rgba(0,0,0,0.4);
     }
 
     /* Hide standard UI clutter */
     #MainMenu, footer, header {visibility: hidden;}
-    .block-container { padding: 3rem !important; max-width: 95% !important; }
+    .block-container { padding-top: 5rem !important; }
 
 </style>
 """, unsafe_allow_html=True)
-# ---------------- SIDEBAR ----------------
+
+# 3. IMPLEMENTATION
+# This acts as the "Toggle" button for the dashboard
+if st.button("⚙️ SYSTEM COMMAND"):
+    st.sidebar.markdown("### 🛠️ DASHBOARD CONTROLS")
+    # Add your alerts and controls here
+    st.sidebar.warning("ALERT: High Humidity Detected")
+    st.sidebar.selectbox("Language Select", ["English", "Kannada", "Hindi"])
+    st.sidebar.slider("Scan Sensitivity", 0, 100, 85)-------
 st.sidebar.title("🌿 Controls & Alerts")
 lang_choice = st.sidebar.selectbox("Language / ಭಾಷೆ", ("en", "kn"), 
                                    format_func=lambda k: "English" if k=="en" else "ಕನ್ನಡ (Kannada)")
