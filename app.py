@@ -445,36 +445,115 @@ def mock_chatbot_response(prompt):
 # ---------------- CUSTOM CSS (Your Beautiful Design) ----------------
 st.markdown("""
 <style>
-    .stApp { background: radial-gradient(circle at 50% 50%, #0a1f1c 0%, #040d0b 100%); background-attachment: fixed; }
+    /* 1. Global Page Styling - Deep Forest Gradient */
+    .stApp {
+        background: radial-gradient(circle at 20% 30%, #061a12 0%, #020806 100%);
+        color: #e0f2f1;
+    }
+
+    /* 2. Animated DNA-like Mesh Overlay */
     .stApp::before {
-        content: ""; position: fixed; inset: 0;
-        background: linear-gradient(125deg, rgba(0,77,64,0.1) 0%, rgba(27,94,32,0.05) 50%, rgba(56,142,60,0.1) 100%);
-        background-size: 400% 400%; animation: meshFlow 15s ease infinite alternate; z-index: 0;
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: 
+            radial-gradient(rgba(167, 255, 131, 0.05) 1px, transparent 0);
+        background-size: 40px 40px;
+        z-index: 0;
+        pointer-events: none;
     }
-    @keyframes meshFlow { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
-    .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(255,255,255,0.02) !important; backdrop-filter: blur(20px);
-        border-radius: 24px !important; padding: 25px; color: #f0fff4;
-        border: 1px solid rgba(167,255,131,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+
+    /* 3. Modern Glassmorphism Cards */
+    .prediction-box, .solution-box, .stChatMessage, div[data-testid="stExpander"] {
+        background: rgba(255, 255, 255, 0.03) !important;
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        border-radius: 20px !important;
+        border: 1px solid rgba(167, 255, 131, 0.15) !important;
+        padding: 25px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        transition: transform 0.3s ease;
     }
+    
+    .prediction-box:hover {
+        border-color: #a7ff83 !important;
+        transform: translateY(-2px);
+    }
+
+    /* 4. The "Scanner" Diagnosis Box */
     .primary-diagnosis-box {
-        background: rgba(0,77,64,0.3); border: 1px solid #a7ff83; border-radius: 20px;
-        padding: 35px; position: relative; overflow: hidden;
+        background: linear-gradient(145deg, rgba(0, 56, 46, 0.4), rgba(0, 20, 15, 0.6));
+        border-left: 5px solid #a7ff83;
+        border-radius: 12px;
+        padding: 30px;
+        position: relative;
+        overflow: hidden;
     }
+
+    /* Moving Bio-Scanner Light */
     .primary-diagnosis-box::after {
-        content: ""; position: absolute; top: -100%; left: 0; width: 100%; height: 100%;
-        background: linear-gradient(to bottom, transparent, rgba(167,255,131,0.2), transparent);
-        animation: scanner 4s linear infinite;
+        content: "";
+        position: absolute;
+        left: 0; top: -100%; width: 100%; height: 50%;
+        background: linear-gradient(to bottom, transparent, rgba(167, 255, 131, 0.1), transparent);
+        animation: bioScan 3s ease-in-out infinite;
     }
-    @keyframes scanner { 0% { top: -100%; } 100% { top: 100%; } }
-    h1 { font-weight: 900 !important; background: linear-gradient(135deg, #a7ff83 0%, #4db6ac 100%);
-         -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 3.5rem !important; }
+
+    @keyframes bioScan {
+        0% { top: -100%; }
+        100% { top: 150%; }
+    }
+
+    /* 5. Typography - Bio-Tech Style */
+    h1, h2, h3 {
+        font-family: 'Inter', sans-serif;
+        letter-spacing: -0.02em;
+    }
+
+    h1 {
+        background: linear-gradient(90deg, #ffffff 0%, #a7ff83 50%, #4db6ac 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800 !important;
+        text-transform: uppercase;
+        filter: drop-shadow(0 0 10px rgba(167,255,131,0.2));
+    }
+
+    /* 6. Glowing Neon Buttons */
     .stButton button {
-        background: transparent !important; color: #a7ff83 !important; border: 1px solid #a7ff83 !important;
-        border-radius: 50px !important; padding: 15px 30px !important; font-weight: 800 !important;
-        transition: all 0.4s ease;
+        background: linear-gradient(45deg, #0a2e24 0%, #000000 100%) !important;
+        color: #a7ff83 !important;
+        border: 1.5px solid #a7ff83 !important;
+        border-radius: 12px !important;
+        padding: 12px 28px !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: 0.4s all cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    .stButton button:hover { background: #a7ff83 !important; color: #020806 !important; transform: scale(1.05); }
+
+    .stButton button:hover {
+        background: #a7ff83 !important;
+        color: #020806 !important;
+        box-shadow: 0 0 25px rgba(167, 255, 131, 0.6);
+        transform: scale(1.02);
+    }
+
+    /* 7. Sidebar Customization */
+    section[data-testid="stSidebar"] {
+        background-color: #020b08 !important;
+        border-right: 1px solid rgba(167, 255, 131, 0.1);
+    }
+    
+    /* Input Field Styling */
+    .stTextInput input, .stSelectbox div {
+        background-color: rgba(255,255,255,0.05) !important;
+        border-radius: 10px !important;
+        color: white !important;
+        border: 1px solid rgba(167, 255, 131, 0.2) !important;
+    }
+
 </style>
 """, unsafe_allow_html=True)
 
