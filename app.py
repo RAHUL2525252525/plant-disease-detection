@@ -883,7 +883,16 @@ if page=="Home":
                             for i, res in enumerate(prediction_results[1:]):
                                 st.write(f"**{res['class']}** ({res['confidence']:.2f}%)")
                     
-                    # 5. Get Treatment Info & Nutrients (Feature 4)
+                    results = predict_disease(img)
+
+                    if results:
+                        current_disease = results[0]["class"]
+                        confidence = results[0]["confidence"]
+                    else:
+                        current_disease = "Unknown"
+                        confidence = 0
+
+
                     current_info = disease_treatments.get(current_disease, {})
 
                     meds = current_info.get("medicines", "None")
