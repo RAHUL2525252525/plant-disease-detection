@@ -442,39 +442,123 @@ def mock_chatbot_response(prompt):
     else:
         return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
 
-# ---------------- CUSTOM CSS (Your Beautiful Design) ----------------
+
+st.markdown("""
+    <video autoplay loop muted playsinline  style="
+        position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;
+        z-index: -1; filter: brightness(0.15) contrast(1.2) saturate(0.5); object-fit: cover;">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-video-of-leaves-in-a-branch-11440-large.mp4" type="video/mp4">
+    </video>
+""", unsafe_allow_html=True)
+
+# 2. ULTRA-MINIMALIST PRO CSS
 st.markdown("""
 <style>
-    .stApp { background: radial-gradient(circle at 50% 50%, #0a1f1c 0%, #040d0b 100%); background-attachment: fixed; }
-    .stApp::before {
-        content: ""; position: fixed; inset: 0;
-        background: linear-gradient(125deg, rgba(0,77,64,0.1) 0%, rgba(27,94,32,0.05) 50%, rgba(56,142,60,0.1) 100%);
-        background-size: 400% 400%; animation: meshFlow 15s ease infinite alternate; z-index: 0;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;900&display=swap');
+    
+    .stApp { background: transparent; font-family: 'Inter', sans-serif; }
+
+    /* --- 1. TITAN HEADER --- */
+    h1 {
+        font-weight: 900 !important;
+        font-size: clamp(3rem, 15vw, 10rem) !important;
+        letter-spacing: -12px !important;
+        color: #ffffff;
+        line-height: 0.75 !important;
+        margin: 0 !important;
+        filter: drop-shadow(0 30px 60px rgba(0,0,0,1));
     }
-    @keyframes meshFlow { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+
+    /* --- 2. MICRO-UI: CONTROLS & ALERTS (SIZE 5 EQUIVALENT) --- */
+    /* Target Sidebar labels, radio buttons, and selectbox headers */
+    section[data-testid="stSidebar"] label, 
+    section[data-testid="stSidebar"] p,
+    .stSelectbox label, 
+    .stTextInput label,
+    .stRadio label p {
+        font-size: 7px !important; /* Precision Size 5 equivalent */
+        font-weight: 700 !important;
+        letter-spacing: 3px !important;
+        text-transform: uppercase;
+        color: rgba(167, 255, 131, 0.4) !important;
+        margin-bottom: 4px !important;
+    }
+
+    /* Target the Alert/Warning Boxes (Ultra Compact) */
+    .stAlert {
+        background: rgba(0, 0, 0, 0.7) !important;
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(167, 255, 131, 0.1) !important;
+        border-radius: 0px !important;
+        padding: 5px 12px !important;
+        min-height: 0px !important;
+    }
+    
+    /* Alert Text Size 5 */
+    .stAlert p, .stAlert div {
+        font-size: 7px !important;
+        font-weight: 400 !important;
+        letter-spacing: 1.5px;
+        color: #a7ff83 !important;
+        margin: 0 !important;
+        text-transform: uppercase;
+    }
+
+    /* --- 3. THE "MONOLITH" GLASS CARDS --- */
     .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(255,255,255,0.02) !important; backdrop-filter: blur(20px);
-        border-radius: 24px !important; padding: 25px; color: #f0fff4;
-        border: 1px solid rgba(167,255,131,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        background: rgba(0, 0, 0, 0.8) !important;
+        backdrop-filter: blur(80px) saturate(200%);
+        -webkit-backdrop-filter: blur(80px) saturate(200%);
+        border: 1px solid rgba(255, 255, 255, 0.03) !important;
+        border-radius: 0px !important; 
+        padding: 60px !important;
+        box-shadow: 0 100px 200px rgba(0,0,0,1);
+        margin: 20px 0;
     }
-    .primary-diagnosis-box {
-        background: rgba(0,77,64,0.3); border: 1px solid #a7ff83; border-radius: 20px;
-        padding: 35px; position: relative; overflow: hidden;
-    }
-    .primary-diagnosis-box::after {
-        content: ""; position: absolute; top: -100%; left: 0; width: 100%; height: 100%;
-        background: linear-gradient(to bottom, transparent, rgba(167,255,131,0.2), transparent);
-        animation: scanner 4s linear infinite;
-    }
-    @keyframes scanner { 0% { top: -100%; } 100% { top: 100%; } }
-    h1 { font-weight: 900 !important; background: linear-gradient(135deg, #a7ff83 0%, #4db6ac 100%);
-         -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 3.5rem !important; }
+
+    /* --- 4. THE COMMAND BUTTON --- */
     .stButton button {
-        background: transparent !important; color: #a7ff83 !important; border: 1px solid #a7ff83 !important;
-        border-radius: 50px !important; padding: 15px 30px !important; font-weight: 800 !important;
-        transition: all 0.4s ease;
+        width: 100% !important;
+        height: 100px !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        border-radius: 0px !important;
+        font-size: 2rem !important;
+        font-weight: 900 !important;
+        text-transform: uppercase;
+        letter-spacing: 15px;
+        transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     }
-    .stButton button:hover { background: #a7ff83 !important; color: #020806 !important; transform: scale(1.05); }
+
+    .stButton button:hover {
+        background: #a7ff83 !important;
+        box-shadow: 0 0 120px rgba(167, 255, 131, 0.4);
+        transform: scale(0.98);
+    }
+
+    /* --- 5. SIDEBAR STEALTH MODE --- */
+    section[data-testid="stSidebar"] {
+        background: rgba(0, 0, 0, 0.9) !important;
+        backdrop-filter: blur(50px);
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+        width: 350px !important;
+    }
+
+    /* Inputs - Nano-Sized for Pro Look */
+    .stSelectbox div[data-baseweb="select"], 
+    .stTextInput input {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 0px !important;
+        height: 30px !important;
+        font-size: 10px !important;
+        color: #666 !important;
+    }
+
+    /* Hide standard UI clutter */
+    #MainMenu, footer, header {visibility: hidden;}
+    .block-container { padding: 4rem !important; max-width: 95% !important; }
+
 </style>
 """, unsafe_allow_html=True)
 
