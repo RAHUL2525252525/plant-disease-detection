@@ -443,7 +443,77 @@ def mock_chatbot_response(prompt):
         return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
 
 
-v
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;900&display=swap');
+
+.stApp { background: transparent; font-family: 'Inter', sans-serif; }
+
+/* --- 1. TITAN HEADER --- */
+h1 {
+    font-weight: 900 !important;
+    font-size: clamp(3rem, 15vw, 10rem) !important;
+    letter-spacing: -12px !important;
+    color: #ffffff;
+    line-height: 0.75 !important;
+    margin: 0 !important;
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,1));
+}
+
+/* --- 2. MICRO-UI: CONTROLS & ALERTS (ULTRA MICRO) --- */
+/* Sidebar & Input Labels */
+section[data-testid="stSidebar"] label, 
+section[data-testid="stSidebar"] p,
+.stSelectbox label, 
+.stTextInput label,
+.stRadio label p {
+    font-size: 3px !important;   /* Ultra tiny */
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase;
+    color: rgba(167, 255, 131, 0.25) !important;
+    margin-bottom: 1px !important;
+}
+
+/* Alert/Warning Boxes */
+.stAlert {
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(167, 255, 131, 0.03) !important;
+    border-radius: 0px !important;
+    padding: 1px 4px !important;   /* Tiny padding */
+    min-height: 0px !important;
+}
+
+/* Alert Text */
+.stAlert p, .stAlert div {
+    font-size: 3px !important;  /* Tiny text */
+    font-weight: 400 !important;
+    letter-spacing: 0.5px;
+    color: #a7ff83 !important;
+    margin: 0 !important;
+    text-transform: uppercase;
+}
+
+/* Inputs - Nano-Sized for Pro Look */
+.stSelectbox div[data-baseweb="select"], 
+.stTextInput input,
+.stRadio {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 0px !important;
+    height: 22px !important;    /* Tiny height */
+    font-size: 7px !important;  /* Tiny font inside input */
+    color: #666 !important;
+    padding: 0 4px !important;
+}
+
+/* Hide standard UI clutter */
+#MainMenu, footer, header {visibility: hidden;}
+.block-container { padding: 4rem !important; max-width: 95% !important; }
+</style>
+""", unsafe_allow_html=True)
+
 # ---------------- SIDEBAR ----------------
 st.sidebar.title("🌿 Controls & Alerts")
 lang_choice = st.sidebar.selectbox("Language / ಭಾಷೆ", ("en", "kn"), 
