@@ -882,26 +882,30 @@ if page=="Home":
                         with st.expander(f"🔮 {txt['top_predictions']}"):
                             for i, res in enumerate(prediction_results[1:]):
                                 st.write(f"**{res['class']}** ({res['confidence']:.2f}%)")
-                    if uploaded_file is not None:
-                       img = Image.open(uploaded_file)
-                    
-                    results = predict_disease(img)
 
-                    if results:
-                        current_disease = results[0]["class"]
-                        confidence = results[0]["confidence"]
-                    else:
-                        current_disease = "Unknown"
-                        confidence = 0
+uploaded_file = st.file_uploader("Upload Leaf Image", type=["jpg","png","jpeg"])
 
+if uploaded_file is not None:
+    img = Image.open(uploaded_file)
 
-                    current_info = disease_treatments.get(current_disease, {})
+    results = predict_disease(img)
 
-                    meds = current_info.get("medicines", "None")
-                    treatment = current_info.get("treatment", "No treatment info available.")
-                    suggestions = current_info.get("suggestions", "No suggestions available.")
-                    nutrients = current_info.get("nutrients", "N/A")
+    if results:
+        current_disease = results[0]["class"]
+        confidence = results[0]["confidence"]
+    else:
+        current_disease = "Unknown"
+        confidence = 0
 
+    current_info = disease_treatments.get(current_disease, {})
+
+    meds = current_info.get("medicines", "None")
+    treatment = current_info.get("treatment", "No treatment info available.")
+    suggestions = current_info.get("suggestions", "No suggestions available.")
+    nutrients = current_info.get("nutrients", "N/A")
+
+    st.image(img, caption="Uploaded Image", width=300)
+    st.success(f"Prediction: {current_disease} ({confidence:.2f}%)")
                     # 6. PDF Download
                     pdf_width, pdf_height = A4
                     pdf_buffer = generate_pdf_report(
