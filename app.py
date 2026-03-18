@@ -443,35 +443,35 @@ def mock_chatbot_response(prompt):
         return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
 
 
-# 1. THE TECHNICAL GRID & VIDEO BACKGROUND
+# 1. LUXURY MOTION BACKGROUND (Dark Silk/Liquid)
 st.markdown("""
     <video autoplay loop muted playsinline  style="
         position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;
-        z-index: -2; filter: brightness(0.1) contrast(1.5) grayscale(1); object-fit: cover;">
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-video-of-leaves-in-a-branch-11440-large.mp4" type="video/mp4">
+        z-index: -2; filter: brightness(0.15) contrast(1.1) saturate(0.4); object-fit: cover;">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-abstract-green-liquid-background-40097-large.mp4" type="video/mp4">
     </video>
-    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-        background-image: radial-gradient(rgba(167, 255, 131, 0.05) 1px, transparent 1px);
-        background-size: 30px 30px; z-index: -1; pointer-events: none;"></div>
 """, unsafe_allow_html=True)
 
-# 2. THE KINETIC BLUEPRINT CSS
+# 2. THE EDITORIAL LUXURY CSS
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400;900&family=JetBrains+Mono:wght@100&display=swap');
+    /* Importing a Fancy Serif for Titles and Inter for UI */
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@100;400;700&display=swap');
     
     .stApp { background: transparent; font-family: 'Inter', sans-serif; }
 
-    /* --- 1. THE ASYMMETRIC HEADER --- */
+    /* --- 1. THE FANCY EDITORIAL HEADER --- */
     h1 {
+        font-family: 'Playfair Display', serif !important;
         font-weight: 900 !important;
-        font-size: clamp(3rem, 12vw, 8rem) !important;
-        letter-spacing: -10px !important;
+        font-style: italic;
+        font-size: clamp(4rem, 15vw, 12rem) !important;
+        letter-spacing: -5px !important;
         color: #ffffff;
         line-height: 0.8 !important;
         margin: 0 !important;
-        padding-left: 20px;
-        border-left: 1px solid rgba(167, 255, 131, 0.3);
+        padding-bottom: 40px;
+        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
     }
 
     /* --- 2. ULTRA-MICRO INSTRUMENTATION (SIZE 3-5) --- */
@@ -480,85 +480,78 @@ st.markdown("""
     .stSelectbox label, 
     .stTextInput label,
     .stRadio label p {
-        font-size: 3.5px !important; /* Ultra-Micro */
-        font-weight: 400 !important;
-        letter-spacing: 2px !important;
+        font-size: 4px !important; /* Ultra-Micro */
+        font-weight: 700 !important;
+        letter-spacing: 3px !important;
         text-transform: uppercase;
         color: rgba(167, 255, 131, 0.3) !important;
-        font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Target Alerts - Minimalist HUD Style */
+    /* Elegant Micro Alerts */
     .stAlert {
-        background: rgba(0, 0, 0, 0.8) !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        backdrop-filter: blur(10px);
         border: none !important;
-        border-left: 2px solid #a7ff83 !important;
+        border-left: 1px solid rgba(167, 255, 131, 0.5) !important;
         border-radius: 0px !important;
-        padding: 2px 8px !important;
+        padding: 4px 10px !important;
     }
     .stAlert p {
         font-size: 5px !important;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
         color: #a7ff83 !important;
         text-transform: uppercase;
     }
 
-    /* --- 3. THE "BLUEPRINT" CONTAINERS --- */
+    /* --- 3. THE "FLOATING SILK" CONTAINERS --- */
     .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(255, 255, 255, 0.01) !important;
-        backdrop-filter: blur(40px);
+        background: rgba(0, 0, 0, 0.5) !important;
+        backdrop-filter: blur(50px) saturate(150%);
+        -webkit-backdrop-filter: blur(50px) saturate(150%);
         border: 1px solid rgba(255, 255, 255, 0.05) !important;
         border-radius: 0px !important;
-        padding: 50px !important;
-        margin: 20px 0;
+        padding: 80px !important;
+        box-shadow: 0 100px 200px rgba(0,0,0,0.9);
+        margin: 40px 0;
         position: relative;
     }
 
-    /* Corner Accents for a Technical Feel */
-    .prediction-box::before {
-        content: ""; position: absolute; top: 0; left: 0; width: 20px; height: 20px;
-        border-top: 1px solid #a7ff83; border-left: 1px solid #a7ff83;
-    }
-    .prediction-box::after {
-        content: ""; position: absolute; bottom: 0; right: 0; width: 20px; height: 20px;
-        border-bottom: 1px solid #a7ff83; border-right: 1px solid #a7ff83;
-    }
-
-    /* --- 4. TACTILE MONOCHROME BUTTON --- */
+    /* --- 4. THE LUXURY GHOST BUTTON --- */
     .stButton button {
         width: 100% !important;
-        height: 80px !important;
+        height: 100px !important;
         background: transparent !important;
-        color: #ffffff !important;
-        border: 1px solid rgba(255,255,255,0.1) !important;
+        color: #a7ff83 !important;
+        border: 1px solid rgba(167, 255, 131, 0.3) !important;
         border-radius: 0px !important;
-        font-size: 1.5rem !important;
-        font-weight: 100 !important;
-        text-transform: uppercase;
-        letter-spacing: 12px;
-        transition: 0.5s ease;
+        font-family: 'Playfair Display', serif !important;
+        font-size: 2.5rem !important;
+        font-style: italic;
+        transition: 0.8s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .stButton button:hover {
         background: #ffffff !important;
         color: #000000 !important;
-        letter-spacing: 18px;
+        border-color: #ffffff !important;
+        letter-spacing: 10px;
     }
 
-    /* --- 5. NANO-INPUTS --- */
+    /* --- 5. STEALTH NANO-INPUTS --- */
     .stSelectbox div[data-baseweb="select"], 
     .stTextInput input {
-        background: rgba(0,0,0,0.5) !important;
-        border: 1px solid rgba(167, 255, 131, 0.1) !important;
-        height: 20px !important;
+        background: rgba(255,255,255,0.03) !important;
+        border: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 0px !important;
+        height: 25px !important;
         font-size: 8px !important;
         color: #a7ff83 !important;
-        font-family: 'JetBrains Mono', monospace;
     }
 
     /* Remove standard Streamlit noise */
     #MainMenu, footer, header {visibility: hidden;}
-    .block-container { padding: 4rem !important; max-width: 95% !important; }
+    .block-container { padding: 4rem !important; max-width: 90% !important; }
 </style>
 """, unsafe_allow_html=True)
 # ---------------- SIDEBAR ----------------
