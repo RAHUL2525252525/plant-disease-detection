@@ -560,9 +560,6 @@ def speak_text(text: str):
     except Exception:
         pass
 
-# ===== SAFE TREATMENT INFO BLOCK =====
-info = treatments.get(current_diagnosis, {})
-
 def generate_pdf_report(current_diagnosis: str, confidence: float, record: dict, treatments: dict, image: Image.Image, width, height):
     """Generates a PDF report for the current diagnosis, with embedded image and confidence."""
     buf = io.BytesIO()
@@ -658,7 +655,7 @@ def generate_pdf_report(current_diagnosis: str, confidence: float, record: dict,
     # 4. Save and return buffer
     c.save()
     buf.seek(0)
-    return 
+    return buf
 
 # --- UI IMPLEMENTATION (Main Body) ---
 
@@ -825,128 +822,206 @@ st.markdown("---")
 page = st.sidebar.radio("Go to / ತೆರೆಯಿರಿ", ["Home","Chatbot","History","About"], key="main_nav")
 
 # ---------------- Home ----------------
-if page == "Home":
+if page=="Home":
     st.markdown("### 📷 Select Image Source")
     
+    # Input Section
     with st.container(border=True):
-        input_method = st.radio(
-            "Input Method", 
-            ["Camera", "Upload"], 
-            key="input_method_radio", 
-            horizontal=True
-        )
-
+        input_method = st.radio("Input Method", ["Camera","Upload"], key="input_method_radio", horizontal=True)
         image_obj = None
-        source_label = "camera" if input_method == "Camera" else "upload"
+        source_label = "camera" if input_method=="Camera" else "upload"
 
-        if input_method == "Camera":
-            cam = st.camera_input(
-                "Take a clear close-up picture of the leaf", 
-                key="camera_input"
-            )
+        if input_method=="Camera":
+            cam = st.camera_input("Take a clear close-up picture of the leaf", key="camera_input")
             if cam:
                 image_obj = Image.open(cam).convert("RGB")
-
         else:
-            up = st.file_uploader(
-                "Upload leaf image (jpg/png)", 
-                type=["jpg", "jpeg", "png"], 
-                key="file_uploader"
-            )
+            up = st.file_uploader("Upload leaf image (jpg/png)", type=["jpg","jpeg","png"], key="file_uploader")
             if up:
                 image_obj = Image.open(up).convert("RGB")
         
-        # ===== PROCESS IMAGE =====
         if image_obj:
-            st.image(image_obj, caption="Input Image", width=250)
-
+            # Displaying the image at a fixed, small size (250px)
+            st.image(image_obj, caption="Input Image", width=250) 
+            
             if st.button(txt["analyze"], key="analyze_button", use_container_width=True):
-
+                
+                prediction_results = []
                 try:
                     prediction_results = predict_disease(image_obj, top_n=3)
+                except RuntimeError as e:
+                    st.error(str(e))
                 except Exception as e:
                     st.error(f"Prediction failed: {e}")
-                    prediction_results = []
-
+                
                 if prediction_results:
                     top_result = prediction_results[0]
                     cls = top_result["class"]
                     confidence = top_result["confidence"]
 
-                    # ===== RECORD =====
+                    # 1. Record History
                     record = {
-                        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        "disease": cls,
-                        "confidence": float(confidence),
+                        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+                        "disease": cls, 
+                        "confidence": float(confidence), 
                         "source": source_label
                     }
-
                     save_history(record)
                     speak_text(f"{cls} detected.")
-
-                    # ===== MAIN RESULT =====
-                    st.markdown(
-                        f"<div class='primary-diagnosis-box'>"
-                        f"<h2>✅ Detected: {cls}</h2>"
-                        f"<p style='color:white;font-size:1.2em;'>Confidence: {confidence:.2f}%</p>"
-                        f"</div>",
-                        unsafe_allow_html=True
-                    )
-
-                    # ===== LOW CONFIDENCE WARNING =====
-                    if confidence < 80:
-                        st.warning(txt['low_confidence'])
-
-                    # ===== TOP PREDICTIONS =====
+                    
+                    # 2. Display Top Prediction
+                    st.markdown(f"<div class='primary-diagnosis-box'><h2>✅ Detected: {cls}</h2><p style='color: white; font-size:1.2em;'>Confidence: **{confidence:.2f}%**</p></div>", unsafe_allow_html=True)
+                    
+                    # 3. Confidence Warning Check
+                    CONFIDENCE_THRESHOLD = 80.0
+                    if confidence < CONFIDENCE_THRESHOLD:
+                        st.markdown(f"<div class='warning-box'>{txt['low_confidence']}</div>", unsafe_allow_html=True)
+                    
+                    # 4. Display Top 3
                     if len(prediction_results) > 1:
                         with st.expander(f"🔮 {txt['top_predictions']}"):
-                            for res in prediction_results[1:]:
-                                st.write(f"{res['class']} ({res['confidence']:.2f}%)")
+                            for i, res in enumerate(prediction_results[1:]):
+                                st.write(f"**{res['class']}** ({res['confidence']:.2f}%)")
 
-                    # ===== PDF =====
+uploaded_file = st.file_uploader("Upload Leaf Image", type=["jpg","png","jpeg"])
+
+if uploaded_file is not None:
+    img = Image.open(uploaded_file)
+
+    results = predict_disease(img)
+
+    if results:
+        current_disease = results[0]["class"]
+        confidence = results[0]["confidence"]
+    else:
+        current_disease = "Unknown"
+        confidence = 0
+
+    current_info = disease_treatments.get(current_disease, {})
+
+    meds = current_info.get("medicines", "None")
+    treatment = current_info.get("treatment", "No treatment info available.")
+    suggestions = current_info.get("suggestions", "No suggestions available.")
+    nutrients = current_info.get("nutrients", "N/A")
+
+    st.image(img, caption="Uploaded Image", width=300)
+    st.success(f"Prediction: {current_disease} ({confidence:.2f}%)")
+                    # 6. PDF Download
                     pdf_width, pdf_height = A4
                     pdf_buffer = generate_pdf_report(
-                        current_diagnosis=cls,
-                        confidence=confidence,
-                        record=record,
+                        current_diagnosis=cls, 
+                        confidence=confidence, 
+                        record=record, 
                         treatments=disease_treatments,
-                        image=image_obj,
+                        image=image_obj, 
                         width=pdf_width,
                         height=pdf_height
                     )
-
+                    
                     st.download_button(
-                        label="📄 Download Diagnosis as PDF",
-                        data=pdf_buffer,
-                        file_name=f"{cls}_report.pdf",
+                        label="📄 Download Diagnosis as PDF", 
+                        data=pdf_buffer, 
+                        file_name=f"{cls}_report_{datetime.now().strftime('%Y%m%d')}.pdf",
                         mime="application/pdf"
                     )
 
-                    # ===== TREATMENT =====
-                    current_info = disease_treatments.get(cls, {})
-
-                    meds = current_info.get("medicines", "None")
-                    treatment = current_info.get("treatment", "No treatment info available.")
-                    suggestions = current_info.get("suggestions", "No suggestions available.")
-                    nutrients = current_info.get("nutrients", "N/A")
-
-                    meds_list = [m.strip() for m in meds.split(",") if m.strip()]
-
-                    link_html = "<div>" + "".join(
-                        f"{flipkart_search_link(m)}<br>" for m in meds_list
-                    ) + "</div>"
-
+                    # 7. Streamlit Display of Treatment (Completed Block)
+                    meds_label = txt['medicines']
+                    treatment_label = txt['treatment']
+                    suggestions_label = txt['suggestions']
+                    
+                    meds_list = [m.strip() for m in meds.split(",") if m.strip() and m.strip().lower() not in ["none", "no cure"]]
+                    link_html = "<div style='margin-top: 10px;'>" + "".join(f"{flipkart_search_link(m)}<br>" for m in meds_list) + "</div>"
+                    
                     solution_html = f"""
                     <div class='solution-box'>
-                        <h3>💊 {txt['medicines']}:</h3><p>{meds}</p>
-                        {link_html}
-                        <h3>🛠️ {txt['treatment']}:</h3><p>{treatment}</p>
-                        <h3>💡 {txt['suggestions']}:</h3><p>{suggestions}</p>
-                        <h3>🌱 Nutrient Focus:</h3><p>{nutrients}</p>
+                        <h3>💊 {meds_label}:</h3><p style="margin-top:-10px;">{meds}</p>{link_html}
+                        <h3>🛠️ {treatment_label}:</h3><p style="margin-top:-10px;">{treatment}</p>
+                        <h3>💡 {suggestions_label}:</h3><p style="margin-top:-10px;">{suggestions}</p>
+                        <hr style='border-top: 1px solid rgba(255,255,255,0.1); margin: 10px 0;'>
+                        <h3>🌱 Nutrient Focus:</h3><p style="margin-top:-10px;">{nutrients}</p>
                     </div>
                     """
-
                     st.markdown(solution_html, unsafe_allow_html=True)
-
+        
                 else:
-                    st.info("No clear prediction could be made. Please upload a clear image.")
+                    st.info("No clear prediction could be made. Please upload a clear image of the diseased leaf.")
+
+# ---------------- Chatbot (Feature 3) ----------------
+elif page=="Chatbot":
+    st.markdown("## 🤖 AI Crop Assistant Chatbot")
+    st.markdown("Ask me anything about crop care, fertilizers, or general disease management.")
+    
+    if 'messages' not in st.session_state:
+        st.session_state.messages = []
+
+    # Display chat messages from history on app rerun
+    for message in st.session_state.messages:
+        avatar = "🧑‍🌾" if message["role"] == "user" else "🤖"
+        with st.chat_message(message["role"], avatar=avatar):
+            st.markdown(message["content"])
+
+    # Accept user input
+    if prompt := st.chat_input("How can I treat my tomato's early blight?"):
+        # Add user message to chat history
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        # Display user message in chat message container
+        with st.chat_message("user", avatar="🧑‍🌾"):
+            st.markdown(prompt)
+
+        # Get assistant response
+        with st.chat_message("assistant", avatar="🤖"):
+            response = mock_chatbot_response(prompt)
+            st.markdown(response)
+        # Add assistant response to chat history
+        st.session_state.messages.append({"role": "assistant", "content": response})
+
+# ---------------- History (Feature 2) ----------------
+elif page=="History":
+    st.markdown("## 📜 Prediction History")
+    
+    # Load and prepare data
+    history_data = load_history()
+    df = history_to_df(history_data)
+    
+    st.markdown("### Recent Diagnoses")
+    
+    if df.empty:
+        st.info("No prediction history found. Start analyzing images on the Home page!")
+    else:
+        # Feature 2: Display the history data table
+        st.dataframe(df, use_container_width=True)
+        
+        st.markdown("---")
+        
+        # Download CSV button
+        csv = df.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label=txt["download"],
+            data=csv,
+            file_name='plant_doctor_history.csv',
+            mime='text/csv',
+            key="download_csv_btn"
+        )
+
+# ---------------- About ----------------
+elif page=="About":
+    st.markdown("## ℹ️ About AI Plant Doctor")
+    st.markdown("""
+    This application is built using **Streamlit** for the UI and **TensorFlow/Keras** for the deep learning model.
+    
+    **Model Details:**
+    * **Architecture:** Convolutional Neural Network (CNN) - *Assumed to be a common architecture like ResNet or VGG.*
+    * **Input Size:** $128 \times 128$ pixels (3 color channels).
+    * **Data Source:** Trained on a dataset of various common plant leaf diseases (e.g., PlantVillage or similar open-source datasets).
+    
+    **Disclaimer:**
+    This AI diagnosis is for **informational purposes only**. Always confirm the diagnosis and treatment plan with a local agricultural expert, agronomist, or Krishi Vigyan Kendra (KVK).
+    **Medicines** are general suggestions and may require specific dosage and timing based on local regulations and crop stage.
+    """)
+
+
+
+# Clean up/End of file.
+if __name__ == "__main__":
+    pass 
