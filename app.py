@@ -444,115 +444,46 @@ def mock_chatbot_response(prompt):
         
 st.markdown("""
 <style>
-    /* 1. Global Refinement */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700;900&display=swap');
-    
-    .stApp {
-        background: radial-gradient(circle at 0% 0%, #031510 0%, #000000 100%);
-        background-attachment: fixed;
-        font-family: 'Inter', sans-serif;
-    }
+/* Background - Deep Forest */
+.stApp {
+    background: linear-gradient(135deg, #0b3d0b 0%, #1f4d1f 50%, #081c08 100%);
+    background-attachment: fixed;
+}
 
-    /* 2. Massive Kinetic Header */
-    h1 {
-        font-weight: 900 !important;
-        font-size: clamp(3rem, 8vw, 7rem) !important;
-        letter-spacing: -6px !important;
-        background: linear-gradient(180deg, #ffffff 40%, rgba(167, 255, 131, 0.7) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        line-height: 0.8 !important;
-        filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
-    }
+/* Title */
+h1 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800 !important;
+    font-size: 5rem !important;
+    color: #a7ff83;
+    text-shadow: 0 0 20px #4d8c4d;
+    margin-bottom: 40px !important;
+}
 
-    /* 3. Sidebar Micro-UI (Controls & Alerts) */
-    section[data-testid="stSidebar"] {
-        background: rgba(0, 0, 0, 0.4) !important;
-        backdrop-filter: blur(30px) saturate(150%);
-        border-right: 1px solid rgba(255, 255, 255, 0.05);
-        width: 320px !important;
-    }
+/* Cards & Chat */
+.prediction-box, .solution-box, .stChatMessage {
+    background: rgba(255, 255, 255, 0.03) !important;
+    backdrop-filter: blur(30px) saturate(120%);
+    border-radius: 40px !important;
+    padding: 50px !important;
+    margin: 20px 0;
+}
 
-    /* Shrink font for Sidebar Controls */
-    section[data-testid="stSidebar"] .stText, 
-    section[data-testid="stSidebar"] label,
-    section[data-testid="stSidebar"] p {
-        font-size: 0.75rem !important;
-        font-weight: 400 !important;
-        letter-spacing: 0.5px;
-        color: rgba(255, 255, 255, 0.6) !important;
-        text-transform: uppercase;
-    }
+/* Button */
+.stButton button {
+    background: #4d8c4d !important;
+    color: #e0f8d8 !important;
+    border-radius: 80px !important;
+    padding: 20px 50px !important;
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+}
 
-    /* Alert Boxes - Minimalist Glass */
-    .stAlert {
-        background: rgba(167, 255, 131, 0.05) !important;
-        border: 1px solid rgba(167, 255, 131, 0.2) !important;
-        border-radius: 15px !important;
-        color: #a7ff83 !important;
-    }
-
-    /* 4. Action Cards (Glassmorphism) */
-    .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(255, 255, 255, 0.02) !important;
-        backdrop-filter: blur(40px) saturate(150%);
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 40px !important;
-        padding: 40px !important;
-        box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-    }
-
-    .prediction-box:hover {
-        transform: translateY(-10px) scale(1.01);
-        border: 1px solid rgba(167, 255, 131, 0.4) !important;
-        background: rgba(255, 255, 255, 0.04) !important;
-    }
-
-    /* 5. Fluid Result Pulse */
-    .primary-diagnosis-box {
-        background: radial-gradient(circle, rgba(167, 255, 131, 0.1) 0%, transparent 70%);
-        padding: 60px 20px !important;
-        animation: pulse 4s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-        0%, 100% { opacity: 0.7; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.02); }
-    }
-
-    /* 6. Professional Buttons */
-    .stButton button {
-        background: #a7ff83 !important;
-        color: #000 !important;
-        border-radius: 100px !important;
-        padding: 18px 40px !important;
-        font-weight: 800 !important;
-        font-size: 1rem !important;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        border: none !important;
-        transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-    }
-
-    .stButton button:hover {
-        box-shadow: 0 0 40px rgba(167, 255, 131, 0.6);
-        transform: scale(1.05);
-    }
-
-    /* 7. Inputs & Selectors - Stealth Mode */
-    .stSelectbox div[data-baseweb="select"], 
-    .stTextInput input {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 12px !important;
-        color: white !important;
-        font-size: 0.85rem !important;
-    }
-
-    /* Hide standard clutter */
-    #MainMenu, footer, header {visibility: hidden;}
-
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background: rgba(0, 0, 0, 0.2) !important;
+    backdrop-filter: blur(20px);
+}
 </style>
 """, unsafe_allow_html=True)
 # ---------------- SIDEBAR ----------------
