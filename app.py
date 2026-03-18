@@ -14,9 +14,9 @@ import random
 # Optional: text-to-speech
 try:
   import pyttsx3
-    TTS_AVAILABLE = True
+  TTS_AVAILABLE = True
 except Exception:
-    TTS_AVAILABLE = False
+  TTS_AVAILABLE = False
 
 # ---------------- Page Config ----------------
 st.set_page_config(
