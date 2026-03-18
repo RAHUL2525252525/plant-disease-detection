@@ -928,6 +928,8 @@ if uploaded_file is not None:
     )
 
                     # 7. Streamlit Display of Treatment (Completed Block)
+current_disease = cls  # Assign prediction result
+
 if current_disease in disease_treatments:
     txt = disease_treatments[current_disease]
 
