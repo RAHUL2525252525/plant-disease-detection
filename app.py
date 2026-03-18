@@ -26,7 +26,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-st.title("🌿 AI Plant Doctor")
+#st.title("🌿 AI Plant Doctor")
 st.write("Upload a plant leaf image to detect disease")
 
 # ---------------- PATH CONFIG ----------------
@@ -944,7 +944,7 @@ else:
 # ---------------- PAGE NAVIGATION ----------------
 
 if page == "Home":
-    st.markdown("## 🌿 AI Plant Disease Detection")
+    #st.markdown("## 🌿 AI Plant Disease Detection")
     # 👉 your existing Home code here (image upload, prediction, PDF, etc)
 
 # ---------------- Chatbot ----------------
