@@ -578,15 +578,6 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("<p style='font-size: 0.75rem; color: #a7ff83;'>SYSTEM VERSION: 4.0.2-EMERALD</p>", unsafe_allow_html=True)
 # 3. DASHBOARD CONTENT (Inside the Slide-out)
-with st.sidebar:
-    st.markdown("### 🛰️ SYSTEM HUD")
-    st.warning("ACTIVE SCANNING: Sensors Normal")
-    
-    st.selectbox("ANALYSIS MODE", ["Deep Scan", "Quick Check", "Neural Map"])
-    st.slider("SENSITIVITY", 0, 100, 75)
-    
-    st.markdown("---")
-    st.markdown("<p style='font-size: 10px; color: #666;'>SYSTEM VERSION: 4.0.2-EMERALD</p>", unsafe_allow_html=True)
 
 # 3. IMPLEMENTATION
 # This acts as the "Toggle" button for the dashboard
