@@ -444,100 +444,117 @@ def mock_chatbot_response(prompt):
 
 st.markdown("""
 <style>
-    /* 1. THE VOID - Deep Black to Forest Green Gradient */
+    /* 1. THE FOUNDATION - Deep Obsidian with Kinetic Glow */
     .stApp {
-        background: radial-gradient(circle at top left, #051a14 0%, #000000 100%);
+        background-color: #020504;
+        background-image: 
+            radial-gradient(at 0% 0%, rgba(167, 255, 131, 0.12) 0%, transparent 40%),
+            radial-gradient(at 100% 100%, rgba(0, 255, 135, 0.08) 0%, transparent 40%);
         background-attachment: fixed;
     }
 
-    /* 2. AMBIENT GLOW - Floating Light Source */
-    .stApp::before {
-        content: ""; position: fixed; top: -10%; right: -10%; width: 500px; height: 500px;
-        background: radial-gradient(circle, rgba(167, 255, 131, 0.08) 0%, transparent 70%);
-        z-index: 0; pointer-events: none;
-    }
-
-    /* 3. THE HEADER - Massive, Thin, & Elegant */
+    /* 2. THE TITAN HEADER - Ultra-Thin & Massive */
     h1 {
         font-family: 'Inter', sans-serif;
-        font-weight: 200 !important; /* Thin for that premium feel */
-        font-size: 7rem !important;
-        letter-spacing: -6px !important;
+        font-weight: 100 !important; /* The "Pro" secret: Ultra-light weight */
+        font-size: clamp(4rem, 12vw, 8.5rem) !important;
+        letter-spacing: -8px !important;
+        line-height: 0.8 !important;
         color: #ffffff;
-        line-height: 0.9 !important;
-        margin-bottom: 50px !important;
-        text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        text-transform: uppercase;
+        margin-top: 1rem !important;
+        margin-bottom: 2rem !important;
+        filter: drop-shadow(0 20px 50px rgba(0,0,0,1));
     }
 
-    /* 4. THE GLASS SLAB - Ultra Blur & Subtle Border */
+    /* 3. THE "GLAZE" CONTAINERS - Multi-layered Depth */
     .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(255, 255, 255, 0.03) !important;
-        backdrop-filter: blur(40px) saturate(180%);
-        -webkit-backdrop-filter: blur(40px) saturate(180%);
+        background: rgba(255, 255, 255, 0.02) !important;
+        backdrop-filter: blur(50px) saturate(200%);
+        -webkit-backdrop-filter: blur(50px) saturate(200%);
         border: 1px solid rgba(167, 255, 131, 0.15) !important;
-        border-radius: 40px !important; 
-        padding: 50px !important;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-        margin: 30px 0;
-        transition: 0.5s ease;
+        border-radius: 0px !important; /* Brutalist sharp corners */
+        padding: 60px !important;
+        box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
     }
 
-    .prediction-box:hover {
-        border: 1px solid rgba(167, 255, 131, 0.4) !important;
-        background: rgba(255, 255, 255, 0.05) !important;
-        transform: translateY(-5px);
+    /* Animated Accent Bar */
+    .prediction-box::before {
+        content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8px;
+        background: linear-gradient(to bottom, #a7ff83, transparent);
+        animation: glowPulse 4s ease-in-out infinite;
     }
 
-    /* 5. THE RESULT - Neon Emerald Glow */
+    @keyframes glowPulse {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
+    }
+
+    /* 4. THE RESULT TYPOGRAPHY */
     .primary-diagnosis-box h2 {
-        font-size: 4.5rem !important;
-        font-weight: 800;
-        background: linear-gradient(135deg, #ffffff 0%, #a7ff83 100%);
+        font-size: 5rem !important;
+        font-weight: 900;
+        background: linear-gradient(90deg, #ffffff, #a7ff83);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        letter-spacing: -2px;
-        margin: 0;
+        letter-spacing: -3px;
+        text-transform: uppercase;
     }
 
-    /* 6. THE TITAN BUTTON - Glowing Glass */
+    /* 5. THE "TACTILE" COMMAND BUTTON */
     .stButton button {
         width: 100% !important;
-        background: rgba(167, 255, 131, 0.1) !important;
+        height: 100px !important;
+        background: transparent !important;
         color: #a7ff83 !important;
         border: 1px solid rgba(167, 255, 131, 0.5) !important;
-        backdrop-filter: blur(10px);
-        border-radius: 20px !important;
-        padding: 25px !important;
-        font-size: 1.5rem !important;
-        font-weight: 700 !important;
+        border-radius: 0px !important;
+        font-size: 1.8rem !important;
+        font-weight: 300 !important;
         text-transform: uppercase;
-        letter-spacing: 4px;
-        transition: 0.4s all cubic-bezier(0.16, 1, 0.3, 1);
+        letter-spacing: 12px;
+        transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        cursor: pointer;
     }
 
     .stButton button:hover {
         background: #a7ff83 !important;
         color: #000000 !important;
-        box-shadow: 0 0 40px rgba(167, 255, 131, 0.6);
-        transform: scale(1.02);
+        transform: scale(0.98); /* Tactile "clicky" feel */
+        box-shadow: 0 0 80px rgba(167, 255, 131, 0.4);
+        letter-spacing: 18px;
     }
 
-    /* 7. SIDEBAR - Translucent Emerald */
+    /* 6. THE SIDEBAR - CARBON STEALTH */
     section[data-testid="stSidebar"] {
-        background: rgba(5, 15, 10, 0.6) !important;
-        backdrop-filter: blur(25px);
+        background-color: #000000 !important;
         border-right: 1px solid rgba(167, 255, 131, 0.1);
-        width: 400px !important;
+        width: 450px !important;
     }
 
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
+    /* Custom Scrollbar for Pro Apps */
+    ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(167, 255, 131, 0.2); border-radius: 10px; }
-    
-    /* Hide Default UI */
+    ::-webkit-scrollbar-thumb { background: #a7ff83; border-radius: 10px; }
+
+    /* Hide Standard UI Clutter */
     #MainMenu, footer, header {visibility: hidden;}
-    .block-container { padding-top: 2rem !important; }
+    .block-container { padding: 2rem !important; max-width: 95% !important; }
+
+    /* IMAGE - HIGH-CONTRAST LAB STYLE */
+    [data-testid="stImage"] img {
+        border-radius: 0px;
+        filter: contrast(1.1) brightness(0.9);
+        border: 1px solid rgba(255,255,255,0.05);
+        transition: 0.5s ease;
+    }
+    [data-testid="stImage"] img:hover {
+        filter: contrast(1) brightness(1);
+        border-color: #a7ff83;
+    }
 
 </style>
 """, unsafe_allow_html=True)
