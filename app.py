@@ -840,6 +840,8 @@ if page == "Home":
             up = st.file_uploader("Upload leaf image (jpg/png)", type=["jpg","jpeg","png"], key="file_uploader")
             if up:
                 image_obj = Image.open(up).convert("RGB")
+
+        # ...rest of your Home code (prediction, PDF, treatments) indented here
         
         # If image is available
         if image_obj:
