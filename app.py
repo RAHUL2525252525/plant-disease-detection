@@ -441,133 +441,43 @@ def mock_chatbot_response(prompt):
         return "Hello! I'm your AI Crop Assistant. Ask me about diseases, fertilizers, or crop care!"
     else:
         return "I'm still learning! Try asking about 'early blight', 'fertilizer', or 'crop care'."
-        
-# 1. Background Video Injection (Place this at the very top of your app)
-# 1. CINEMATIC BACKGROUND VIDEO
-# 1. CINEMATIC BACKGROUND VIDEO (Nature Overlay)
+
+# ---------------- CUSTOM CSS (Your Beautiful Design) ----------------
+st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;900&display=swap');
-   
-    .stApp { 
-        background: transparent; 
-        font-family: 'Inter', sans-serif; 
+    .stApp { background: radial-gradient(circle at 50% 50%, #0a1f1c 0%, #040d0b 100%); background-attachment: fixed; }
+    .stApp::before {
+        content: ""; position: fixed; inset: 0;
+        background: linear-gradient(125deg, rgba(0,77,64,0.1) 0%, rgba(27,94,32,0.05) 50%, rgba(56,142,60,0.1) 100%);
+        background-size: 400% 400%; animation: meshFlow 15s ease infinite alternate; z-index: 0;
     }
-
-    /* --- 1. TITAN HEADER --- */
-    h1 {
-        font-weight: 900 !important;
-        font-size: clamp(3rem, 15vw, 10rem) !important;
-        letter-spacing: -12px !important;
-        color: #ffffff;
-        line-height: 0.75 !important;
-        margin: 0 !important;
-        filter: drop-shadow(0 30px 60px rgba(0,0,0,1));
-    }
-
-    /* --- 2. MICRO-UI: CONTROLS & ALERTS (EVEN SMALLER - SIZE 5) --- */
-    /* Labels, sidebar text, selectbox/radio/text_input headers */
-    section[data-testid="stSidebar"] label,
-    section[data-testid="stSidebar"] p,
-    .stSelectbox label,
-    .stTextInput label,
-    .stRadio label,
-    .stRadio label p,
-    .stMultiselect label,
-    .stNumberInput label,
-    .stSlider label {
-        font-size: 5.5px !important;           /* Reduced from 7px */
-        font-weight: 700 !important;
-        letter-spacing: 2.5px !important;
-        text-transform: uppercase;
-        color: rgba(167, 255, 131, 0.35) !important;
-        margin-bottom: 3px !important;
-        line-height: 1 !important;
-    }
-
-    /* Alert/Warning Boxes - Ultra Compact */
-    .stAlert {
-        background: rgba(0, 0, 0, 0.75) !important;
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(167, 255, 131, 0.08) !important;
-        border-radius: 0px !important;
-        padding: 4px 10px !important;          /* Tighter padding */
-        min-height: 0px !important;
-        margin: 4px 0 !important;
-    }
-   
-    /* Alert Text - Even smaller */
-    .stAlert p, 
-    .stAlert div,
-    .stAlert .stMarkdown {
-        font-size: 5.5px !important;           /* Reduced from 7px */
-        font-weight: 400 !important;
-        letter-spacing: 1.2px !important;
-        color: #a7ff83 !important;
-        margin: 0 !important;
-        text-transform: uppercase;
-        line-height: 1.1 !important;
-    }
-
-    /* --- 3. THE "MONOLITH" GLASS CARDS --- */
+    @keyframes meshFlow { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
     .prediction-box, .solution-box, .stChatMessage {
-        background: rgba(0, 0, 0, 0.8) !important;
-        backdrop-filter: blur(80px) saturate(200%);
-        -webkit-backdrop-filter: blur(80px) saturate(200%);
-        border: 1px solid rgba(255, 255, 255, 0.03) !important;
-        border-radius: 0px !important;
-        padding: 60px !important;
-        box-shadow: 0 100px 200px rgba(0,0,0,1);
-        margin: 20px 0;
+        background: rgba(255,255,255,0.02) !important; backdrop-filter: blur(20px);
+        border-radius: 24px !important; padding: 25px; color: #f0fff4;
+        border: 1px solid rgba(167,255,131,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5);
     }
-
-    /* --- 4. THE COMMAND BUTTON --- */
+    .primary-diagnosis-box {
+        background: rgba(0,77,64,0.3); border: 1px solid #a7ff83; border-radius: 20px;
+        padding: 35px; position: relative; overflow: hidden;
+    }
+    .primary-diagnosis-box::after {
+        content: ""; position: absolute; top: -100%; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(to bottom, transparent, rgba(167,255,131,0.2), transparent);
+        animation: scanner 4s linear infinite;
+    }
+    @keyframes scanner { 0% { top: -100%; } 100% { top: 100%; } }
+    h1 { font-weight: 900 !important; background: linear-gradient(135deg, #a7ff83 0%, #4db6ac 100%);
+         -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 3.5rem !important; }
     .stButton button {
-        width: 100% !important;
-        height: 100px !important;
-        background: #ffffff !important;
-        color: #000000 !important;
-        border-radius: 0px !important;
-        font-size: 2rem !important;
-        font-weight: 900 !important;
-        text-transform: uppercase;
-        letter-spacing: 15px;
-        transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        background: transparent !important; color: #a7ff83 !important; border: 1px solid #a7ff83 !important;
+        border-radius: 50px !important; padding: 15px 30px !important; font-weight: 800 !important;
+        transition: all 0.4s ease;
     }
-    .stButton button:hover {
-        background: #a7ff83 !important;
-        box-shadow: 0 0 120px rgba(167, 255, 131, 0.4);
-        transform: scale(0.98);
-    }
-
-    /* --- 5. SIDEBAR STEALTH MODE --- */
-    section[data-testid="stSidebar"] {
-        background: rgba(0, 0, 0, 0.9) !important;
-        backdrop-filter: blur(50px);
-        border-right: 1px solid rgba(255, 255, 255, 0.05);
-        width: 350px !important;
-    }
-
-    /* Nano Inputs */
-    .stSelectbox div[data-baseweb="select"],
-    .stTextInput input,
-    .stNumberInput input,
-    .stTextArea textarea {
-        background: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 0px !important;
-        height: 28px !important;               /* Slightly smaller */
-        font-size: 9px !important;
-        color: #666 !important;
-        padding: 0 8px !important;
-    }
-
-    /* Hide standard UI clutter */
-    #MainMenu, footer, header {visibility: hidden;}
-    .block-container { 
-        padding: 4rem 2rem !important; 
-        max-width: 95% !important; 
-    }
+    .stButton button:hover { background: #a7ff83 !important; color: #020806 !important; transform: scale(1.05); }
 </style>
+""", unsafe_allow_html=True)
+
 # ---------------- SIDEBAR ----------------
 st.sidebar.title("🌿 Controls & Alerts")
 lang_choice = st.sidebar.selectbox("Language / ಭಾಷೆ", ("en", "kn"), 
