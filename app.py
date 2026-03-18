@@ -444,105 +444,100 @@ def mock_chatbot_response(prompt):
 
 st.markdown("""
 <style>
-    /* 1. THE FOUNDATION - PURE OBSIDIAN */
+    /* 1. THE VOID - Deep Black to Forest Green Gradient */
     .stApp {
-        background-color: #000000;
-        background-image: 
-            linear-gradient(rgba(167, 255, 131, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(167, 255, 131, 0.03) 1px, transparent 1px);
-        background-size: 100px 100px; /* Large scale grid */
+        background: radial-gradient(circle at top left, #051a14 0%, #000000 100%);
+        background-attachment: fixed;
     }
 
-    /* 2. THE TITAN HEADER - BRUTALIST & MASSIVE */
+    /* 2. AMBIENT GLOW - Floating Light Source */
+    .stApp::before {
+        content: ""; position: fixed; top: -10%; right: -10%; width: 500px; height: 500px;
+        background: radial-gradient(circle, rgba(167, 255, 131, 0.08) 0%, transparent 70%);
+        z-index: 0; pointer-events: none;
+    }
+
+    /* 3. THE HEADER - Massive, Thin, & Elegant */
     h1 {
         font-family: 'Inter', sans-serif;
-        font-weight: 900 !important;
-        font-size: 10rem !important; /* Extremely Massive */
-        letter-spacing: -12px !important;
+        font-weight: 200 !important; /* Thin for that premium feel */
+        font-size: 7rem !important;
+        letter-spacing: -6px !important;
         color: #ffffff;
-        line-height: 0.75 !important;
-        margin: 0 !important;
-        padding-top: 50px !important;
-        text-transform: uppercase;
-        opacity: 0.9;
+        line-height: 0.9 !important;
+        margin-bottom: 50px !important;
+        text-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
-    /* 3. THE "MONOLITH" CONTAINERS */
+    /* 4. THE GLASS SLAB - Ultra Blur & Subtle Border */
     .prediction-box, .solution-box, .stChatMessage {
-        background: #080808 !important;
-        border: none !important;
-        border-top: 1px solid #1a1a1a !important;
-        border-bottom: 1px solid #1a1a1a !important;
-        border-radius: 0px !important; 
-        padding: 80px 0px !important; /* Massive vertical padding */
-        margin: 0 !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        backdrop-filter: blur(40px) saturate(180%);
+        -webkit-backdrop-filter: blur(40px) saturate(180%);
+        border: 1px solid rgba(167, 255, 131, 0.15) !important;
+        border-radius: 40px !important; 
+        padding: 50px !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        margin: 30px 0;
+        transition: 0.5s ease;
     }
 
-    /* 4. THE "SCANNER" RESULT */
+    .prediction-box:hover {
+        border: 1px solid rgba(167, 255, 131, 0.4) !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        transform: translateY(-5px);
+    }
+
+    /* 5. THE RESULT - Neon Emerald Glow */
     .primary-diagnosis-box h2 {
-        font-size: 6rem !important;
-        color: #a7ff83;
-        font-weight: 900;
-        letter-spacing: -4px;
-        text-transform: uppercase;
+        font-size: 4.5rem !important;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffffff 0%, #a7ff83 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -2px;
         margin: 0;
-        line-height: 1;
     }
 
-    /* 5. THE "TACTILE" COMMAND BUTTON */
+    /* 6. THE TITAN BUTTON - Glowing Glass */
     .stButton button {
         width: 100% !important;
-        height: 120px !important; /* Massive Button */
-        background: transparent !important;
+        background: rgba(167, 255, 131, 0.1) !important;
         color: #a7ff83 !important;
-        border: 2px solid #a7ff83 !important;
-        border-radius: 0px !important;
-        font-size: 2.5rem !important;
-        font-weight: 900 !important;
+        border: 1px solid rgba(167, 255, 131, 0.5) !important;
+        backdrop-filter: blur(10px);
+        border-radius: 20px !important;
+        padding: 25px !important;
+        font-size: 1.5rem !important;
+        font-weight: 700 !important;
         text-transform: uppercase;
-        letter-spacing: 15px; /* Cinematic spacing */
-        transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        letter-spacing: 4px;
+        transition: 0.4s all cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .stButton button:hover {
         background: #a7ff83 !important;
         color: #000000 !important;
-        box-shadow: 0 0 100px rgba(167, 255, 131, 0.3);
-        transform: translateY(-5px);
+        box-shadow: 0 0 40px rgba(167, 255, 131, 0.6);
+        transform: scale(1.02);
     }
 
-    /* 6. THE SIDEBAR - STEALTH TECH */
+    /* 7. SIDEBAR - Translucent Emerald */
     section[data-testid="stSidebar"] {
-        background-color: #000000 !important;
-        border-right: 1px solid #111;
-        width: 500px !important;
+        background: rgba(5, 15, 10, 0.6) !important;
+        backdrop-filter: blur(25px);
+        border-right: 1px solid rgba(167, 255, 131, 0.1);
+        width: 400px !important;
     }
 
-    /* Remove all Streamlit "Cheap" UI elements */
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(167, 255, 131, 0.2); border-radius: 10px; }
+    
+    /* Hide Default UI */
     #MainMenu, footer, header {visibility: hidden;}
-    .block-container { padding: 0 !important; max-width: 90% !important; }
-
-    /* Custom Input Styling */
-    .stTextInput input, .stSelectbox div {
-        background-color: transparent !important;
-        border-radius: 0px !important;
-        border: 1px solid #333 !important;
-        color: #fff !important;
-        height: 60px !important;
-        font-size: 1.2rem !important;
-    }
-
-    /* 7. IMAGE - LABORATORY STYLE */
-    [data-testid="stImage"] img {
-        border-radius: 0px;
-        filter: grayscale(100%) contrast(150%);
-        transition: 0.8s;
-        border: 1px solid #222;
-    }
-    [data-testid="stImage"] img:hover {
-        filter: grayscale(0%) contrast(100%);
-        border-color: #a7ff83;
-    }
+    .block-container { padding-top: 2rem !important; }
 
 </style>
 """, unsafe_allow_html=True)
